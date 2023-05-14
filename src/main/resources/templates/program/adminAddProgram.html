@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <form th:action method="post">
+    <div>
+      <label for="title">프로그램명</label>
+      <input type="text" id="title" name="title">
+    </div>
+    <div>
+      <label for="place">장소</label>
+      <input type="text" id="place" name="place">
+    </div>
+    <div>
+      <label for="target">신청대상</label>
+      <input type="text" id="target" name="target">
+    </div>
+    <div>
+      <label for="startDate">신청 시작일</label>
+      <input type="date" id="startDate" name="startDate">
+    </div>
+    <div>
+      <label for="endDate">신청 종료일</label>
+      <input type="date" id="endDate" name="endDate">
+    </div>
+    <button type="submit">등록하기</button>
+  </form>
+</div>
+</body>
+</html>

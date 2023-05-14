@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container" style="max-width: 1000px">
+    <p th:text="|프로그램명 : ${programInfo.title}|"></p>
+    <p th:text="|장소 : ${programInfo.place} |"></p>
+    <p th:text="|대상 : ${programInfo.target}|"></p>
+    <p th:text="|시작일 : ${programInfo.startDate} |"></p>
+    <p th:text="|종료일 : ${programInfo.endDate}|"></p>
+</div>
+</body>
+</html>
