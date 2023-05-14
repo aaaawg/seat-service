@@ -1,4 +1,3 @@
-# seat-service
 create database seat_service;
 
 create table program(
