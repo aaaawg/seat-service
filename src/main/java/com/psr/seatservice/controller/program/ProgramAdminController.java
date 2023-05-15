@@ -2,9 +2,12 @@ package com.psr.seatservice.controller.program;
 
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.dto.program.request.AdminAddProgramRequest;
+import com.psr.seatservice.dto.program.request.AdminUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.ProgramAdminResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoAdminResponse;
 import com.psr.seatservice.service.program.ProgramService;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/admin/program")
+@RequestMapping("/admin/program")
 public class ProgramAdminController {
     private final ProgramService programService;
 
@@ -31,7 +34,6 @@ public class ProgramAdminController {
     public String programInfo(@PathVariable Long programNum, Model model) {
         Program program = programService.programInfo(programNum);
         model.addAttribute("programInfo", new ProgramInfoAdminResponse(program));
-
         return "program/adminProgramInfo";
     }
 
@@ -40,9 +42,22 @@ public class ProgramAdminController {
         return "program/adminAddProgram";
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping( "/add")
     public String addProgram(AdminAddProgramRequest request) {
         programService.addProgram(request);
         return "redirect:";
+    }
+
+    @GetMapping("/info/update/{programNum}")
+    public String updateProgramInfo(@PathVariable Long programNum, Model model) {
+        Program program = programService.programInfo(programNum);
+        model.addAttribute("programInfo", new ProgramInfoAdminResponse(program));
+        return "program/adminUpdateProgram";
+    }
+
+    @PostMapping("/info/update/{programNum}")
+    public String updateProgramInfo(@PathVariable Long programNum, AdminUpdateProgramRequest request) {
+        programService.updateProgramInfo(programNum, request);
+        return "redirect:/admin/program/info/{programNum}";
     }
 }

@@ -1,8 +1,6 @@
 package com.psr.seatservice.dto.program.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class AdminAddProgramRequest {
+public class AdminUpdateProgramRequest {
     private String title; //프로그램 제목
     private String place; //장소
     private String target; //신청대상

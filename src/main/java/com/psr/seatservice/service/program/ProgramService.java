@@ -3,10 +3,13 @@ package com.psr.seatservice.service.program;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.program.ProgramRepository;
 import com.psr.seatservice.dto.program.request.AdminAddProgramRequest;
+import com.psr.seatservice.dto.program.request.AdminUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.ProgramAdminResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,5 +38,13 @@ public class ProgramService {
     public void addProgram(AdminAddProgramRequest request) {
         programRepository.save(new Program(request.getTitle(), request.getPlace(), request.getTarget(),
                 request.getStartDate(), request.getEndDate()));
+    }
+
+    @Transactional
+    public void updateProgramInfo(Long programNum, AdminUpdateProgramRequest request) {
+        Program program = programRepository.findById(programNum)
+                .orElseThrow(IllegalAccessError::new);
+        program.updateInfo(request.getTitle(), request.getPlace(), request.getTarget(),
+                request.getStartDate(), request.getEndDate());
     }
 }

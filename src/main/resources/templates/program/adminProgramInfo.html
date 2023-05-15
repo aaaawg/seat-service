@@ -12,6 +12,8 @@
     <p th:text="|대상 : ${programInfo.target}|"></p>
     <p th:text="|시작일 : ${programInfo.startDate} |"></p>
     <p th:text="|종료일 : ${programInfo.endDate}|"></p>
+    <button th:onclick="|location.href='@{/admin/program/info/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">수정</button>
+    <button th:onclick="|location.href='@{/admin/program}'|" type="button">목록</button>
 </div>
 </body>
 </html>

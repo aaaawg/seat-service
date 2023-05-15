@@ -1,5 +1,6 @@
 package com.psr.seatservice.domian.program;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,6 @@ import java.util.Date;
 
 @Entity
 @Getter
-@Setter
 public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,14 @@ public class Program {
     protected Program() {}
 
     public Program(String title, String place, String target, Date startDate, Date endDate) {
+        this.title = title;
+        this.place = place;
+        this.target = target;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public void updateInfo(String title, String place, String target, Date startDate, Date endDate) {
         this.title = title;
         this.place = place;
         this.target = target;
