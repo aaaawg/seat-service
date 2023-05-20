@@ -6,8 +6,6 @@ import com.psr.seatservice.dto.program.request.AdminUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.ProgramAdminResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoAdminResponse;
 import com.psr.seatservice.service.program.ProgramService;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +43,7 @@ public class ProgramAdminController {
     @PostMapping( "/add")
     public String addProgram(AdminAddProgramRequest request) {
         programService.addProgram(request);
+        System.out.println(request.getPlace());
         return "redirect:";
     }
 
