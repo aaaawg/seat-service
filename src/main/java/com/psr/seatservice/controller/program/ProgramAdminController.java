@@ -43,7 +43,6 @@ public class ProgramAdminController {
     @PostMapping( "/add")
     public String addProgram(AdminAddProgramRequest request) {
         programService.addProgram(request);
-        System.out.println(request.getPlace());
         return "redirect:";
     }
 

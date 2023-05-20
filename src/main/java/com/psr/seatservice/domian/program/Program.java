@@ -32,7 +32,7 @@ public class Program {
     //private String contents; //프로그램 상세 내용
     //private String notice; //예약 공지
     //private poster;
-    //프로그램 작성자
+    //프로그램 등록 작성자 아이디
 
     protected Program() {}
 

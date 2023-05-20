@@ -22,3 +22,14 @@ create table program_viewing(
     foreign key(program_num) references program(program_num)
 );
 ```
+```
+create table user_admin(
+    user_num bigint not null auto_increment,
+    address varchar(255),
+    name varchar(255),
+    password varchar(255),
+    phone varchar(255),
+    user_id varchar(255),
+    primary key (user_num)
+);
+```

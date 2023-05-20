@@ -13,6 +13,7 @@ public class ProgramInfoAdminResponse {
     private String target; //신청대상
     private Date startDate; //신청시작일
     private Date endDate; //신청마감일
+    private String type;
 
     public ProgramInfoAdminResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -21,5 +22,6 @@ public class ProgramInfoAdminResponse {
         this.target = program.getTarget();
         this.startDate = program.getStartDate();
         this.endDate = program.getEndDate();
+        this.type = program.getType();
     }
 }
