@@ -65,4 +65,8 @@ public class ProgramService {
         }
         programViewingRepository.saveAll(list);
     }
+
+    public List<Program> findA() {
+        return new ArrayList<>(programRepository.findAll());
+    }
 }
