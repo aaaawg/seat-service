@@ -27,7 +27,7 @@ public class UserController {
         if(loginUser != null && loginUser.getRole().equals("admin"))
             return "program/adminPrograms";
         else
-            return "user/login";
+            return "program/programList";
     }
 
     @GetMapping("/admin/join")
@@ -38,6 +38,9 @@ public class UserController {
     @PostMapping("/admin/join")
     public String join(AddAdminUserRequest request) {
         userService.join(request);
-        return "redirect:/admin/join";
+        return "program/adminPrograms";
     }
+
+
+
 }

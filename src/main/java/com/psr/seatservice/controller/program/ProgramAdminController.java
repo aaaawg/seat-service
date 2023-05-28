@@ -3,7 +3,7 @@ package com.psr.seatservice.controller.program;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.dto.program.request.AdminAddProgramRequest;
 import com.psr.seatservice.dto.program.request.AdminUpdateProgramRequest;
-import com.psr.seatservice.dto.program.response.ProgramAdminResponse;
+import com.psr.seatservice.dto.program.response.AdminProgramResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoAdminResponse;
 import com.psr.seatservice.service.program.ProgramService;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ public class ProgramAdminController {
 
     @GetMapping
     public String programs(Model model) {
-        List<ProgramAdminResponse> programs = programService.programs();
+        List<AdminProgramResponse> programs = programService.programs();
         model.addAttribute("programs", programs);
         return "program/adminPrograms";
     }
