@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import "../css/ProgramList.css";
 
-function LectureList() {
+function ProgramList() {
 const [message, setMessage] = useState([]);
 
     useEffect(()=>{
@@ -13,7 +13,6 @@ const [message, setMessage] = useState([]);
         })
         .then(function (data) {
             setMessage(data);
-
         });
         },[]);
 
@@ -42,4 +41,4 @@ const [message, setMessage] = useState([]);
     );
 }
 
-export default LectureList;
+export default ProgramList;

@@ -33,3 +33,15 @@ create table user_admin(
     primary key (user_num)
 );
 ```
+```
+create table seat_table(
+    id bigint not null auto_increment,
+    program_num bigint not null,
+    checking boolean dafault false,
+    s_row int,
+    s_col int,
+    primary key(id),
+    foreign key(program_num) references program(program_num)
+);
+```
+```

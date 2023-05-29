@@ -63,7 +63,7 @@ public class ProgramAdminController {
 
     //화면에 프로그램 전체 전송
     @GetMapping("/List")
-    public List<Program> getAll(){
+    public List<ProgramInfoAdminResponse> getAll(){
         return programService.findA();
     }
 }

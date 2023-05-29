@@ -4,6 +4,7 @@ import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.dto.program.request.AdminAddProgramRequest;
 import com.psr.seatservice.dto.program.request.AdminUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.ProgramAdminResponse;
+import com.psr.seatservice.dto.program.response.ProgramInfoAdminResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +67,10 @@ public class ProgramService {
         programViewingRepository.saveAll(list);
     }
 
-    public List<Program> findA() {
-        return new ArrayList<>(programRepository.findAll());
+    public List<ProgramInfoAdminResponse> findA() {
+        List<Program> programs = programRepository.findAll();
+        return programs.stream()
+                .map(ProgramInfoAdminResponse::new)
+                .collect(Collectors.toList());
     }
 }

@@ -20,24 +20,23 @@ function sp(a,b){
     return re;
 }
 function max(a){
-    let re;
+    let re=0;
     let index;
-    for(index=0;index<a.length;index++)
-        if(a[index].col > re)
-            re = a[index].col;
-    re++;
-    return re;
+    for(index=0;index<a.length;index++){
+        if(a[index].s_col > re)
+            re = a[index].s_col;
+    }
+    return ++re;
 }
     useEffect(()=>{
         setInterval(()=> {
-        console.log("running");
-
-        fetch("/Test/"+{pro})
+        fetch("/List/"+`${pro}`)
         .then((response) => {
             return response.json();
         })
         .then(function (data) {
             setMessage(sp(data,max(data)));
+            console.log(data);
         });
         },1000);
 
@@ -54,13 +53,13 @@ function max(a){
                                return(
                                <li key={index2}>
                                <Link to={{
-                                               pathname:`/Pur/${t.num}`
+                                               pathname:`/Pur/${t.id}`
                                          }}
                                state={{num: t}}>
-                                               <button key={t.num}
-                                               title={t.num}
-                                               className={"btn"+(`${t.check}`==="true" ? 'T': 'F')}
-                                               disabled={t.check}
+                                               <button key={t.id}
+                                               title={t.program_num}
+                                               className={"btn"+(`${t.checking}`==="true" ? 'T': 'F')}
+                                               disabled={t.checking}
                                                ></button>
                                </Link>
                                </li>
