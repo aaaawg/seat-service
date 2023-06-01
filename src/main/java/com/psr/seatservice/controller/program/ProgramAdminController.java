@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RestController
 @RequestMapping("/admin/program")
 public class ProgramAdminController {
     private final ProgramService programService;
@@ -57,5 +58,12 @@ public class ProgramAdminController {
     public String updateProgramInfo(@PathVariable Long programNum, AdminUpdateProgramRequest request) {
         programService.updateProgramInfo(programNum, request);
         return "redirect:/admin/program/info/{programNum}";
+    }
+
+
+    //화면에 프로그램 전체 전송
+    @GetMapping("/List")
+    public List<ProgramInfoAdminResponse> getAll(){
+        return programService.findA();
     }
 }

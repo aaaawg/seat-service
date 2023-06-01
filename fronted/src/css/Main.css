@@ -1,0 +1,22 @@
+#root{
+    width:100%;
+}
+
+.con {
+    font-family : 'AppleSDGothicNeo';
+    display: grid;
+    width: 90%;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: auto;
+    min-height: calc(100vh - 60px - 10vw);
+    gap: 2vw;
+    justify-content: space-around;
+    margin: 2vw auto;
+    padding-bottom: 2vw;
+}
+
+.con div{
+    border: 1.5px solid rgba(34, 36, 38, 0.15);
+    border-radius: 10px;
+    min-height: 35vh;
+}

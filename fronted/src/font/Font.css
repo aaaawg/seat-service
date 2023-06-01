@@ -1,0 +1,40 @@
+@font-face {
+    font-family: "AppleSDGothicNeo";
+    font-style: normal;
+    font-weight: normal;
+    src: url("./AppleSDGothicNeoL.woff") format("woff");
+}
+
+@font-face {
+    font-family: "AppleSDGothicNeo";
+    font-style: normal;
+    src: url("./AppleSDGothicNeoR.woff") format("woff");
+}
+
+@font-face {
+    font-family: "AppleSDGothicNeo";
+    font-style: normal;
+    src: url("./AppleSDGothicNeoM.woff") format("woff");
+}
+
+@font-face {
+    font-family: "AppleSDGothicNeo";
+    font-style: normal;
+    font-weight: bold;
+    src: url("./AppleSDGothicNeoB.woff") format("woff");
+}
+
+@font-face {
+    font-family: "AppleSDGothicNeo";
+    font-style: normal;
+    src: url("./AppleSDGothicNeoEB.woff") format("woff");
+}
+
+@font-face {
+    font-family: "AppleSDGothicNeo";
+    font-style: normal;
+    src: url("./AppleSDGothicNeoH.woff") format("woff");
+}
+
+
+
