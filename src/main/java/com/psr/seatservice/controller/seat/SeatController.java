@@ -22,5 +22,5 @@ public class SeatController {
 
         return seatService.findByPro(proNum);
     }
-
+//관리자 페이지 설정하기
 }

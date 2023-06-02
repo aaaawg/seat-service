@@ -21,7 +21,7 @@ const [message, setMessage] = useState([]);
         {message.map(function(m,index){
             return(
                 <div key={index} className="program-list">
-                <Link to= {`/Buy?program=${m.title}`}
+                <Link to= {`/Buy?num=${m.programNum}`}
                 state={{program: m.programNum}}>
                 <button>
                     <div className="list-outside">

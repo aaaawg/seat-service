@@ -1,13 +1,7 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useLocation, useSearchParams} from 'react-router-dom';
 import "../css/buy.css";
-
-
-function SeatShape() {
-const [message, setMessage] = useState([]);
-const location = useLocation();
-const pro = location.state.program;
 
 function sp(a,b){
     const re = [];
@@ -28,15 +22,24 @@ function max(a){
     }
     return ++re;
 }
+
+
+function SeatShape() {
+const [message, setMessage] = useState([]);
+const location = useLocation();
+const pro = location.state.program;
+const [searchParams, setSearchParams] = useSearchParams();
+const n = searchParams.get('num');
+
     useEffect(()=>{
         setInterval(()=> {
-        fetch("/List/"+`${pro}`)
+        fetch(`/List/${pro}`)
         .then((response) => {
             return response.json();
         })
         .then(function (data) {
             setMessage(sp(data,max(data)));
-            console.log(data);
+
         });
         },1000);
 
@@ -44,7 +47,7 @@ function max(a){
 
    return(
         <div className="r">
-                <h1>{pro}</h1>
+                <h1>{pro} {n}</h1>
                 {message.map(function (m, index){
                        return (
                            <div key={index} className="bu2">
