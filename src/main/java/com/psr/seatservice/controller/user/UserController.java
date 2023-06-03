@@ -1,7 +1,7 @@
 package com.psr.seatservice.controller.user;
 
 import com.psr.seatservice.domian.user.User;
-import com.psr.seatservice.dto.user.request.AddAdminUserRequest;
+import com.psr.seatservice.dto.user.request.AddBizUserRequest;
 import com.psr.seatservice.dto.user.request.UserLoginRequest;
 import com.psr.seatservice.service.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -24,23 +24,32 @@ public class UserController {
     @PostMapping("/login")
     public String login(UserLoginRequest request) {
         User loginUser = userService.login(request);
-        if(loginUser != null && loginUser.getRole().equals("admin"))
-            return "program/adminPrograms";
+        if(loginUser != null && loginUser.getRole().equals("biz"))
+            return "program/bizUserPrograms";
         else
             return "program/programList";
     }
 
-    @GetMapping("/admin/join")
+    @GetMapping("/join")
     public String join() {
-        return "user/addAdminUser";
+        return "user/join";
     }
 
-    @PostMapping("/admin/join")
-    public String join(AddAdminUserRequest request) {
+    @GetMapping("/join/business")
+    public String bizUserJoinForm() {
+        return "user/addBizUser";
+    }
+
+    @PostMapping("/join/business")
+    public String bizUserJoin(AddBizUserRequest request) {
         userService.join(request);
-        return "program/adminPrograms";
+        return "program/programList";
     }
 
+    @GetMapping("/join/user")
+    public String userJoinForm() {
+        return "user/addUser";
+    }
 
 
 }

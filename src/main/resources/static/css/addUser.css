@@ -1,0 +1,14 @@
+.btn {
+    background-color: #a4d0a4;
+    border: none;
+}
+.btn:hover {
+    background-color: #83A783 !important;
+    border: none;
+}
+#text {
+    text-align: center;
+}
+div {
+    margin-bottom: 10px;
+}

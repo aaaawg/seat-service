@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container" style="max-width: 800px">
+    <button th:onclick="|location.href='@{/business/program/add}'|" type="button">추가</button>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th> </th>
+                <th>프로그램명</th>
+                <th>상태</th>
+                <th>상세정보</th>
+                <th>예약현황</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${programs}">
+                <td><input type="checkbox"></td>
+                <td>프로그램상태</td>
+                <td th:text="${item.title}">프로그램명</td>
+                <td><button th:onclick="|location.href='@{/business/program/info/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
+                <td><button th:onclick="|location.href='@{/business/program/booking/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

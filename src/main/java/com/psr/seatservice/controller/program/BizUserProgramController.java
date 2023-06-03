@@ -1,7 +1,7 @@
 package com.psr.seatservice.controller.program;
 
 import com.psr.seatservice.domian.program.Program;
-import com.psr.seatservice.dto.program.request.AdminAddProgramRequest;
+import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.AdminUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.AdminProgramResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoAdminResponse;
@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RestController
-@RequestMapping("/admin/program")
-public class ProgramAdminController {
+@RequestMapping("/business/program")
+public class BizUserProgramController {
     private final ProgramService programService;
 
-    public ProgramAdminController(ProgramService programService) {
+    public BizUserProgramController(ProgramService programService) {
         this.programService = programService;
     }
 
@@ -26,7 +25,7 @@ public class ProgramAdminController {
     public String programs(Model model) {
         List<AdminProgramResponse> programs = programService.programs();
         model.addAttribute("programs", programs);
-        return "program/adminPrograms";
+        return "program/bizUserPrograms";
     }
 
     @GetMapping("/info/{programNum}")
@@ -38,11 +37,11 @@ public class ProgramAdminController {
 
     @GetMapping("/add")
     public String addProgram() {
-        return "program/adminAddProgram";
+        return "program/bizUserAddProgram";
     }
 
     @PostMapping( "/add")
-    public String addProgram(AdminAddProgramRequest request) {
+    public String addProgram(BizAddProgramRequest request) {
         programService.addProgram(request);
         return "redirect:";
     }
@@ -57,13 +56,11 @@ public class ProgramAdminController {
     @PostMapping("/info/update/{programNum}")
     public String updateProgramInfo(@PathVariable Long programNum, AdminUpdateProgramRequest request) {
         programService.updateProgramInfo(programNum, request);
-        return "redirect:/admin/program/info/{programNum}";
+        return "redirect:/business/program/info/{programNum}";
     }
 
-
-    //화면에 프로그램 전체 전송
-    @GetMapping("/List")
-    public List<ProgramInfoAdminResponse> getAll(){
-        return programService.findA();
+    @GetMapping("/booking/{programNum}")
+    public String bookingUserList(@PathVariable Long programNum) {
+        return "user/bookingUserList";
     }
 }

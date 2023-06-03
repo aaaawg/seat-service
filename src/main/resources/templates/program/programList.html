@@ -7,43 +7,7 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:onclick="|location.href='@{/}'|">좌석예약</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" th:onclick="|location.href='@{/}'|">프로그램</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:onclick="|location.href='@{/admin/program}'|">프로그램 관리</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" th:onclick="|location.href='@{/login}'|">로그인</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:onclick="|location.href='@{/join}'|">회원가입</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        마이페이지
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">예약내역</a></li>
-                        <li><a class="dropdown-item" href="#">정보수정</a></li>
-                        <li><a class="dropdown-item" href="#">로그아웃</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        </div>
-    </div>
-</nav>
+<div th:replace="/layout/nav.html :: nav"></div>
 <div class="container" style="max-width: 800px">
     <th:block th:each="program: ${programs}">
         <div class="p-3 mb-2 bg-light text-dark rounded-3" style="width: 250px; height: 300px" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">

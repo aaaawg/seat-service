@@ -1,29 +1,29 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/addUser.css}" href="../css/addUser.css" rel="stylesheet">
+    <title>예약 현황</title>
 </head>
 <body>
 <div class="container" style="max-width: 800px">
-    <button th:onclick="|location.href='@{/admin/program/add}'|" type="button">추가</button>
+    <button th:onclick="" type="button">좌석보기</button>
     <div>
         <table class="table">
             <thead>
             <tr>
-                <th>프로그램번호</th>
+                <th> </th>
                 <th>프로그램명</th>
+                <th>상태</th>
                 <th>상세정보</th>
                 <th>예약현황</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="item : ${programs}">
-                <td th:text="${item.programNum}">프로그램번호</td>
+                <td><input type="checkbox"></td>
+                <td>프로그램상태</td>
                 <td th:text="${item.title}">프로그램명</td>
-                <td><button th:onclick="|location.href='@{/admin/program/info/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
-                <td><button th:onclick="">보기</button></td>
+                <td><button th:onclick="|location.href='@{/business/program/info/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
             </tr>
             </tbody>
         </table>

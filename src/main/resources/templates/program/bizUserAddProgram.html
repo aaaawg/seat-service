@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="../css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/addProgram.css}" href="../css/addProgram.css" rel="stylesheet">
+</head>
+<body>
+<div class="container" style="max-width: 500px">
+  <form th:action method="post">
+    <div>
+      <label>구분</label>
+      <input type="radio" id="offline" name="type" value="오프라인" checked onchange="showPlaceInput(0)">
+      <label for="offline">오프라인</label>
+      <input type="radio" id="online" name="type" value="온라인" onchange="showPlaceInput(1)">
+      <label for="online">온라인</label>
+    </div>
+    <div>
+      <label for="title">프로그램명</label>
+      <input type="text" id="title" name="title">
+    </div>
+    <div>
+      <label>장소</label>
+      <div id="off">
+        <input type="button" id="searchAddr" value="주소 검색" onclick="findAddress()">
+        <input type="text" id="address" readonly placeholder="주소">
+        <input type="text" id="detailAddress" onchange="placeValue()" placeholder="상세주소" value="">
+        <input type="hidden" id="offPlace" name="place">
+      </div>
+      <div id="on" style="display: none">
+        <input type="text" id="onPlace" name="place" value="온라인 관람" readonly disabled>
+      </div>
+    </div>
+    <div>
+      <label for="drop">신청대상</label>
+      <select id="drop" name="target">
+        <option value="제한없음" selected>제한없음</option>
+        <option id="area" value="지역">지역</option>
+      </select>
+    </div>
+    <div>
+      <label for="startDate">신청기간</label>
+      <input type="date" id="startDate" name="startDate"><b> ~ </b>
+      <input type="date" id="endDate" name="endDate">
+    </div>
+    <div>
+      <label for="viewing">관람일시</label>
+      <input type="datetime-local" id="viewing">
+      <input type="button" onclick="addViewing()" value="추가">
+      <div id="viewingList" class="form-check"></div>
+    </div>
+
+    <div style="max-width: 500px">
+      <fieldset>
+        <legend>좌석 생성</legend>
+        <div class="input-group">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="seatRow" placeholder="열 입력" oninput="checkNumber(id)">
+            <label for="seatRow">열 입력</label>
+          </div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="seat" placeholder="한 줄 좌석수 입력" oninput="checkNumber(id)">
+            <label for="seat">한 줄 좌석수 입력</label>
+          </div>
+          <input type="button" class="btn btn-primary" onclick="createSeatingChart()" value="생성">
+        </div>
+        <div>
+          <div id="stage">stage</div>
+          <div id="chart"></div>
+        </div>
+        <div>
+          <p>제거할 좌석</p>
+          <div id="removedSeat"></div>
+        </div>
+      </fieldset>
+    </div>
+    <button type="submit" class="btn btn-success">등록하기</button>
+  </form>
+</div>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="/js/addProgram.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AdminAddProgramRequest {
+public class BizAddProgramRequest {
     private String title; //프로그램 제목
     private String place; //장소
     private String target; //신청대상
