@@ -11,7 +11,7 @@
     <p th:text="|프로그램명 : ${programInfo.title}|"></p>
     <p th:text="|장소 : ${programInfo.place} |"></p>
     <p th:text="|대상 : ${programInfo.target}|"></p>
-    <p th:text="|신청기간 : ${programInfo.startDate} + ' ~ ' + ${programInfo.endDate}|"></p>
+    <p th:text="|신청기간 : ${programInfo.startDate} ~ ${programInfo.endDate}|"></p>
     <button th:onclick="|location.href='@{/admin/program/info/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">수정</button>
     <button th:onclick="|location.href='@{/admin/program}'|" type="button">목록</button>
 </div>

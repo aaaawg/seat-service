@@ -5,10 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AddAdminUserRequest {
+public class AddBizUserRequest {
     private String userId;
     private String password;
     private String name;
     private String address;
     private String phone;
+    private String email;
+    private String role = "biz";
 }

@@ -1,9 +1,10 @@
 package com.psr.seatservice.service.program;
 
 import com.psr.seatservice.domian.program.*;
-import com.psr.seatservice.dto.program.request.AdminAddProgramRequest;
+import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.AdminUpdateProgramRequest;
-import com.psr.seatservice.dto.program.response.ProgramAdminResponse;
+import com.psr.seatservice.dto.program.response.AdminProgramResponse;
+import com.psr.seatservice.dto.program.response.MainProgramResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoAdminResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +24,10 @@ public class ProgramService {
         this.programViewingRepository = programViewingRepository;
     }
 
-    @Transactional
-    public List<ProgramAdminResponse> programs() {
+    public List<AdminProgramResponse> programs() {
         List<Program> programs = programRepository.findAll();
         return programs.stream()
-                .map(ProgramAdminResponse::new)
+                .map(AdminProgramResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -36,8 +36,7 @@ public class ProgramService {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    @Transactional
-    public void addProgram(AdminAddProgramRequest request) {
+    public void addProgram(BizAddProgramRequest request) {
         Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(), request.getEndDate());
         programRepository.save(program);
         Long programNum = program.getProgramNum();
@@ -53,7 +52,7 @@ public class ProgramService {
                 request.getStartDate(), request.getEndDate());
     }
 
-    public void addProgramViewingDateAndTime(AdminAddProgramRequest request, Long programNum) {
+    public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
         int size = request.getViewingDateAndTime().size();
         String dateAndTime, date, time;
         List<ProgramViewing> list = new ArrayList<>();
@@ -67,7 +66,18 @@ public class ProgramService {
         programViewingRepository.saveAll(list);
     }
 
+    public List<MainProgramResponse> mainPrograms() {
+        List<Program> programs = programRepository.findAll();
+        return programs.stream()
+                .map(MainProgramResponse::new)
+                .collect(Collectors.toList());
+    }
+
+
+
+
     public List<ProgramInfoAdminResponse> findA() {
+        //...
         List<Program> programs = programRepository.findAll();
         return programs.stream()
                 .map(ProgramInfoAdminResponse::new)

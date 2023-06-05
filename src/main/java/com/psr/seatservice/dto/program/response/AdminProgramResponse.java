@@ -4,11 +4,11 @@ import com.psr.seatservice.domian.program.Program;
 import lombok.Getter;
 
 @Getter
-public class ProgramAdminResponse {
+public class AdminProgramResponse {
     private Long programNum;
     private String title;
 
-    public ProgramAdminResponse(Program program) {
+    public AdminProgramResponse(Program program) {
         this.programNum = program.getProgramNum();
         this.title = program.getTitle();
     }
