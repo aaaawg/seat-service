@@ -39,7 +39,7 @@ const n = searchParams.get('num');
         })
         .then(function (data) {
             setMessage(sp(data,max(data)));
-
+            console.log(data);
         });
         },1000);
 

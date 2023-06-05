@@ -1,40 +1,52 @@
 import React from 'react';
-import "../css/buy.css";
 import axios from "axios";
 import {useQuery} from "react-query";
-import Grid from 'react-grid-layout';
+import GridLayout from 'react-grid-layout';
 
 function max(a){
     let re=0;
+    let te = a ? Object.keys(a).length : 0;;
     let index;
-    for(index=0;index<a.length;index++){
+    for(index=0;index<te;index++){
         if(a[index].s_col > re)
             re = a[index].s_col;
     }
-    return ++re;
+    ++re;
+    return re;
 }
 
-function SeatNewList(program){
-    let n=0;
+
+//자료 정렬 ㄱㄱ
+//길이 받아오기 ok
+const fetchData = () => {
+    return axios.get("http://localhost:3000/List/1");
+}
+
+function SeatNewList(){
+    let n;
     const {data, isSuccess} = useQuery(
-    ["seat_list"],
-    () => axios.get("http://localhost:3000/List/1"),{
-        onSuccess: data => {
-        }
-    });
-    n = max(isSuccess);
-    console.log(data, isSuccess)
+    'seat_list',
+    fetchData,
+    {
+        select: (data) => data.data,
+    }
+    );
+    console.log(data);
+
+    n = data ? Object.keys(data).length : 0;
+    n =max(data);
+
     return(
-    <Grid cols={n} width={10}>
+    <>
     {n}
-        {isSuccess ? (
-             data.data.map((seat, index) => (
+       {isSuccess && data && Array.isArray(data) ? (
+             data.map((seats,index) => (
                     <div key={index}>
-                        id: {seat.id} col: {seat.s_col} ch: {seat.checking}
+                        {seats.id}
                     </div>
           ))
         ) : null}
-    </Grid>
+    </>
     );
 }
 export default SeatNewList;
