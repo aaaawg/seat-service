@@ -1,4 +1,4 @@
-package com.psr.seatservice.service;
+package com.psr.seatservice.service.user;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -42,7 +42,6 @@ public class EmailService {
         simpleMailMessage.setSubject(title);
         simpleMailMessage.setText(message);
 
-        System.out.println(toEmail);
         //mailSender.send(simpleMailMessage); //메일을 실제로 보냄
         return randomNum;
     }

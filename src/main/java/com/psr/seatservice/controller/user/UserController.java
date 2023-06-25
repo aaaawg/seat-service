@@ -21,11 +21,12 @@ public class UserController {
         return "user/login";
     }
 
+    //로그인
     @PostMapping("/login")
     public String login(UserLoginRequest request) {
         User loginUser = userService.login(request);
         if(loginUser != null && loginUser.getRole().equals("biz"))
-            return "program/bizUserPrograms";
+            return "program/bizProgramList";
         else
             return "program/programList";
     }
@@ -40,6 +41,7 @@ public class UserController {
         return "user/addBizUser";
     }
 
+    //기업 사용자 회원가입 처리
     @PostMapping("/join/business")
     public String bizUserJoin(AddBizUserRequest request) {
         userService.join(request);
