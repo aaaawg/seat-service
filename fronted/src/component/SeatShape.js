@@ -1,7 +1,13 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import {Link, useLocation, useSearchParams} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import "../css/buy.css";
+
+
+function SeatShape() {
+const [message, setMessage] = useState([]);
+const location = useLocation();
+const pro = location.state.program;
 
 function sp(a,b){
     const re = [];
@@ -54,25 +60,25 @@ const n = searchParams.get('num');
                             <ul>
                                {m.map(function (t, index2){
                                return(
-                               <li key={index2}>
-                               <Link to={{
-                                               pathname:`/Pur/${t.id}`
-                                         }}
-                               state={{num: t}}>
-                                               <button key={t.id}
-                                               title={t.program_num}
-                                               className={"btn"+(`${t.checking}`==="true" ? 'T': 'F')}
-                                               disabled={t.checking}
-                                               ></button>
-                               </Link>
-                               </li>
+                                   <li key={index2}>
+                                       <Link to={{
+                                           pathname:`/Pur/${t.id}`
+                                       }}
+                                             state={{num: t}}>
+                                           <button key={t.id}
+                                                   title={t.program_num}
+                                                   className={"btn"+(`${t.checking}`==="true" ? 'T': 'F')}
+                                                   disabled={t.checking}
+                                           ></button>
+                                       </Link>
+                                   </li>
                                )})}
-                               </ul>
-                           </div>
-                       )
-                   })
-                }
-        </div>
+                       </ul>
+                   </div>
+               )
+           })
+           }
+       </div>
    );
 }
 export default SeatShape;

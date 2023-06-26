@@ -1,4 +1,6 @@
 let addr;
+let row;
+let num;
 function placeValue() {
     let detailAddr= document.getElementById("detailAddress").value;
     let val = '';
@@ -121,11 +123,16 @@ function createSeatingChart() {
             sBtn.className = "seatBtn";
             seatNum++;
             sBtn.innerText = seatNum + "";
+
+            sBtn.addEventListener("click", function() { removedSeat();})
             row.appendChild(sBtn);
         }
         chart.appendChild(row);
     }
 }
 function removedSeat() {
-
+    let remove = document.getElementById("removedSeat");
+    let n = document.createElement("a")
+    n.innerText = row + "열 " + seatNum + "번";
+    remove.appendChild(n)
 }

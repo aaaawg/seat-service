@@ -2,10 +2,10 @@ package com.psr.seatservice.service.program;
 
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
-import com.psr.seatservice.dto.program.request.AdminUpdateProgramRequest;
-import com.psr.seatservice.dto.program.response.AdminProgramResponse;
-import com.psr.seatservice.dto.program.response.MainProgramResponse;
-import com.psr.seatservice.dto.program.response.ProgramInfoAdminResponse;
+import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
+import com.psr.seatservice.dto.program.response.BizProgramListResponse;
+import com.psr.seatservice.dto.program.response.ProgramListResponse;
+import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +24,10 @@ public class ProgramService {
         this.programViewingRepository = programViewingRepository;
     }
 
-    public List<AdminProgramResponse> programs() {
+    public List<BizProgramListResponse> programs() {
         List<Program> programs = programRepository.findAll();
         return programs.stream()
-                .map(AdminProgramResponse::new)
+                .map(BizProgramListResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +45,7 @@ public class ProgramService {
     }
 
     @Transactional
-    public void updateProgramInfo(Long programNum, AdminUpdateProgramRequest request) {
+    public void updateProgramInfo(Long programNum, BizUpdateProgramRequest request) {
         Program program = programRepository.findById(programNum)
                 .orElseThrow(IllegalAccessError::new);
         program.updateInfo(request.getTitle(), request.getPlace(), request.getTarget(),
@@ -66,21 +66,21 @@ public class ProgramService {
         programViewingRepository.saveAll(list);
     }
 
-    public List<MainProgramResponse> mainPrograms() {
+    public List<ProgramListResponse> mainPrograms() {
         List<Program> programs = programRepository.findAll();
         return programs.stream()
-                .map(MainProgramResponse::new)
+                .map(ProgramListResponse::new)
                 .collect(Collectors.toList());
     }
 
 
 
 
-    public List<ProgramInfoAdminResponse> findA() {
+    public List<ProgramInfoResponse> findA() {
         //...
         List<Program> programs = programRepository.findAll();
         return programs.stream()
-                .map(ProgramInfoAdminResponse::new)
+                .map(ProgramInfoResponse::new)
                 .collect(Collectors.toList());
     }
 }

@@ -8,7 +8,8 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class AdminUpdateProgramRequest {
+public class BizUpdateProgramRequest {
+    //기업 사용자 - 프로그램 정보 수정
     private String title; //프로그램 제목
     private String place; //장소
     private String target; //신청대상

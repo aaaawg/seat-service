@@ -1,4 +1,4 @@
-package com.psr.seatservice.dto;
+package com.psr.seatservice.dto.user.request;
 
 import lombok.Getter;
 import lombok.Setter;

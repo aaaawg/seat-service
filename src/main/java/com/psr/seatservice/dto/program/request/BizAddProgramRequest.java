@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class BizAddProgramRequest {
+    //기업 사용자 - 프로그램 정보 추가
     private String title; //프로그램 제목
     private String place; //장소
     private String target; //신청대상

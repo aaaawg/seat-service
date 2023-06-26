@@ -6,22 +6,20 @@ import lombok.Getter;
 import java.util.Date;
 
 @Getter
-public class ProgramInfoAdminResponse {
+public class ProgramListResponse {
     private Long programNum;
-    private String title; //프로그램 제목
-    private String place; //장소
-    private String target; //신청대상
-    private Date startDate; //신청시작일
-    private Date endDate; //신청마감일
+    private String title;
+    private Date startDate;
+    private Date endDate;
     private String type;
+    private String place;
 
-    public ProgramInfoAdminResponse(Program program) {
+    public ProgramListResponse(Program program) {
         this.programNum = program.getProgramNum();
         this.title = program.getTitle();
-        this.place = program.getPlace();
-        this.target = program.getTarget();
         this.startDate = program.getStartDate();
         this.endDate = program.getEndDate();
         this.type = program.getType();
+        this.place = program.getPlace();
     }
 }
