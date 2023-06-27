@@ -3,6 +3,7 @@ package com.psr.seatservice.controller.program;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.dto.program.response.ProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
+import com.psr.seatservice.dto.program.response.ProgramViewingDateAndTimeResponse;
 import com.psr.seatservice.service.program.ProgramService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,9 @@ public class ProgramController {
     @GetMapping("/program/{programNum}")
     public String programInfo(@PathVariable Long programNum, Model model) {
         Program program = programService.programInfo(programNum);
+        List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
+        model.addAttribute("programViewing", viewing);
         return "program/programInfo";
     }
 }

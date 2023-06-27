@@ -12,8 +12,36 @@
     <p th:text="|장소 : ${programInfo.place} |"></p>
     <p th:text="|대상 : ${programInfo.target}|"></p>
     <p th:text="|신청기간 : ${programInfo.startDate} ~ ${programInfo.endDate}|"></p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <ul id="selectDate" class="list-group" th:each="i, viewing: ${programViewing}" th:if="${viewing.index == 0||(viewing.index > 0 && programViewing[viewing.index].viewingDate != programViewing[(viewing.index)-1].viewingDate)}">
+                    <li class="list-group-item" ><a onclick="selectedDate(this.innerText)" th:text="${i.viewingDate}"></a></li>
+                </ul>
+            </div>
+            <div class="col"><ul id="selectTime" class="list-group"></ul></div>
+            <div class="col"><button type="button">좌석선택</button></div>
+        </div>
+    </div>
+
     <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">수정</button>
     <button th:onclick="|location.href='@{/business/program}'|" type="button">목록</button>
 </div>
+<script th:inline="javascript">
+    function selectedDate(date) {
+        let u = document.getElementById("selectTime");
+        u.innerText = "";
+        const list = [[${programViewing}]];
+        for (let i = 0; i < list.length; i++) {
+            if(date == list[i].viewingDate) {
+                let tt = document.createElement("li");
+                tt.className = "list-group-item";
+                tt.innerText = list[i].viewingTime;
+                u.appendChild(tt);
+            }
+        }
+    }
+</script>
 </body>
 </html>
