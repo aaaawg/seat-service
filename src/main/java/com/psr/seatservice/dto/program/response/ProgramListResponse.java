@@ -13,6 +13,7 @@ public class ProgramListResponse {
     private Date endDate;
     private String type;
     private String place;
+    private Long fileId;
 
     public ProgramListResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -21,5 +22,6 @@ public class ProgramListResponse {
         this.endDate = program.getEndDate();
         this.type = program.getType();
         this.place = program.getPlace();
+        this.fileId = program.getFileId();
     }
 }

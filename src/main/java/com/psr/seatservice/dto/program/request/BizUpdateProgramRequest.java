@@ -17,4 +17,5 @@ public class BizUpdateProgramRequest {
     private Date startDate; //신청시작일
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate; //신청마감일
+    private Long fileId;//poster
 }
