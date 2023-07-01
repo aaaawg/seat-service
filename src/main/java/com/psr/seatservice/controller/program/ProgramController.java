@@ -37,4 +37,9 @@ public class ProgramController {
         model.addAttribute("programViewing", viewing);
         return "program/programInfo";
     }
+
+    @GetMapping("/booking/{programNum}")
+    public String booking(@PathVariable Long programNum) {
+        return "program/programSeatBooking";
+    }
 }

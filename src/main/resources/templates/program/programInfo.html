@@ -6,6 +6,7 @@
           href="../css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div th:replace="/layout/nav.html :: nav"></div>
 <div class="container" style="max-width: 1000px">
     <p th:text="|구분 : ${programInfo.type}|"></p>
     <p th:text="|프로그램명 : ${programInfo.title}|"></p>
@@ -20,8 +21,11 @@
                     <li class="list-group-item" ><a onclick="selectedDate(this.innerText)" th:text="${i.viewingDate}"></a></li>
                 </ul>
             </div>
-            <div class="col"><ul id="selectTime" class="list-group"></ul></div>
-            <div class="col"><button type="button">좌석선택</button></div>
+            <div class="col">
+                <ul id="selectTime" class="list-group">
+                </ul>
+            </div>
+            <div class="col"><button type="button" th:s="${programInfo.programNum}" onclick="openPopup(this.getAttribute('s'))">좌석선택</button></div>
         </div>
     </div>
 
@@ -29,17 +33,38 @@
     <button th:onclick="|location.href='@{/business/program}'|" type="button">목록</button>
 </div>
 <script th:inline="javascript">
+    let sDate;
+    let sTime;
+
     function selectedDate(date) {
+        sDate = date;
         let u = document.getElementById("selectTime");
         u.innerText = "";
         const list = [[${programViewing}]];
         for (let i = 0; i < list.length; i++) {
             if(date == list[i].viewingDate) {
                 let tt = document.createElement("li");
+                let a = document.createElement("a")
                 tt.className = "list-group-item";
-                tt.innerText = list[i].viewingTime;
+                a.innerText = list[i].viewingTime;
+                a.onclick = function selectedTime() {
+                    sTime = this.innerText;
+                };
+                tt.appendChild(a);
                 u.appendChild(tt);
             }
+        }
+    }
+    function openPopup(num) {
+        let url = "/booking/"+ num;
+        window.open(url, "예약", "width=1000px, height=600px");
+    }
+    function selectedDataAndTime(t) {
+        if(t === "date") {
+            return sDate;
+        }
+        else if(t === "time") {
+            return sTime;
         }
     }
 </script>

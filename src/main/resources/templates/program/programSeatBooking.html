@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <button type="button" onclick="f()"></button>
+
+</div>
+<script>
+    let d;
+    let t;
+    function f() {
+        //상세 정보 페이지에서 선택된 날짜, 시간 가져오기
+        d = window.opener.selectedDataAndTime("date");
+        t = window.opener.selectedDataAndTime("time");
+
+        console.log(d);
+        console.log(t);
+    }
+</script>
+</body>
+</html>
