@@ -1,9 +1,12 @@
 package com.psr.seatservice.domian.files;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Entity
 public class Files {

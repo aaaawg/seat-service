@@ -12,6 +12,10 @@
     <p th:text="|장소 : ${programInfo.place} |"></p>
     <p th:text="|대상 : ${programInfo.target}|"></p>
     <p th:text="|신청기간 : ${programInfo.startDate} ~ ${programInfo.endDate}|"></p>
+    <div>
+        <strong>파일 : </strong>
+        <img th:src="@{'/files/' + ${file.filename}}" title="test" width="200"/>
+    </div>
     <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">수정</button>
     <button th:onclick="|location.href='@{/business/program}'|" type="button">목록</button>
 </div>

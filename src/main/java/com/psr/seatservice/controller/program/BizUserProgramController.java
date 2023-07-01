@@ -46,7 +46,7 @@ public class BizUserProgramController {
     public String addProgram(BizAddProgramRequest request, @RequestParam("file") MultipartFile files) {
         try{
             String origFilename = files.getOriginalFilename();
-            String filename = new MD5Generator(origFilename).toString();
+            String filename = new MD5Generator(origFilename).toString() + origFilename;
             /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
             String savePath = System.getProperty("user.dir") + "\\files";
             /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
@@ -64,7 +64,6 @@ public class BizUserProgramController {
             FileDto fileDto = new FileDto(origFilename,filename,filePath);
 
             Long id = fileService.saveFile(fileDto);
-
             request.setFileId(id);
             programService.addProgram(request);
         }catch(Exception e) {

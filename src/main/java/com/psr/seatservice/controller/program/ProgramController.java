@@ -1,8 +1,10 @@
 package com.psr.seatservice.controller.program;
 
 import com.psr.seatservice.domian.program.Program;
+import com.psr.seatservice.dto.files.FileDto;
 import com.psr.seatservice.dto.program.response.ProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
+import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +16,11 @@ import java.util.List;
 @Controller
 public class ProgramController {
     private final ProgramService programService;
+    private final FilesService filesService;
 
-    public ProgramController(ProgramService programService) {
+    public ProgramController(ProgramService programService, FilesService filesService) {
         this.programService = programService;
+        this.filesService = filesService;
     }
 
     //메인 페이지 - 프로그램 목록 표시
@@ -31,7 +35,11 @@ public class ProgramController {
     @GetMapping("/program/{programNum}")
     public String programInfo(@PathVariable Long programNum, Model model) {
         Program program = programService.programInfo(programNum);
+        System.out.println(program.getFileId());
+        FileDto fileDto = filesService.getFile(program.getFileId());
+
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
+        model.addAttribute("file",fileDto);
         return "program/programInfo";
     }
 }

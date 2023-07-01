@@ -16,7 +16,6 @@ public class FilesService {
     @Transactional
     public Long saveFile(FileDto fileDto) {
         Files files = new Files(fileDto.getOrigfilename(), fileDto.getFilename(), fileDto.getFilepath());
-        System.out.println(fileDto.getOrigfilename()+ fileDto.getFilename()+ fileDto.getFilepath());
         Long id = 1L;
         id = filesRepository.save(files).getId();
         if(id == null) {
@@ -26,15 +25,9 @@ public class FilesService {
         return id;
     }
 
-   /* @Transactional
     public FileDto getFile(Long id) {
         Files files = filesRepository.findById(id).get();
-
-        FileDto fileDto = FileDto.builder()
-                .origFilename(files.getOrigFilename())
-                .filename(files.getFilename())
-                .filePath(files.getFilePath())
-                .build();
+        FileDto fileDto = new FileDto(files.getOrigfilename(), files.getFilename(), files.getFilepath());
         return fileDto;
-    }*/
+    }
 }
