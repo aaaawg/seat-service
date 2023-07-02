@@ -28,9 +28,18 @@ function max(a){
     }
     return ++re;
 }
+
+
+function SeatShape() {
+const [message, setMessage] = useState([]);
+const location = useLocation();
+const pro = location.state.program;
+const [searchParams, setSearchParams] = useSearchParams();
+const n = searchParams.get('num');
+
     useEffect(()=>{
         setInterval(()=> {
-        fetch("/List/"+`${pro}`)
+        fetch(`/List/${pro}`)
         .then((response) => {
             return response.json();
         })
@@ -43,13 +52,13 @@ function max(a){
     }, )
 
    return(
-       <div className="r">
-           <h1>{pro}</h1>
-           {message.map(function (m, index){
-               return (
-                   <div key={index} className="bu2">
-                       <ul>
-                           {m.map(function (t, index2){
+        <div className="r">
+                <h1>{pro} {n}</h1>
+                {message.map(function (m, index){
+                       return (
+                           <div key={index} className="bu2">
+                            <ul>
+                               {m.map(function (t, index2){
                                return(
                                    <li key={index2}>
                                        <Link to={{

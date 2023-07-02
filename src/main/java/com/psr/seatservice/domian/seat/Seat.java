@@ -1,10 +1,11 @@
 package com.psr.seatservice.domian.seat;
 
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.*;
 @Entity
-@Data
+@Getter
 @Table(name = "seat_table")
 public class Seat {
     @Id

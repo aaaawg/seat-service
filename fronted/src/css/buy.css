@@ -1,3 +1,7 @@
+react-grid-layout{
+    border: black;
+}
+
 .r{
     display: flex;
     flex-direction: column;

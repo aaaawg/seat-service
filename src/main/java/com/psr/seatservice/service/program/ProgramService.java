@@ -38,7 +38,7 @@ public class ProgramService {
     }
 
     public void addProgram(BizAddProgramRequest request) {
-        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(), request.getEndDate());
+        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(), request.getEndDate(), request.getFileId());
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 

@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container" style="max-width: 500px">
-  <form th:action method="post">
+  <form th:action method="post" enctype="multipart/form-data">
     <div>
       <label>구분</label>
       <input type="radio" id="offline" name="type" value="오프라인" checked onchange="showPlaceInput(0)">
@@ -51,6 +51,16 @@
       <div id="viewingList" class="form-check"></div>
     </div>
 
+    <div>
+      <label for="inputFile"><strong>첨부 파일</strong></label>
+      <div>
+        <div class="custom-file" id="inputFile">
+          <input name="file" type="file" class="custom-file-input" id="customFile" />
+          <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
+        </div>
+      </div>
+    </div>
+
     <div style="max-width: 500px">
         <span>좌석 생성</span>
         <div class="input-group">
@@ -79,5 +89,12 @@
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="/js/addProgram.js"></script>
+
+<script>
+      $('.custom-file-input').on('change', function () {
+        var fileName = $(this).val().split('\\').pop();
+        $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
+      });
+</script>
 </body>
 </html>

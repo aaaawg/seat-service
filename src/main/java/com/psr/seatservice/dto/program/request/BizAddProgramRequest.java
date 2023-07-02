@@ -20,4 +20,5 @@ public class BizAddProgramRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate; //신청마감일
     private List<String> viewingDateAndTime;
+    private Long fileId; //포스터
 }

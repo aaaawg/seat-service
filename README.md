@@ -10,6 +10,7 @@ create table program(
     target varchar(10),  
     start_date date,  
     end_date date,  
+    file_id bigint,
     primary key(program_num)  
 );
 ```
@@ -32,6 +33,15 @@ create table user_admin(
     user_id varchar(255),
     primary key (user_num)
 );
+```
+```
+create table  files (
+  id bigint NOT NULL auto_increment,
+  filename varchar(300) NOT NULL,
+  filepath varchar(255) NOT NULL,
+  origfilename varchar(255) NOT NULL,
+  PRIMARY KEY (id)
+)
 ```
 ```
 create table seat_table(
