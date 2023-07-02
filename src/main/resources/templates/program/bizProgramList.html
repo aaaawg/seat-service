@@ -22,8 +22,8 @@
             <tbody>
             <tr th:each="item : ${programs}">
                 <td><input type="checkbox"></td>
-                <td>프로그램상태</td>
                 <td th:text="${item.title}">프로그램명</td>
+                <td>상태</td>
                 <td><button th:onclick="|location.href='@{/program/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
                 <td><button th:onclick="|location.href='@{/business/program/booking/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
             </tr>

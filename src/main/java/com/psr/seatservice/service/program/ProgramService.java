@@ -6,6 +6,7 @@ import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.BizProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
+import com.psr.seatservice.dto.program.response.ProgramViewingDateAndTimeResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,8 +74,12 @@ public class ProgramService {
                 .collect(Collectors.toList());
     }
 
-
-
+    public List<ProgramViewingDateAndTimeResponse> getProgramViewingDateAndTime(Long programNum) {
+        List<ProgramViewing> programViewings = programViewingRepository.findByProgramNo(programNum);
+        return programViewings.stream()
+                .map(ProgramViewingDateAndTimeResponse::new)
+                .collect(Collectors.toList());
+    }
 
     public List<ProgramInfoResponse> findA() {
         //...

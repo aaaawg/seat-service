@@ -5,6 +5,7 @@ import com.psr.seatservice.dto.files.FileDto;
 import com.psr.seatservice.dto.program.response.ProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
 import com.psr.seatservice.service.files.FilesService;
+import com.psr.seatservice.dto.program.response.ProgramViewingDateAndTimeResponse;
 import com.psr.seatservice.service.program.ProgramService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,8 +39,15 @@ public class ProgramController {
         System.out.println(program.getFileId());
         FileDto fileDto = filesService.getFile(program.getFileId());
 
+        List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
         model.addAttribute("file",fileDto);
+        model.addAttribute("programViewing", viewing);
         return "program/programInfo";
+    }
+
+    @GetMapping("/booking/{programNum}")
+    public String booking(@PathVariable Long programNum) {
+        return "program/programSeatBooking";
     }
 }
