@@ -9,7 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //파일 저장 위치 **
+        String savePath = "file:///" + System.getProperty("user.dir") + "/files/";
         registry.addResourceHandler( "/files/**")
-                .addResourceLocations("file:///C:/Users/dkdud/Downloads/seat-service-master/seat-service/files/");
+                .addResourceLocations(savePath);
     }
 }
