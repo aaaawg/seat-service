@@ -1,4 +1,6 @@
 package com.psr.seatservice.controller.session;
+import com.psr.seatservice.SessionConst;
+import com.psr.seatservice.domian.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,8 @@ public class SessionController {
         log.info("lastAccessedTime={}", new
                 Date(session.getLastAccessedTime()));
         System.out.println("isNew="+ session.isNew());
-        return "세션 출력";
+        User logUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        return logUser.getName();
     }
 }

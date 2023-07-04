@@ -6,6 +6,7 @@ import com.psr.seatservice.dto.user.request.AddBizUserRequest;
 import com.psr.seatservice.dto.user.request.UserLoginRequest;
 import com.psr.seatservice.service.user.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -27,27 +28,27 @@ public class UserController {
 
     //로그인
     @PostMapping("/login")
-    public String login(UserLoginRequest request, HttpServletRequest httpServletRequest) {
+    public String login(UserLoginRequest request, HttpServletRequest httpServletRequest, Model model) {
         User loginUser = userService.login(request);
         if(loginUser != null && loginUser.getRole().equals("biz")) {
             HttpSession session = httpServletRequest.getSession();
             session.setAttribute(SessionConst.LOGIN_MEMBER, loginUser);
-            System.out.println("idid: " + SessionConst.LOGIN_MEMBER);
+            User logUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-            session.getAttributeNames().asIterator()
-                    .forEachRemaining(name -> System.out.println("session name=" + name + "value=" + session.getAttribute(name)));
-            return "program/bizProgramList";
+            model.addAttribute("name",logUser.getName());
+             //return "program/bizProgramList";
+            return "program/programList";
         }
         else {
-            System.out.println("noidid: " + SessionConst.LOGIN_MEMBER);
             return "program/programList";
         }
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
         //세션을 삭제한다.
         HttpSession session = request.getSession(false);
+        System.out.println("end: "+ session.getAttribute(SessionConst.LOGIN_MEMBER));
         if (session != null) {
             session.invalidate();
         }
