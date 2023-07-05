@@ -17,12 +17,20 @@
           </li>
         </ul>
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <li th:if="${#strings.isEmpty(session.loginMember)}" class="nav-item">
             <a class="nav-link" th:onclick="|location.href='@{/login}'|">로그인</a>
           </li>
-          <li class="nav-item">
+          <li th:unless="${#strings.isEmpty(session.loginMember)} and ${#strings.isEmpty(name)}" class="nav-item">
+            <p th:text="@{${name}+'님'}" />
+          </li>
+
+          <li th:if="${#strings.isEmpty(session.loginMember)}" class="nav-item">
             <a class="nav-link" th:onclick="|location.href='@{/join}'|">회원가입</a>
           </li>
+          <li th:unless="${#strings.isEmpty(session.loginMember)}" class="nav-item">
+            <a class="nav-link" th:onclick="|location.href='@{/logout}'|">로그아웃</a>
+          </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               마이페이지
