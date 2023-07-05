@@ -29,6 +29,9 @@ public class Program {
     @OneToMany(mappedBy = "program")
     private List<ProgramViewing> programViewings = new ArrayList<>();
 
+    @OneToOne(mappedBy = "program")
+    private ProgramSeat programSeat;
+
     //private String contents; //프로그램 상세 내용
     //private String notice; //예약 공지
 

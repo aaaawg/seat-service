@@ -43,14 +43,19 @@ public class ProgramController {
 
     //프로그램 상세정보 
     @GetMapping("/program/{programNum}")
-    public String programInfo(@PathVariable Long programNum, Model model) {
+    public String programInfo(@PathVariable Long programNum, Model model) throws InterruptedException{
         Program program = programService.programInfo(programNum);
-        List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
-        FileDto fileDto = filesService.getFile(program.getFileId());
+        FileDto fileDto;
+        if(program.getFileId() != null) fileDto = filesService.getFile(program.getFileId());
+        else {
+            fileDto = new FileDto();
+            fileDto.setFilename("NoInImage");
+        }
 
+        List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
+        model.addAttribute("file",fileDto);
         model.addAttribute("programViewing", viewing);
-        model.addAttribute("file", fileDto);
         return "program/programInfo";
     }
 

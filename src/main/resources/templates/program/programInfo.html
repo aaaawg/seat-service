@@ -16,7 +16,10 @@
 
     <div>
         <strong>파일 : </strong>
-        <img th:src="@{'/files/' + ${file.filename}}" title="test" width="200"/>
+        <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
+        <span th:unless="${file.filename == 'NoInImage'}">
+            <img th:src="@{'/files/' + ${file.filename}}" title="test" width="200"/>
+        </span>
     </div>
 
     <div class="container">

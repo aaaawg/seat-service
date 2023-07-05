@@ -7,7 +7,7 @@
   <link th:href="@{/css/addProgram.css}" href="../css/addProgram.css" rel="stylesheet">
 </head>
 <body>
-<div class="container" style="max-width: 500px">
+<div class="container" style="max-width: 1000px">
   <form th:action method="post" enctype="multipart/form-data">
     <div>
       <label>구분</label>
@@ -61,8 +61,8 @@
       </div>
     </div>
 
-    <div style="max-width: 500px">
-        <span>좌석 생성</span>
+    <div style="max-width: 1000px">
+        <span>좌석 생성</span> <button type="button" onclick="openPopup()">좌석배치도 생성</button>
         <div class="input-group">
           <div class="form-floating">
             <input type="text" class="form-control" id="seatRow" placeholder="열 입력" oninput="checkNumber(id)">

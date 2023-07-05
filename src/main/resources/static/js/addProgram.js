@@ -136,3 +136,7 @@ function removedSeat() {
     n.innerText = row + "열 " + seatNum + "번";
     remove.appendChild(n)
 }
+
+function openPopup() {
+    window.open("/business/program/seat", "좌석배치도", "width=1000px, height=1000px");
+}
