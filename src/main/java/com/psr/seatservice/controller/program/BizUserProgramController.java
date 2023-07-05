@@ -86,6 +86,11 @@ public class BizUserProgramController {
         return "redirect:/business/program/info/{programNum}";
     }
 
+    @GetMapping("/seat")
+    public String createSeatingChart() {
+        return "program/bizCreateSeatingChart";
+    }
+
     //해당 프로그램을 예약한 개인 사용자 목록 조회
     @GetMapping("/booking/{programNum}")
     public String bookingUserList(@PathVariable Long programNum) {

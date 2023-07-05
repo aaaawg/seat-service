@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @IdClass(ProgramSeatPK.class)
 public class ProgramSeat {
+    //기업사용자가 생성한 좌석표 정보
     @Id
     @Column(name = "program_num")
     private Long programNo;

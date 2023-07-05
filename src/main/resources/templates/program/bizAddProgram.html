@@ -63,25 +63,6 @@
 
     <div style="max-width: 1000px">
         <span>좌석 생성</span> <button type="button" onclick="openPopup()">좌석배치도 생성</button>
-        <div class="input-group">
-          <div class="form-floating">
-            <input type="text" class="form-control" id="seatRow" placeholder="열 입력" oninput="checkNumber(id)">
-            <label for="seatRow">열 입력</label>
-          </div>
-          <div class="form-floating">
-            <input type="text" class="form-control" id="seat" placeholder="한 줄 좌석수 입력" oninput="checkNumber(id)">
-            <label for="seat">한 줄 좌석수 입력</label>
-          </div>
-          <input type="button" class="btn btn-primary" onclick="createSeatingChart()" value="생성">
-        </div>
-        <div>
-          <div id="stage">stage</div>
-          <div id="chart"></div>
-        </div>
-        <div>
-          <p>제외 좌석</p>
-          <div id="removedSeat"></div>
-        </div>
     </div>
     <button type="submit" class="btn btn-success">등록하기</button>
   </form>

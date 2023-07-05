@@ -108,35 +108,6 @@ function showArea() {
         drop.options[0].selected = true;
     }
 }
-function createSeatingChart() {
-    let seatNum = 0;
-    let seat = document.getElementById("seat").value;
-    let sRow = document.getElementById("seatRow").value;
-    let chart = document.getElementById("chart");
-
-    chart.innerHTML = "";
-    for (let i = 0; i < sRow; i++) {
-        let row = document.createElement("div");
-        row.className = "row justify-content-center";
-        for (let j = 0; j < seat; j++) {
-            let sBtn = document.createElement("a");
-            sBtn.className = "seatBtn";
-            seatNum++;
-            sBtn.innerText = seatNum + "";
-
-            sBtn.addEventListener("click", function() { removedSeat();})
-            row.appendChild(sBtn);
-        }
-        chart.appendChild(row);
-    }
-}
-function removedSeat() {
-    let remove = document.getElementById("removedSeat");
-    let n = document.createElement("a")
-    n.innerText = row + "열 " + seatNum + "번";
-    remove.appendChild(n)
-}
-
 function openPopup() {
     window.open("/business/program/seat", "좌석배치도", "width=1000px, height=1000px");
 }
