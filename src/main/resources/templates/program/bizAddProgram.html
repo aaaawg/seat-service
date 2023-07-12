@@ -55,7 +55,7 @@
       <label for="inputFile"><strong>첨부 파일</strong></label>
       <div>
         <div class="custom-file" id="inputFile">
-          <input name="file" type="file" class="custom-file-input" id="customFile" />
+          <input multiple="multiple" name="file" type="file" class="custom-file-input" id="customFile"/>
           <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
         </div>
       </div>
@@ -90,11 +90,5 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="/js/addProgram.js"></script>
 
-<script>
-      $('.custom-file-input').on('change', function () {
-        var fileName = $(this).val().split('\\').pop();
-        $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
-      });
-</script>
 </body>
 </html>

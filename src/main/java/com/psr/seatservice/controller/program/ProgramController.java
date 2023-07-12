@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -43,19 +44,21 @@ public class ProgramController {
 
     //프로그램 상세정보 
     @GetMapping("/program/{programNum}")
-    public String programInfo(@PathVariable Long programNum, Model model) throws IllegalArgumentException{
+    public String programInfo(@PathVariable Long programNum, Model model) throws IllegalArgumentException {
         Program program = programService.programInfo(programNum);
-        System.out.println(program.getFileId());
         FileDto fileDto;
-        if(program.getFileId() != null) fileDto = filesService.getFile(program.getFileId());
-        else {
-            fileDto = new FileDto();
+        List<FileDto> list = filesService.getFileByProNum(program.getProgramNum());
+        fileDto = new FileDto();
+        if(list != null) {
+            fileDto.setFilename("InImage");
+            model.addAttribute("fileList", list);
+        } else {
             fileDto.setFilename("NoInImage");
         }
 
         List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
-        model.addAttribute("file",fileDto);
+        model.addAttribute("file", fileDto);
         model.addAttribute("programViewing", viewing);
         return "program/programInfo";
     }

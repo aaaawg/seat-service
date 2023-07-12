@@ -17,7 +17,7 @@
         <strong>파일 : </strong>
         <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
         <span th:unless="${file.filename == 'NoInImage'}">
-            <img th:src="@{'/files/' + ${file.filename}}" title="test" width="200"/>
+            <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" title=${im.origfilename} width="200"/>
         </span>
     </div>
 

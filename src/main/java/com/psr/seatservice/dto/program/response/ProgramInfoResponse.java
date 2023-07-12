@@ -15,7 +15,6 @@ public class ProgramInfoResponse {
     private Date startDate; //신청시작일
     private Date endDate; //신청마감일
     private String type;
-    private Long fileId; //poster
 
     public ProgramInfoResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -25,6 +24,5 @@ public class ProgramInfoResponse {
         this.startDate = program.getStartDate();
         this.endDate = program.getEndDate();
         this.type = program.getType();
-        this.fileId = program.getFileId();
     }
 }

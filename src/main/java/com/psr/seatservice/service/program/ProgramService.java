@@ -37,12 +37,14 @@ public class ProgramService {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public void addProgram(BizAddProgramRequest request) {
-        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(), request.getEndDate(), request.getFileId());
+    public Long addProgram(BizAddProgramRequest request) {
+        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(),
+                request.getEndDate());
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
         addProgramViewingDateAndTime(request, programNum);
+        return program.getProgramNum();
     }
 
     @Transactional
@@ -54,17 +56,20 @@ public class ProgramService {
     }
 
     public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
-        int size = request.getViewingDateAndTime().size();
-        String dateAndTime, date, time;
-        List<ProgramViewing> list = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            dateAndTime = request.getViewingDateAndTime().get(i);
-            date = dateAndTime.substring(0, 10);
-            time = dateAndTime.substring(11);
-            ProgramViewing pk = new ProgramViewing(programNum, date, time);
-            list.add(pk);
+        if(request.getViewingDateAndTime() != null) {
+            int size = request.getViewingDateAndTime().size();
+            System.out.println("size :" + size);
+            String dateAndTime, date, time;
+            List<ProgramViewing> list = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                dateAndTime = request.getViewingDateAndTime().get(i);
+                date = dateAndTime.substring(0, 10);
+                time = dateAndTime.substring(11);
+                ProgramViewing pk = new ProgramViewing(programNum, date, time);
+                list.add(pk);
+            }
+            programViewingRepository.saveAll(list);
         }
-        programViewingRepository.saveAll(list);
     }
 
     public List<ProgramListResponse> mainPrograms() {
