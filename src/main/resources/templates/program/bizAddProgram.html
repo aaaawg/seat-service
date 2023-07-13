@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <link th:href="@{/css/bootstrap.min.css}"
         href="../css/bootstrap.min.css" rel="stylesheet">
-  <link th:href="@{/css/addProgram.css}" href="../css/addProgram.css" rel="stylesheet">
+  <link th:href="@{/css/addProgram.css}" href="../css/addProgram.css?ver=1" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 <body>
 <div class="container" style="max-width: 500px">
@@ -83,12 +84,28 @@
           <div id="removedSeat"></div>
         </div>
     </div>
+
+    <div id="content">
+      <button type="button" class="btn btn-change">
+        <i class="bi bi-pencil-square"></i>
+      </button>
+      <div class="sample">
+        <span>항목 제목</span>
+        <input type="text" class="sample1" placeholder="제목 입력">
+      </div>
+      <div>
+        <span>항목 설명</span>
+        <input type="text" class="sample1-1">
+      </div>
+    </div>
+
     <button type="submit" class="btn btn-success">등록하기</button>
+    <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
   </form>
 </div>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="/js/addProgram.js"></script>
-
+<script type="text/javascript" src="/js/addProgramContent.js?ver=2"></script>
 </body>
 </html>

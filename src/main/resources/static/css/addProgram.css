@@ -26,3 +26,12 @@
 #chart {
     margin-top: 15px;
 }
+
+.bi.bi-pencil-square {
+    background-color: #767676;
+    color: white;
+    width: 1.7rem;
+    display: block;
+    height: 1.7rem;
+    border-radius: 3px;
+}
