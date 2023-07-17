@@ -69,3 +69,17 @@ function checkAuthNum() {
         en.value = "";
     }
 }
+function changeText(id) {
+    if(id === "user") {
+        document.getElementById("n").textContent = "이름";
+        document.getElementById("a").textContent = "주소";
+        document.getElementById("p").textContent = "휴대폰번호";
+        document.getElementById("role").value = "user"
+    }
+    else {
+        document.getElementById("n").textContent = "기업(기관)명";
+        document.getElementById("a").textContent = "기업(기관)주소";
+        document.getElementById("p").textContent = "전화번호";
+        document.getElementById("role").value = "biz"
+    }
+}

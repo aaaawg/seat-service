@@ -2,7 +2,7 @@ package com.psr.seatservice.controller.user;
 
 import com.psr.seatservice.SessionConst;
 import com.psr.seatservice.domian.user.User;
-import com.psr.seatservice.dto.user.request.AddBizUserRequest;
+import com.psr.seatservice.dto.user.request.AddUserRequest;
 import com.psr.seatservice.dto.user.request.UserLoginRequest;
 import com.psr.seatservice.service.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -60,22 +60,10 @@ public class UserController {
         return "user/join";
     }
 
-    @GetMapping("/join/business")
-    public String bizUserJoinForm() {
-        return "user/addBizUser";
-    }
-
-    //기업 사용자 회원가입 처리
-    @PostMapping("/join/business")
-    public String bizUserJoin(AddBizUserRequest request) {
+    //사용자 회원가입 처리
+    @PostMapping("/join")
+    public String userJoin(AddUserRequest request) {
         userService.join(request);
         return "program/programList";
     }
-
-    @GetMapping("/join/user")
-    public String userJoinForm() {
-        return "user/addUser";
-    }
-
-
 }
