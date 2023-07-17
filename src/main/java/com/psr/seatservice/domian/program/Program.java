@@ -1,12 +1,14 @@
 package com.psr.seatservice.domian.program;
 
+import com.psr.seatservice.domian.files.Files;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@NoArgsConstructor
 @Entity
 @Getter
 public class Program {
@@ -35,22 +37,16 @@ public class Program {
     //private String contents; //프로그램 상세 내용
     //private String notice; //예약 공지
 
-    //private poster; -> fileId
-    @Column
-    private Long fileId;
 
     //프로그램 등록 작성자 아이디
 
-    protected Program() {}
-
-    public Program(String title, String place, String target, String type, Date startDate, Date endDate, Long fileId) {
+    public Program(String title, String place, String target, String type, Date startDate, Date endDate) {
         this.title = title;
         this.place = place;
         this.target = target;
         this.type = type;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.fileId = fileId;
     }
 
     public void updateInfo(String title, String place, String target, Date startDate, Date endDate) {

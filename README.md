@@ -10,7 +10,6 @@ create table program(
     target varchar(10),  
     start_date date,  
     end_date date,  
-    file_id bigint,
     primary key(program_num)  
 );
 ```
@@ -41,7 +40,9 @@ create table  files (
   filename varchar(300) NOT NULL,
   filepath varchar(255) NOT NULL,
   origfilename varchar(255) NOT NULL,
-  PRIMARY KEY (id)
+  post_id bigint NOT NULL,
+  PRIMARY KEY (id),
+  foreign key(post_id) references program(program_num)
 )
 ```
 ```

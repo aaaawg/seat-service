@@ -1,3 +1,37 @@
+#stage {
+    width: 476px;
+    height: 40px;
+    background-color: #e5e5e5;
+    margin-top: 20px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 7px;
+}
+.seatBtn {
+    width: 20px;
+    height: 20px;
+    background-color: #83A783;
+    border-radius: 3px;
+    margin: 2px 2px 2px 2px;
+    text-align: center;
+    font-size: 11px;
+    padding: 0px 0px 0px 0px;
+    text-decoration: none;
+    color: black;
+}
 .row {
     margin: auto;
+}
+#chart {
+    margin-top: 15px;
+}
+
+.bi.bi-pencil-square {
+    background-color: #767676;
+    color: white;
+    width: 1.7rem;
+    display: block;
+    height: 1.7rem;
+    border-radius: 3px;
 }
