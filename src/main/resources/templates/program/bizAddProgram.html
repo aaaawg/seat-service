@@ -62,8 +62,17 @@
       </div>
     </div>
 
-    <div style="max-width: 1000px">
-        <span>좌석 생성</span> <button type="button" onclick="openPopup()">좌석배치도 생성</button>
+    <div id="offSeatingChart" style="max-width: 1000px; display: block;">
+      <label>좌석표</label>
+      <input type="radio" id="nsc" name="ynsc" checked onchange="showCreatSeatingChart(0)">
+      <label for="nsc">사용안함</label>
+      <input type="radio" id="ysc" name="ynsc" onchange="showCreatSeatingChart(1)">
+      <label for="ysc">사용</label>
+      <div id="csc" style="display: none;">
+        <button type="button" id="cb" onclick="openPopup()">좌석배치도 생성</button>
+        <div id="popupChart" class="container"></div>
+        <input type="hidden" id="seatingChart" name="seatingChart">
+      </div>
     </div>
 
     <div id="content">

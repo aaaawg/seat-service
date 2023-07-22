@@ -39,7 +39,7 @@ public class ProgramService {
 
     public Long addProgram(BizAddProgramRequest request) {
         Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(),
-                request.getEndDate());
+                request.getEndDate(), request.getSeatingChart());
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
@@ -83,14 +83,6 @@ public class ProgramService {
         List<ProgramViewing> programViewings = programViewingRepository.findByProgramNo(programNum);
         return programViewings.stream()
                 .map(ProgramViewingDateAndTimeResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    public List<ProgramInfoResponse> findA() {
-        //...
-        List<Program> programs = programRepository.findAll();
-        return programs.stream()
-                .map(ProgramInfoResponse::new)
                 .collect(Collectors.toList());
     }
 }

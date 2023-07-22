@@ -35,20 +35,19 @@ public class Program {
     private ProgramSeat programSeat;
 
     //private String contents; //프로그램 상세 내용
-    //private String notice; //예약 공지
-
-
     //프로그램 등록 작성자 아이디
 
-    public Program(String title, String place, String target, String type, Date startDate, Date endDate) {
+    private String seatingChart;
+
+    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart) {
         this.title = title;
         this.place = place;
         this.target = target;
         this.type = type;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.seatingChart = seatingChart;
     }
-
     public void updateInfo(String title, String place, String target, Date startDate, Date endDate) {
         this.title = title;
         this.place = place;

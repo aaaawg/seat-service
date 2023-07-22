@@ -1,6 +1,6 @@
 let addr;
-let row;
-let num;
+let popupSeatArr;
+let popupSeatCol;
 function placeValue() {
     let detailAddr= document.getElementById("detailAddress").value;
     let val = '';
@@ -57,12 +57,18 @@ function showPlaceInput(type) {
         document.getElementById("on").style.display = "block";
         document.getElementById("onPlace").disabled = false;
         document.getElementById("offPlace").disabled = true;
+
+        document.getElementById("offSeatingChart").style.display = "none";
+        showCreatSeatingChart(0);
     }
     else {
         document.getElementById("off").style.display = "block";
         document.getElementById("on").style.display = "none";
         document.getElementById("onPlace").disabled = true;
         document.getElementById("offPlace").disabled = false;
+
+        document.getElementById("offSeatingChart").style.display = "block"
+        document.getElementById("csc").style.display = "none";
     }
 }
 function showArea() {
@@ -109,5 +115,40 @@ function showArea() {
     }
 }
 function openPopup() {
-    window.open("/business/program/seat", "좌석배치도", "width=1000px, height=1000px");
+    const popup = window.open("/business/program/seat", "좌석배치도", "width=1000px, height=1000px");
+
+    popup.addEventListener("beforeunload", function () {
+        const c = document.getElementById("popupChart");
+        c.innerHTML = "";
+        let num = 1;
+        let seatNum = 1;
+        for (let i = 0; i < popupSeatArr.length; i++) {
+            if (popupSeatArr[i]) {
+                c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(131, 167, 131);'>" + seatNum + "</div>";
+                seatNum++;
+            }
+            else
+                c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(215, 215, 215);'></div>";
+            if(num % popupSeatCol === 0 )
+                c.innerHTML += "<br>";
+            num++;
+        }
+        let chart = JSON.stringify(popupSeatArr);
+        document.getElementById("seatingChart").value = chart;
+    });
+}
+function showCreatSeatingChart(v) {
+    if(v) {
+        document.getElementById("csc").style.display = "block";
+        document.getElementById("cb").disabled = false;
+        document.getElementById("seatingChart").disabled = false;
+    } else {
+        document.getElementById("csc").style.display = "none";
+        document.getElementById("cb").disabled = true;
+        document.getElementById("seatingChart").disabled = true;
+    }
+}
+function popupSeat(arr, col) {
+    popupSeatArr = arr;
+    popupSeatCol = col;
 }

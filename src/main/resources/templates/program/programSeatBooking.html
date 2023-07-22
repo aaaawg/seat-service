@@ -1,14 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
 </head>
 <body>
-<div class="container">
-    <button type="button" onclick="f()"></button>
-
+<div id="selectDate" class="container">
+    <p>시간/날짜 선택</p>
 </div>
+
+<div id="enterForm">
+    <p>신청서 작성</p>
+</div>
+
+<div id="selectSeat">
+    <p>좌석 선택</p>
+</div>
+
+<div id="checkInfo">
+    <p>신청 정보 확인</p>
+    <button type="submit">신청하기</button>
+</div>
+
+<button type="button">이전</button>
+<button type="button">다음</button>
+
 <script>
     let d;
     let t;
@@ -16,9 +31,6 @@
         //상세 정보 페이지에서 선택된 날짜, 시간 가져오기
         d = window.opener.selectedDataAndTime("date");
         t = window.opener.selectedDataAndTime("time");
-
-        console.log(d);
-        console.log(t);
     }
 </script>
 </body>

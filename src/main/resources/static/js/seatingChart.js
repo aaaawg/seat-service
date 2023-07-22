@@ -1,7 +1,9 @@
+let sCol;
+let sRow;
 function createSeatingChart() {
     let seatNum = 0;
-    let sCol = document.getElementById("seat").value;
-    let sRow = document.getElementById("seatRow").value;
+    sCol = document.getElementById("seat").value;
+    sRow = document.getElementById("seatRow").value;
     let chart = document.getElementById("chart");
 
     chart.innerHTML = "";
@@ -18,6 +20,7 @@ function createSeatingChart() {
         }
         chart.appendChild(row);
     }
+
     let c = document.querySelectorAll(".seatBtn");
     for (let i = 0; i < c.length; i++) {
         c[i].addEventListener("click",function (i) {
@@ -31,4 +34,14 @@ function createSeatingChart() {
     }
 }
 function saveSeatingChart() {
+    const s = document.querySelectorAll(".seatBtn");
+    let arr = new Array();
+    for (let i = 0; i < s.length; i++) {
+        if(s[i].style.backgroundColor === "rgb(131, 167, 131)")
+            arr.push(1);
+        else
+            arr.push(0);
+    }
+    window.opener.popupSeat(arr, sCol);
+    self.close();
 }
