@@ -6,6 +6,7 @@ function addContent(){
     newContentDiv.setAttribute("id", "plus"+count)
     newContentDiv.style.background = '#fffce2';
     newContentDiv.style.padding = "20px 0 20px 0";
+    element.appendChild(newContentDiv);
 
     addButtons(newContentDiv);
     origContent(newContentDiv);
@@ -155,9 +156,10 @@ function origContent(newContentDiv){
     inputOrigShort.setAttribute('disabled','');
     newDiv3.appendChild(inputOrigShort);
 
-    count++;
     newContentDiv.appendChild(origContent);
     newContentDiv.appendChild(newDiv3);
+    addEditSelect(count);
+    count++;
 }
 //편집 셀렉트 생성
 function addEditSelect(e){
@@ -171,7 +173,7 @@ function addEditSelect(e){
     span.appendChild(TypeText);
     newDiv.appendChild(span);
 
-    var select = document.createElement( 'select' );
+    var select = document.createElement('select');
     select.setAttribute("name", "content"+e);
     select.setAttribute("onchange", "handleOnChange(this, "+e+")");
 
@@ -191,8 +193,11 @@ function addEditSelect(e){
     divName.appendChild(newChBtn);
 
     const target = document.getElementById(e);
+    const changeColor = document.getElementById('plus'+e);
+    //버튼 눌린 상태로 변경
     if(target.disabled === false){
         target.disabled = true;
+        changeColor.style.background = '#fffce2';
     }
 }
 //셀렉트 선택시
@@ -206,6 +211,7 @@ function handleOnChange(e, divNum) {
   switch(e.value){
     case '주관식 단답형':
         var changeInputText = makeTextInput("reply"+divNum, "단답형 답변");
+        changeInputText.setAttribute("disabled", "");
         changeContent[0].appendChild(changeInputText);
         break;
     case '주관식 서술형':
@@ -263,11 +269,11 @@ function complete(e){
     const buttonName = document.getElementById('complete'+e);
     buttonName.remove();
     const target = document.getElementById(e);
+    const changeColor = document.getElementById('plus'+e);
     if(target.disabled === true){
        target.disabled = false;
+       changeColor.style.background = 'white';
     }
-
-
     titleResult(e);
 }
 
@@ -290,11 +296,12 @@ function titleResult(num){
     for(let i=0; i<length; i++)
         removeDiv[i].style.display='none';
 
-    if(document.getElementById('titleConReplyDiv'+num) === null){
-        if(title==='')
-            title = '제목을 입력해주세요.';
-        const origContent = document.getElementById('origContent'+num);
+    if(title==='')
+       title = '제목을 입력해주세요.';
 
+    alert(num);
+    if(document.getElementById('titleConReplyDiv'+num) === null){
+        const origContent = document.getElementById('origContent'+num);
         const replyDiv = document.createElement('div');
         replyDiv.setAttribute("id", "titleConReplyDiv"+num);
 
@@ -321,5 +328,7 @@ function titleResult(num){
         result.style.display='block';
         var ChangeTitleSpan = document.getElementById("titleSpan"+num);
         ChangeTitleSpan.innerText = title;
+        var ChangeContentSpan = document.getElementById("ContentSpan"+num);
+        ChangeContentSpan.innerText = content;
     }
 }
