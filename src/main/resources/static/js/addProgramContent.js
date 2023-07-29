@@ -49,7 +49,7 @@ function makeRadio(name, selectValue){
     inputRadio.setAttribute("value", selectValue);
     var inputText = document.createElement('input');
     inputText.setAttribute("type", "text");
-    inputText.setAttribute("name", name+"_reason");
+    inputText.setAttribute("name", name+"_reason"+selectValue);
 
     var deleteButton = makeButton("select"+selectValue+name, "delete"+selectValue, "clickRadioMinus(this.className)");
     var newI = document.createElement('i');
@@ -275,6 +275,12 @@ function complete(e){
        changeColor.style.background = 'white';
     }
     titleResult(e);
+
+    //라디오나 체크박스인 경우
+    const contentType = document.getElementsByClassName('wholeCheckDiv'+e);
+    if(contentType != null){
+        RadioResult(e);
+    }
 }
 
 function titleInputLayoutShow(num){
@@ -298,8 +304,6 @@ function titleResult(num){
 
     if(title==='')
        title = '제목을 입력해주세요.';
-
-    alert(num);
     if(document.getElementById('titleConReplyDiv'+num) === null){
         const origContent = document.getElementById('origContent'+num);
         const replyDiv = document.createElement('div');
@@ -331,4 +335,17 @@ function titleResult(num){
         var ChangeContentSpan = document.getElementById("ContentSpan"+num);
         ChangeContentSpan.innerText = content;
     }
+}
+
+function RadioResult(num){
+    var val = [];
+    let valCount = 0;
+    while(1){
+        var value = document.getElementsByName('reply'+num+'_reason'+valCount)[0];
+        alert(value.value);
+        if(value != null)   val[valCount++] = value;
+        else   break;
+    }
+    for(let a=0; a<valCount; a++)
+        alert(val[a]);
 }
