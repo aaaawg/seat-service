@@ -192,6 +192,26 @@ function addEditSelect(e){
     newChBtn.innerText = "완료";
     divName.appendChild(newChBtn);
 
+    var radioContent = radioReToInput(e);
+    if(Array.isArray(radioContent) && radioContent.length !== 0){
+        const changeContent = document.getElementsByClassName("selectDiv"+e)[0];
+        changeContent.innerText = '';
+        for(let i=0; i<radioContent.length; i++){
+              var label = makeRadio("reply"+e, i);
+              changeContent.appendChild(label);
+        }
+        radioContent.forEach((con, index) => {
+              document.getElementsByName("reply"+e+"_reason"+index)[0].value = con;
+        });
+        const changeSelectDiv = document.getElementsByClassName("changeSelectDiv"+e)[0];
+        const selectBtnDiv = document.createElement('div');
+        selectBtnDiv.setAttribute("class", "selectBtnDiv"+e);
+        var radioPlusBtn = makeButton("radioPlus"+e, "radioP"+e, "clickRadioPlus("+e+")");
+        radioPlusBtn.innerText = "옵션 추가";
+        selectBtnDiv.appendChild(radioPlusBtn);
+        changeSelectDiv.appendChild(selectBtnDiv);
+    }
+
     const target = document.getElementById(e);
     const changeColor = document.getElementById('plus'+e);
     //버튼 눌린 상태로 변경
@@ -204,7 +224,6 @@ function addEditSelect(e){
 function handleOnChange(e, divNum) {
   const value = e.value;
   const divName = document.getElementById('plus'+divNum);
-
   const changeContent = document.getElementsByClassName('reDiv'+divNum);
   changeContent[0].innerText = '';
 
@@ -219,23 +238,24 @@ function handleOnChange(e, divNum) {
         changeContent[0].appendChild(changeInputText);
         break;
     case '단일 선택형':
-        const wholeSelectDiv = document.createElement('div');
-        wholeSelectDiv.setAttribute("class", "wholeSelectDiv"+divNum);
+        const store = document.querySelector(".changeSelectDiv"+num);
+        if(store === null){
+           const wholeSelectDiv = document.createElement('div');
+           wholeSelectDiv.setAttribute("class", "wholeSelectDiv"+divNum);
+           const selectDiv = document.createElement('div');
+           selectDiv.setAttribute("class", "selectDiv"+divNum);
+           var label = makeRadio("reply"+divNum, 0);
+           selectDiv.appendChild(label);
+           wholeSelectDiv.appendChild(selectDiv);
+           const selectBtnDiv = document.createElement('div');
+           selectBtnDiv.setAttribute("class", "selectBtnDiv"+divNum);
+           var radioPlusBtn = makeButton("radioPlus"+divNum, "radioP"+divNum, "clickRadioPlus("+divNum+")");
+           radioPlusBtn.innerText = "옵션 추가";
+           selectBtnDiv.appendChild(radioPlusBtn);
 
-        const selectDiv = document.createElement('div');
-        selectDiv.setAttribute("class", "selectDiv"+divNum);
-        var label = makeRadio("reply"+divNum, 0);
-        selectDiv.appendChild(label);
-        wholeSelectDiv.appendChild(selectDiv);
-
-        const selectBtnDiv = document.createElement('div');
-        selectBtnDiv.setAttribute("class", "selectBtnDiv"+divNum);
-        var radioPlusBtn = makeButton("radioPlus"+divNum, "radioP"+divNum, "clickRadioPlus("+divNum+")");
-        radioPlusBtn.innerText = "옵션 추가";
-        selectBtnDiv.appendChild(radioPlusBtn);
-
-        wholeSelectDiv.appendChild(selectBtnDiv);
-        changeContent[0].appendChild(wholeSelectDiv);
+           wholeSelectDiv.appendChild(selectBtnDiv);
+           changeContent[0].appendChild(wholeSelectDiv);
+        }
         break;
     case '복수 선택형':
         const wholeCheckDiv = document.createElement('div');
@@ -276,10 +296,15 @@ function complete(e){
     }
     titleResult(e);
 
-    //라디오나 체크박스인 경우
+    const radioType = document.getElementsByClassName('wholeSelectDiv'+e);
+    const radioAfterType = document.getElementsByClassName('changeSelectDiv'+e);
+    if(radioType.length !== 0 || radioAfterType !== 0){
+       RadioResult(e);
+    }
+
+    //체크박스인 경우
     const contentType = document.getElementsByClassName('wholeCheckDiv'+e);
-    if(contentType != null){
-        RadioResult(e);
+    if(contentType !== null){
     }
 }
 
@@ -327,7 +352,6 @@ function titleResult(num){
         replyDiv.appendChild(spanContent);
         origContent.appendChild(replyDiv);
     }else{
-        alert('이미 있는 경우');
         var result = document.getElementById('titleConReplyDiv'+num);
         result.style.display='block';
         var ChangeTitleSpan = document.getElementById("titleSpan"+num);
@@ -338,14 +362,33 @@ function titleResult(num){
 }
 
 function RadioResult(num){
-    var val = [];
     let valCount = 0;
-    while(1){
-        var value = document.getElementsByName('reply'+num+'_reason'+valCount)[0];
-        alert(value.value);
-        if(value != null)   val[valCount++] = value;
-        else   break;
+    const labelContents = document.querySelector('.selectDiv'+num);
+    const labels = labelContents.querySelectorAll("label");
+    labels.forEach((con, index) => {
+           if(con !== null){
+                const inputRadio = labels[index].querySelectorAll("input");
+                inputRadio[0].value = inputRadio[1].value;
+                inputRadio[1].remove();
+                const inputButton = labels[index].querySelector("button");
+                inputButton.remove();
+                const radioText = document.createTextNode(inputRadio[0].value);
+                labels[index].appendChild(radioText);
+           }
+    });
+    var labelContent = document.getElementsByClassName("wholeSelectDiv"+num)[0];
+    if(labelContent !== undefined) { labelContent.className = 'changeSelectDiv'+num; }
+    const removeBtn = document.getElementsByClassName("selectBtnDiv"+num)[0];
+    removeBtn.remove();
+}
+function radioReToInput(num){
+    var re = [];
+    const store = document.querySelector(".changeSelectDiv"+num);
+    if(store !== null){
+        const radioText = store.querySelectorAll("label");
+        radioText.forEach((con, index) => {
+            re[index] = con.textContent;
+        });
     }
-    for(let a=0; a<valCount; a++)
-        alert(val[a]);
+    return re;
 }
