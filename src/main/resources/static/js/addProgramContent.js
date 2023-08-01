@@ -40,7 +40,6 @@ function makeTextArea(className, placeholderName){
 }
 
 function makeRadio(name, selectValue){
-//<label><input type="radio" name="fruit" value="apple"> Apple</label>
     var label = document.createElement('label');
     label.setAttribute("id", "select"+selectValue+name);
     var inputRadio = document.createElement('input');
@@ -75,7 +74,6 @@ function clickRadioMinus(deleteName){
 }
 
 function makeCheckBox(name, selectValue){
-//<input type="checkbox" name="colors" id="chk4" value="black"><label for="radio4">블랙</label>
     var label = document.createElement('label');
     label.setAttribute("id", "checkBox"+selectValue+name);
     var inputCheckBox = document.createElement('input');
@@ -84,7 +82,7 @@ function makeCheckBox(name, selectValue){
     inputCheckBox.setAttribute("value", selectValue);
     var inputText = document.createElement('input');
     inputText.setAttribute("type", "text");
-    inputText.setAttribute("name", name+"_reason");
+    inputText.setAttribute("name", name+"_reason"+selectValue);
 
     var deleteButton = makeButton("checkBox"+selectValue+name, "deleteCheckBox"+selectValue, "clickRadioMinus(this.className)");
     var newI = document.createElement('i');
@@ -192,7 +190,7 @@ function addEditSelect(e){
     newChBtn.innerText = "완료";
     divName.appendChild(newChBtn);
 
-    var radioContent = radioReToInput(e);
+    var radioContent = reToInput(e, 'radio');
     if(Array.isArray(radioContent) && radioContent.length !== 0){
         const changeContent = document.getElementsByClassName("selectDiv"+e)[0];
         changeContent.innerText = '';
@@ -211,7 +209,25 @@ function addEditSelect(e){
         selectBtnDiv.appendChild(radioPlusBtn);
         changeSelectDiv.appendChild(selectBtnDiv);
     }
-
+    var checkContent = reToInput(e, 'check');
+    if(Array.isArray(checkContent) && checkContent.length !== 0){
+        const changeContent = document.getElementsByClassName("checkBoxDiv"+e)[0];
+        changeContent.innerText = '';
+        for(let i=0; i<checkContent.length; i++){
+              var label = makeCheckBox("replyCh"+e, i);
+              changeContent.appendChild(label);
+        }
+        checkContent.forEach((con, index) => {
+              document.getElementsByName("replyCh"+e+"_reason"+index)[0].value = con;
+        });
+        const changeSelectDiv = document.getElementsByClassName("changeCheckDiv"+e)[0];
+        const checkBoxBtnDiv = document.createElement('div');
+        checkBoxBtnDiv.setAttribute("class", "checkBoxBtnDiv"+e);
+        var checkPlusBtn = makeButton("checkPlus"+e, "checkP"+e, "clickCheckPlus("+e+")");
+        checkPlusBtn.innerText = "옵션 추가";
+        checkBoxBtnDiv.appendChild(checkPlusBtn);
+        changeSelectDiv.appendChild(checkBoxBtnDiv);
+    }
     const target = document.getElementById(e);
     const changeColor = document.getElementById('plus'+e);
     //버튼 눌린 상태로 변경
@@ -258,23 +274,26 @@ function handleOnChange(e, divNum) {
         }
         break;
     case '복수 선택형':
-        const wholeCheckDiv = document.createElement('div');
-        wholeCheckDiv.setAttribute("class", "wholeCheckDiv"+divNum);
+        const storeCheck = document.querySelector(".changeCheckDiv"+num);
+        if(storeCheck === null){
+            const wholeCheckDiv = document.createElement('div');
+            wholeCheckDiv.setAttribute("class", "wholeCheckDiv"+divNum);
 
-        const checkBoxDiv = document.createElement('div');
-        checkBoxDiv.setAttribute("class", "checkBoxDiv"+divNum);
-        var checkBoxLabel = makeCheckBox("replyCh"+divNum, 0);
-        checkBoxDiv.appendChild(checkBoxLabel);
-        wholeCheckDiv.appendChild(checkBoxDiv);
+            const checkBoxDiv = document.createElement('div');
+            checkBoxDiv.setAttribute("class", "checkBoxDiv"+divNum);
+            var checkBoxLabel = makeCheckBox("replyCh"+divNum, 0);
+            checkBoxDiv.appendChild(checkBoxLabel);
+            wholeCheckDiv.appendChild(checkBoxDiv);
 
-        const checkBoxBtnDiv = document.createElement('div');
-        checkBoxBtnDiv.setAttribute("class", "checkBoxBtnDiv"+divNum);
-        var checkPlusBtn = makeButton("checkPlus"+divNum, "checkP"+divNum, "clickCheckPlus("+divNum+")");
-        checkPlusBtn.innerText = "옵션 추가";
-        checkBoxBtnDiv.appendChild(checkPlusBtn);
+            const checkBoxBtnDiv = document.createElement('div');
+            checkBoxBtnDiv.setAttribute("class", "checkBoxBtnDiv"+divNum);
+            var checkPlusBtn = makeButton("checkPlus"+divNum, "checkP"+divNum, "clickCheckPlus("+divNum+")");
+            checkPlusBtn.innerText = "옵션 추가";
+            checkBoxBtnDiv.appendChild(checkPlusBtn);
 
-        wholeCheckDiv.appendChild(checkBoxBtnDiv);
-        changeContent[0].appendChild(wholeCheckDiv);
+            wholeCheckDiv.appendChild(checkBoxBtnDiv);
+            changeContent[0].appendChild(wholeCheckDiv);
+        }
         break;
   }
 }
@@ -298,13 +317,12 @@ function complete(e){
 
     const radioType = document.getElementsByClassName('wholeSelectDiv'+e);
     const radioAfterType = document.getElementsByClassName('changeSelectDiv'+e);
-    if(radioType.length !== 0 || radioAfterType !== 0){
-       RadioResult(e);
-    }
+    if(radioType.length !== 0 || radioAfterType.length !== 0)   RadioResult(e);
 
-    //체크박스인 경우
     const contentType = document.getElementsByClassName('wholeCheckDiv'+e);
-    if(contentType !== null){
+    const checkAfterType = document.getElementsByClassName('changeCheckDiv'+e);
+    if(contentType.length !== 0 || checkAfterType.length !== 0){
+        checkResult(e);
     }
 }
 
@@ -362,8 +380,15 @@ function titleResult(num){
 }
 
 function RadioResult(num){
-    let valCount = 0;
     const labelContents = document.querySelector('.selectDiv'+num);
+    saveResult(labelContents);
+    var labelContent = document.getElementsByClassName("wholeSelectDiv"+num)[0];
+    if(labelContent !== undefined) { labelContent.className = 'changeSelectDiv'+num; }
+    const removeBtn = document.getElementsByClassName("selectBtnDiv"+num)[0];
+    removeBtn.remove();
+}
+
+function saveResult(labelContents){
     const labels = labelContents.querySelectorAll("label");
     labels.forEach((con, index) => {
            if(con !== null){
@@ -376,14 +401,22 @@ function RadioResult(num){
                 labels[index].appendChild(radioText);
            }
     });
-    var labelContent = document.getElementsByClassName("wholeSelectDiv"+num)[0];
-    if(labelContent !== undefined) { labelContent.className = 'changeSelectDiv'+num; }
-    const removeBtn = document.getElementsByClassName("selectBtnDiv"+num)[0];
+}
+
+function checkResult(num){
+    const labelContents = document.querySelector('.checkBoxDiv'+num);
+    saveResult(labelContents);
+    var labelContent = document.getElementsByClassName("wholeCheckDiv"+num)[0];
+    if(labelContent !== undefined) { labelContent.className = 'changeCheckDiv'+num; }
+    const removeBtn = document.getElementsByClassName("checkBoxBtnDiv"+num)[0];
     removeBtn.remove();
 }
-function radioReToInput(num){
+
+function reToInput(num, type){
     var re = [];
-    const store = document.querySelector(".changeSelectDiv"+num);
+    var store;
+    if(type === 'radio'){store = document.querySelector(".changeSelectDiv"+num);}
+    else if(type === 'check'){store = document.querySelector(".changeCheckDiv"+num);}
     if(store !== null){
         const radioText = store.querySelectorAll("label");
         radioText.forEach((con, index) => {
