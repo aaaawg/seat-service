@@ -1,6 +1,11 @@
 let addr;
 let popupSeatArr;
 let popupSeatCol;
+
+window.addEventListener("load", function () {
+    showCreatSeatingChart(0);
+})
+
 function placeValue() {
     let detailAddr= document.getElementById("detailAddress").value;
     let val = '';
@@ -52,6 +57,11 @@ function addViewing() {
     viewingList.appendChild(document.createElement("br"));
 }
 function showPlaceInput(type) {
+    valueClear();
+    document.getElementById("peopleChBox").checked = false;
+    peopleNumValue();
+    document.getElementById("enterPeopleNum").style.display = "inline";
+
     if(type) {
         document.getElementById("off").style.display = "none";
         document.getElementById("on").style.display = "block";
@@ -67,6 +77,7 @@ function showPlaceInput(type) {
         document.getElementById("onPlace").disabled = true;
         document.getElementById("offPlace").disabled = false;
 
+        document.getElementById("nsc").checked = true;
         document.getElementById("offSeatingChart").style.display = "block"
         document.getElementById("csc").style.display = "none";
     }
@@ -135,20 +146,60 @@ function openPopup() {
         }
         let chart = JSON.stringify(popupSeatArr);
         document.getElementById("seatingChart").value = chart;
+        document.getElementById("seatCol").value = popupSeatCol;
+
+        document.getElementById("peopleNum").value = popupSeatArr.length;
+        document.getElementById("peopleNum").readOnly = true;
+
+        document.getElementById("enterPeopleNum").style.display = "none";
+        document.getElementById("seatLength").innerText = document.getElementById("peopleNum").value;
+
     });
 }
 function showCreatSeatingChart(v) {
+    valueClear();
     if(v) {
         document.getElementById("csc").style.display = "block";
         document.getElementById("cb").disabled = false;
         document.getElementById("seatingChart").disabled = false;
     } else {
+        document.getElementById("popupChart").innerHTML = "";
+
         document.getElementById("csc").style.display = "none";
         document.getElementById("cb").disabled = true;
         document.getElementById("seatingChart").disabled = true;
+        document.getElementById("peopleNum").readOnly = false;
+        document.getElementById("enterPeopleNum").style.display = "inline";
     }
 }
 function popupSeat(arr, col) {
     popupSeatArr = arr;
     popupSeatCol = col;
+}
+function valueClear() {
+    document.getElementById("seatingChart").value = null;
+    document.getElementById("seatCol").value = null;
+    document.getElementById("peopleNum").value = null;
+    document.getElementById("seatLength").innerText = null;
+}
+function peopleNumValue() {
+    const ch = document.getElementById("peopleChBox");
+    if(ch.checked) {
+        document.getElementById("peopleNum").style.display = "none";
+        document.getElementById("peopleNum").disabled = true;
+        if(document.getElementById("offline").checked) {
+            document.getElementById("offSeatingChart").style.display = "none";
+            showCreatSeatingChart(0);
+        }
+
+    }
+    else {
+        document.getElementById("peopleNum").style.display = "inline";
+        document.getElementById("peopleNum").disabled = false;
+
+        if(document.getElementById("offline").checked) {
+            document.getElementById("offSeatingChart").style.display = "block";
+            showCreatSeatingChart(1);
+        }
+    }
 }

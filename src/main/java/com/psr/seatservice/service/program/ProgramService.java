@@ -3,13 +3,12 @@ package com.psr.seatservice.service.program;
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
-import com.psr.seatservice.dto.program.response.BizProgramListResponse;
-import com.psr.seatservice.dto.program.response.ProgramListResponse;
-import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
-import com.psr.seatservice.dto.program.response.ProgramViewingDateAndTimeResponse;
+import com.psr.seatservice.dto.program.response.*;
+import com.psr.seatservice.dto.user.request.BookingRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,10 +18,12 @@ public class ProgramService {
 
     private final ProgramRepository programRepository;
     private final ProgramViewingRepository programViewingRepository;
+    private final ProgramBookingRepository programBookingRepository;
 
-    public ProgramService(ProgramRepository programRepository, ProgramViewingRepository programViewingRepository) {
+    public ProgramService(ProgramRepository programRepository, ProgramViewingRepository programViewingRepository, ProgramBookingRepository programBookingRepository) {
         this.programRepository = programRepository;
         this.programViewingRepository = programViewingRepository;
+        this.programBookingRepository = programBookingRepository;
     }
 
     public List<BizProgramListResponse> programs() {
@@ -32,14 +33,14 @@ public class ProgramService {
                 .collect(Collectors.toList());
     }
 
-    public Program programInfo(Long programNum) {
+    public Program getProgramInfo(Long programNum) {
         return programRepository.findById(programNum)
                 .orElseThrow(IllegalArgumentException::new);
     }
 
     public Long addProgram(BizAddProgramRequest request) {
         Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(),
-                request.getEndDate(), request.getSeatingChart());
+                request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum());
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
@@ -58,7 +59,6 @@ public class ProgramService {
     public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
         if(request.getViewingDateAndTime() != null) {
             int size = request.getViewingDateAndTime().size();
-            System.out.println("size :" + size);
             String dateAndTime, date, time;
             List<ProgramViewing> list = new ArrayList<>();
             for (int i = 0; i < size; i++) {
@@ -84,5 +84,23 @@ public class ProgramService {
         return programViewings.stream()
                 .map(ProgramViewingDateAndTimeResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public Long getProgramBookingCount(Long programNum, String date, String time) {
+        return programBookingRepository.countByBookingList(programNum, date, time);
+    }
+
+    public List<Integer> getBookingList(Long programNum, String viewingDate, String viewingTime) {
+        List<ProgramBooking> programBookings = programBookingRepository.findProgramBookingList(programNum, viewingDate, viewingTime);
+        List<Integer> list = new ArrayList<>();
+        for (ProgramBooking programBooking : programBookings) {
+            list.add(programBooking.getSeatNum());
+        }
+        return list;
+    }
+
+    @Transactional
+    public void addBooking(Long programNum, BookingRequest request) {
+
     }
 }

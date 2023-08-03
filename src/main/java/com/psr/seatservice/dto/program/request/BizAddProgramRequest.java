@@ -22,4 +22,6 @@ public class BizAddProgramRequest {
     private List<String> viewingDateAndTime;
     private List<String> imageFiles;
     private String seatingChart;
+    private Integer seatCol;
+    private int peopleNum;
 }

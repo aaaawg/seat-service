@@ -43,5 +43,5 @@ function saveSeatingChart() {
             arr.push(0);
     }
     window.opener.popupSeat(arr, sCol);
-    self.close();
+    window.close();
 }

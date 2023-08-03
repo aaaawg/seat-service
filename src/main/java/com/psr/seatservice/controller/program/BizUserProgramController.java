@@ -65,7 +65,7 @@ public class BizUserProgramController {
 
     @GetMapping("/update/{programNum}")
     public String updateProgramInfo(@PathVariable Long programNum, Model model) {
-        Program program = programService.programInfo(programNum);
+        Program program = programService.getProgramInfo(programNum);
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
         return "program/bizUpdateProgramInfo";
     }
