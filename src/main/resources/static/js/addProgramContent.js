@@ -1,4 +1,37 @@
 let count = 0;
+//데이터 전달
+document.getElementById('myForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  // 폼 데이터 생성
+    const resultHtml = document.querySelector('#content').outerHTML;
+    var additionalData = { formHtml: resultHtml};
+    var formData = new FormData(document.getElementById('myForm'));
+    for (var key in additionalData) {
+            formData.append(key, additionalData[key]);
+    }
+
+  // 서버로 폼 데이터 전송
+  fetch('/business/program/add', {
+    method: 'POST',
+    body: formData
+   })
+  .then(response => response.text())
+  .then(data => {
+    console.log(data); // 서버에서 전달하는 응답 출력
+    window.location.href = "http://localhost:8080/business/program";
+  })
+  .catch(error => {
+    console.error(error);
+  });
+});
+
+//유효성 검사 함수
+function check(){
+    const result = document.querySelectorAll('[id^=plus]');
+    if(result.length === 0) return false;
+    return true;
+}
 
 function addContent(){
     const element = document.getElementById('content');

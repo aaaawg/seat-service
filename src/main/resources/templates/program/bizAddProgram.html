@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container" style="max-width: 500px">
-  <form th:action method="post" enctype="multipart/form-data">
+  <form th:action method="post" enctype="multipart/form-data" onsubmit="return check()" id="myForm">
     <div>
       <label>구분</label>
       <input type="radio" id="offline" name="type" value="오프라인" checked onchange="showPlaceInput(0)">
