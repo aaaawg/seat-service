@@ -2,9 +2,9 @@ let addr;
 let popupSeatArr;
 let popupSeatCol;
 
-window.addEventListener("load", function () {
+window.addEventListener("load", function() {
     showCreatSeatingChart(0);
-})
+});
 
 function placeValue() {
     let detailAddr= document.getElementById("detailAddress").value;
@@ -193,7 +193,6 @@ function peopleNumValue() {
             document.getElementById("offSeatingChart").style.display = "none";
             showCreatSeatingChart(0);
         }
-
     }
     else {
         document.getElementById("peopleNum").style.display = "inline";

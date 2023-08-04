@@ -39,8 +39,7 @@ public class ProgramService {
     }
 
     public Long addProgram(BizAddProgramRequest request, String result) {
-        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(),
-                request.getEndDate(), request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum(), result);
+        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(), request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum(), result);
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
@@ -102,5 +101,9 @@ public class ProgramService {
     public void addBooking(Long programNum, BookingRequest request) {
         ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum());
         programBookingRepository.save(programBooking);
+    }
+
+    public String getProgramForm(Long programNum){
+        return programRepository.findById(programNum).get().getProgramHtml();
     }
 }

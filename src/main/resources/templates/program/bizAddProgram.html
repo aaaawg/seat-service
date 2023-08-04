@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container" style="max-width: 1000px">
-  <form th:action method="post" enctype="multipart/form-data">
+  <form th:action method="post" enctype="multipart/form-data" id="myForm">
     <div>
       <label>구분</label>
       <input type="radio" id="offline" name="type" value="오프라인" checked onchange="showPlaceInput(0)">
@@ -39,6 +39,14 @@
         <option value="제한없음" selected>제한없음</option>
         <option id="area" value="지역">지역</option>
       </select>
+    </div>
+    <div>
+      <label for="peopleNum" >모집인원</label>
+      <div id = enterPeopleNum>
+        <label><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
+        <input type="text" id="peopleNum" name="peopleNum" placeholder="숫자 입력">
+      </div>
+      <span id="seatLength"></span>
     </div>
     <div>
       <label for="startDate">신청기간</label>
@@ -85,7 +93,7 @@
 </div>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script type="text/javascript" src="/js/addProgram.js"></script>
+<script type="text/javascript" src="/js/addProgram.js?ver=2"></script>
 <script type="text/javascript" src="/js/addProgramContent.js?ver=4"></script>
 </body>
 </html>

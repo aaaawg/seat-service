@@ -42,7 +42,7 @@ public class Program {
     private Integer seatCol;
     private int peopleNum; //모집인원
 
-    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, , String programHtml) {
+    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String programHtml) {
         this.title = title;
         this.place = place;
         this.target = target;

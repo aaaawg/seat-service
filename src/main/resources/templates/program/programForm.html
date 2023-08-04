@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="formContent">
+
+</div>
+<script th:inline="javascript">
+    var programInfo = /*[[${ProgramForm}]]*/ {};
+    var div = document.getElementById('formContent');
+    div.innerHTML = programInfo;
+    console.log(programInfo);
+</script>
+</body>
+</html>

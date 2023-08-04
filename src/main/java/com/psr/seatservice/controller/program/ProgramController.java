@@ -97,4 +97,10 @@ public class ProgramController {
         programService.addBooking(programNum, request);
         return "1";
     }
+
+    @GetMapping("/program/{programNum}/form")
+    public String programForm(@PathVariable Long programNum, Model model){
+        model.addAttribute("ProgramForm",programService.getProgramForm(programNum));
+        return "program/programForm";
+    }
 }
