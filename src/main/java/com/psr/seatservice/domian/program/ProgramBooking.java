@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class ProgramBooking {
     //개인 사용자가 프로그램 예약한 정보
@@ -24,6 +23,15 @@ public class ProgramBooking {
 
     private Integer seatNum;
 
+    @Column(name = "program_num")
+    private Long programNum;
+
+    @Column(name = "viewing_date")
+    private String viewingDate;
+
+    @Column(name = "viewing_time")
+    private String viewingTime;
+
     @CreationTimestamp
     private Timestamp bookingDate;
 
@@ -31,7 +39,7 @@ public class ProgramBooking {
     @JoinColumns({
             @JoinColumn(name = "program_num", referencedColumnName = "program_num", insertable = false, updatable = false),
             @JoinColumn(name = "viewing_date", referencedColumnName = "viewing_date", insertable = false, updatable = false),
-            @JoinColumn(name = "viewing_time", referencedColumnName = "viewing_time",insertable = false, updatable = false)
+            @JoinColumn(name = "viewing_time", referencedColumnName = "viewing_time", insertable = false, updatable = false)
     })
     private ProgramViewing programViewing;
 
@@ -39,8 +47,10 @@ public class ProgramBooking {
         this.seatNum = seatNum;
     }
 
-    public ProgramBooking(ProgramViewing programViewing, Integer seatNum) {
-        this.programViewing = programViewing;
+    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum) {
+        this.programNum = programNum;
+        this.viewingDate = viewingDate;
+        this.viewingTime = viewingTime;
         this.seatNum = seatNum;
     }
 }

@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @IdClass(ProgramViewingPK.class)
 public class ProgramViewing {
@@ -38,9 +37,5 @@ public class ProgramViewing {
         this.programNo = programNum;
         this.viewingDate = date;
         this.viewingTime = time;
-    }
-
-    public void addProgramBooking(ProgramBooking programBooking) {
-        this.programBookings.add(programBooking);
     }
 }

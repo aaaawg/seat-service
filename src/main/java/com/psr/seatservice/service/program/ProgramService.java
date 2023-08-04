@@ -99,8 +99,8 @@ public class ProgramService {
         return list;
     }
 
-    @Transactional
     public void addBooking(Long programNum, BookingRequest request) {
-
+        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum());
+        programBookingRepository.save(programBooking);
     }
 }
