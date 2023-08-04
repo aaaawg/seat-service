@@ -133,13 +133,16 @@ function openPopup() {
         c.innerHTML = "";
         let num = 1;
         let seatNum = 1;
+        let exSeatCount = 0;
         for (let i = 0; i < popupSeatArr.length; i++) {
             if (popupSeatArr[i]) {
                 c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(131, 167, 131);'>" + seatNum + "</div>";
                 seatNum++;
             }
-            else
+            else {
+                exSeatCount++;
                 c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(215, 215, 215);'></div>";
+            }
             if(num % popupSeatCol === 0 )
                 c.innerHTML += "<br>";
             num++;
@@ -152,8 +155,7 @@ function openPopup() {
         document.getElementById("peopleNum").readOnly = true;
 
         document.getElementById("enterPeopleNum").style.display = "none";
-        document.getElementById("seatLength").innerText = document.getElementById("peopleNum").value;
-
+        document.getElementById("seatLength").innerText = (popupSeatArr.length - exSeatCount).toString();
     });
 }
 function showCreatSeatingChart(v) {
