@@ -37,9 +37,9 @@ public class ProgramService {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public Long addProgram(BizAddProgramRequest request) {
+    public Long addProgram(BizAddProgramRequest request, String result) {
         Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(),
-                request.getEndDate());
+                request.getEndDate(), result);
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
