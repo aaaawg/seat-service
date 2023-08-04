@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 <body>
-<div class="container" style="max-width: 500px">
-  <form th:action method="post" enctype="multipart/form-data" onsubmit="return check()" id="myForm">
+<div class="container" style="max-width: 1000px">
+  <form th:action method="post" enctype="multipart/form-data">
     <div>
       <label>구분</label>
       <input type="radio" id="offline" name="type" value="오프라인" checked onchange="showPlaceInput(0)">
@@ -62,27 +62,18 @@
       </div>
     </div>
 
-    <div style="max-width: 500px">
-        <span>좌석 생성</span>
-        <div class="input-group">
-          <div class="form-floating">
-            <input type="text" class="form-control" id="seatRow" placeholder="열 입력" oninput="checkNumber(id)">
-            <label for="seatRow">열 입력</label>
-          </div>
-          <div class="form-floating">
-            <input type="text" class="form-control" id="seat" placeholder="한 줄 좌석수 입력" oninput="checkNumber(id)">
-            <label for="seat">한 줄 좌석수 입력</label>
-          </div>
-          <input type="button" class="btn btn-primary" onclick="createSeatingChart()" value="생성">
-        </div>
-        <div>
-          <div id="stage">stage</div>
-          <div id="chart"></div>
-        </div>
-        <div>
-          <p>제외 좌석</p>
-          <div id="removedSeat"></div>
-        </div>
+    <div id="offSeatingChart" style="max-width: 1000px; display: block;">
+      <label>좌석표</label>
+      <input type="radio" id="nsc" name="ynsc" checked onchange="showCreatSeatingChart(0)">
+      <label for="nsc">사용안함</label>
+      <input type="radio" id="ysc" name="ynsc" onchange="showCreatSeatingChart(1)">
+      <label for="ysc">사용</label>
+      <div id="csc" style="display: none;">
+        <button type="button" id="cb" onclick="openPopup()">좌석배치도 생성</button>
+        <div id="popupChart" class="container"></div>
+        <input type="hidden" id="seatingChart" name="seatingChart">
+        <input type="hidden" id="seatCol" name="seatCol">
+      </div>
     </div>
 
     <div id="content">

@@ -1,0 +1,34 @@
+button[type="button"] {
+    border: none;
+}
+span {
+    font-size: 12px;
+}
+#seatingChart {
+    display: flex;
+    justify-content: center;
+}
+#stage {
+    width: 476px;
+    height: 40px;
+    background-color: #e5e5e5;
+    margin-top: 20px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 7px;
+}
+.seatBtn {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    margin: 2px 2px 2px 2px;
+    text-align: center;
+    font-size: 11px;
+    padding: 0px 0px 0px 0px;
+    color: black;
+    border: none;
+}
+#chart {
+    margin-top: 15px;
+}

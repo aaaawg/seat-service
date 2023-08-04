@@ -2,7 +2,7 @@ package com.psr.seatservice.service.user;
 
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.domian.user.UserRepository;
-import com.psr.seatservice.dto.user.request.AddBizUserRequest;
+import com.psr.seatservice.dto.user.request.AddUserRequest;
 import com.psr.seatservice.dto.user.request.UserLoginRequest;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class UserService {
         return user;
     }
 
-    public void join(AddBizUserRequest request) {
+    public void join(AddUserRequest request) {
         userRepository.save(new User(request.getUserId(), request.getPassword(), request.getName(),
                 request.getAddress(), request.getPhone(), request.getEmail(), request.getRole()));
     }

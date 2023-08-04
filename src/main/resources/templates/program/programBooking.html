@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/seatingChart.css}" href="../css/seatingChart.css" rel="stylesheet">
+</head>
+<body>
+<div id="enterForm">
+    <p>신청서 작성</p>
+    <input type="hidden" id="program">
+    <button type="button" id="formPage">다음</button>
+</div>
+
+<div class="container row row-cols-3">
+<div id="viewingDate" class="col" style="display: none">
+    <p>시간/날짜 선택</p>
+    <table>
+        <thead>
+            <tr>
+                <td onclick="prevMonth()"><</td>
+                <td id="yearAndDate"></td>
+                <td onclick="nextMonth()">></td>
+            </tr>
+            <tr>
+                <td>일</td>
+                <td>월</td>
+                <td>화</td>
+                <td>수</td>
+                <td>목</td>
+                <td>금</td>
+                <td>토</td>
+            </tr>
+        </thead>
+        <tbody id="calendar"></tbody>
+    </table>
+    <div id="timeBtn"></div>
+    <div id="appCount"></div>
+</div>
+
+<div id="selectSeat" class="col" style="display: none">
+    <p>좌석 선택</p>
+    <div id="chart" class="container"></div>
+</div>
+
+<div id="checkInfo" class="col" style="display: none">
+    <p>신청 정보 확인</p>
+    <div id="bookingInfo"></div>
+
+    <form th:action method="post" onsubmit="sendBookingData()">
+        <input type="hidden" id="seatNum" name="seatNum">
+        <input type="hidden" id="selectedViewingDate" name="viewingDate">
+        <input type="hidden" id="selectedViewingTime" name="viewingTime">
+        <button type="submit">신청하기</button>
+    </form>
+</div>
+</div>
+
+<script th:inline="javascript">
+    let d;
+    let t;
+    let title;
+    let peopleNum;
+    let sDate;
+    let vDate = new Array();
+
+    window.addEventListener("load", function () {
+        d = window.opener.selectedProgramInfo("date");
+        t = window.opener.selectedProgramInfo("time");
+        title = window.opener.selectedProgramInfo("title");
+        peopleNum = window.opener.selectedProgramInfo("peopleNum");
+
+
+        let sYear = d.split("-")[0];
+        let sMonth = d.split("-")[1];
+        let sDay = d.split("-")[2];
+
+        sMonth -= 1;
+
+        document.getElementById("program").value = window.location.pathname.substring(9);
+
+        let btn = document.getElementById("formPage");
+        btn.addEventListener("click", function () {
+            document.getElementById("enterForm").style.display = "none";
+            document.getElementById("viewingDate").style.display = "block";
+            sDate = new Date(sYear, sMonth, sDay);
+            viewingType();
+            createCalendar();
+        })
+    })
+
+
+    function prevMonth() {
+        sDate = new Date(sDate.getFullYear(), sDate.getMonth() - 1, sDate.getDate());
+        createCalendar();
+    }
+    function nextMonth() {
+        sDate = new Date(sDate.getFullYear(), sDate.getMonth() + 1, sDate.getDate());
+        createCalendar();
+    }
+    function createCalendar() {
+        let firstDay = new Date(sDate.getFullYear(), sDate.getMonth(), 1).getDay(); //4
+        let lastDate = new Date(sDate.getFullYear(), sDate.getMonth() + 1, 0).getDate(); //30
+        const calendar = document.getElementById("calendar");
+        let cnt = 0;
+        let m = sDate.getMonth() + 1;
+        m = m < 10 ? "0" + m : m;
+        let dateStr = sDate.getFullYear() + "-" + m + "-";
+
+        document.getElementById("yearAndDate").innerText = sDate.getFullYear() + "년 " + (sDate.getMonth() + 1 ) + "월";
+
+        let tr = "";
+        for (let i = 0; i < firstDay; i++) {
+            tr += "<td></td>"
+            cnt++;
+        }
+        for (let i = 1; i <= lastDate ; i++) {
+            let d = i < 10 ? dateStr + "0" + i : dateStr + i;
+            if(cnt % 7 === 0)
+                tr += "<tr>";
+
+            if(vDate.includes(d))
+                tr += "<td><button type='button' class='dayBtn' onclick='showTime(this.value)' value='"+ d +"'>" + i + "</button></td>";
+            else
+                tr += "<td>" + i + "</td>";
+
+            cnt++;
+            if(cnt % 7 === 0)
+                tr += "</tr>"
+        }
+        calendar.innerHTML = tr;
+    }
+    function viewingType () {
+        const viewing = [[${programViewing}]];
+
+        for (let i = 0; i < viewing.length; i++) {
+            vDate.push(viewing[i].viewingDate);
+        }
+    }
+    let dt;
+
+    function showTime(date) {
+        const viewing = [[${programViewing}]];
+        let timeBtn = document.getElementById("timeBtn");
+        timeBtn.innerHTML = "";
+        timeBtn.innerHTML += "<div>" + date + "</div>";
+        for (let i = 0; i < viewing.length; i++) {
+            if(viewing[i].viewingDate === date) {
+                dt = date;
+                timeBtn.innerHTML += "<button type='button' value='" + viewing[i].viewingTime + "' onclick='timeBtnEvent(dt, this.value)'>" + viewing[i].viewingTime + "</button>"
+            }
+        }
+    }
+    let ssDate;
+    let ssTime;
+    function timeBtnEvent(date, time) {
+        let programNum = document.getElementById("program").value;
+        ssDate = date;
+        ssTime = time;
+
+        fetch(`/booking/seat`, {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "programNum": programNum,
+                "viewingDate": date,
+                "viewingTime": time
+            })
+        }).then((r) => {
+            return r.json();
+        }).then((r) => {
+            showAppCount(r.bookingCount);
+
+            if(r.seatingChart != null) {
+                bookingSeatList = r.bookingSeatList;
+                document.getElementById("selectSeat").style.display = "block";
+                createSeatingChart(JSON.parse(r.seatingChart), r.seatCol);
+            }
+            else {
+                document.getElementById("seatNum").disabled = true;
+                document.getElementById("checkInfo").style.display = "block";
+                showBookingInfo();
+            }
+        });
+    }
+let bookingSeatList;
+    let seatArray = new Array();
+    function createSeatingChart(seatingChart, sCol) {
+        const scDiv = document.getElementById("chart");
+        let seatNum = 1;
+        let ht = "";
+        let num = 0;
+
+        for (let i = 0; i < seatingChart.length; i++) {
+            if(num % sCol === 0) {
+                ht += "<div class='row'>"
+            }
+
+            if(seatingChart[i]){
+                if(bookingSeatList.includes(seatNum))
+                    ht += "<div class='seatBtn' style='background-color: #e5e5e5'></div>"
+                else
+                    ht += "<button type='button' class='seatBtn' style='background-color: #83A783'>" + seatNum + "</button>";
+                seatNum++;
+            }
+            else {
+                ht += "<div class='seatBtn' style='background-color: #ffffff'></div>"
+            }
+
+            num++;
+            if(num % sCol === 0) {
+                ht += "</div>"
+            }
+        }
+        scDiv.innerHTML = ht;
+
+        let qa = scDiv.querySelectorAll("button");
+        for (let i = 0; i < qa.length; i++) {
+            qa[i].addEventListener("click", (e) => {
+                document.getElementById("checkInfo").style.display = "block";
+                showBookingInfo(e.target.innerText);
+            });
+        }
+    }
+    function showBookingInfo(seatNum) {
+        const d = document.getElementById("bookingInfo");
+
+        let ht = "";
+        ht += "<p>" + title +"</p>";
+        ht += "<p>일시: " +  ssDate + " " + ssTime + "</p>";
+        if(bookingSeatList != null)
+            ht += "<p id='selectedSeat'>좌석: " + seatNum + "번</p>";
+
+        d.innerHTML = ht;
+        document.getElementById("seatNum").value = seatNum;
+    }
+    function showAppCount(num) {
+        const tDiv = document.getElementById("appCount");
+        let str = "";
+
+        str += "<p>신청인원: " + num +"</p>";
+        if(peopleNum !== -1)
+            str += "<p>잔여인원: " + (peopleNum - num) +"</p>";
+
+        tDiv.innerHTML = str;
+    }
+    function sendBookingData() {
+        document.getElementById("selectedViewingDate").value = ssDate;
+        document.getElementById("selectedViewingTime").value = ssTime;
+    }
+</script>
+</body>
+</html>

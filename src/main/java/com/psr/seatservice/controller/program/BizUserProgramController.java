@@ -66,7 +66,7 @@ public class BizUserProgramController {
 
     @GetMapping("/update/{programNum}")
     public String updateProgramInfo(@PathVariable Long programNum, Model model) {
-        Program program = programService.programInfo(programNum);
+        Program program = programService.getProgramInfo(programNum);
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
         return "program/bizUpdateProgramInfo";
     }
@@ -76,6 +76,11 @@ public class BizUserProgramController {
     public String updateProgramInfo(@PathVariable Long programNum, BizUpdateProgramRequest request) {
         programService.updateProgramInfo(programNum, request);
         return "redirect:/business/program/info/{programNum}";
+    }
+
+    @GetMapping("/seat")
+    public String createSeatingChart() {
+        return "program/bizCreateSeatingChart";
     }
 
     //해당 프로그램을 예약한 개인 사용자 목록 조회

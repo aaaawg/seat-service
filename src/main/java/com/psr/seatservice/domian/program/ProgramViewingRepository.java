@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ProgramViewingRepository extends JpaRepository<ProgramViewing, ProgramViewingPK> {
     List<ProgramViewing> findByProgramNo(Long num);
+
+    ProgramViewing findByProgramNoAndViewingDateAndViewingTime(Long programNum, String viewingDate, String viewingTime);
 }

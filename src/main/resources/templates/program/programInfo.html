@@ -12,7 +12,9 @@
     <p th:text="|프로그램명 : ${programInfo.title}|"></p>
     <p th:text="|장소 : ${programInfo.place} |"></p>
     <p th:text="|대상 : ${programInfo.target}|"></p>
+    <p>모집인원: <span th:text="${programInfo.peopleNum} == -1? '무제한' : ${programInfo.peopleNum} "></span></p>
     <p th:text="|신청기간 : ${programInfo.startDate} ~ ${programInfo.endDate}|"></p>
+
     <div>
         <strong>파일 : </strong>
         <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
@@ -32,7 +34,7 @@
                 <ul id="selectTime" class="list-group">
                 </ul>
             </div>
-            <div class="col"><button type="button" th:s="${programInfo.programNum}" onclick="openPopup(this.getAttribute('s'))">좌석선택</button></div>
+            <div class="col"><button type="button" th:s="${programInfo.programNum}" onclick="openPopup(this.getAttribute('s'))">신청하기</button></div>
         </div>
     </div>
 
@@ -66,13 +68,16 @@
         let url = "/booking/"+ num;
         window.open(url, "예약", "width=1000px, height=600px");
     }
-    function selectedDataAndTime(t) {
-        if(t === "date") {
+
+    function selectedProgramInfo(t) {
+        if(t === "date")
             return sDate;
-        }
-        else if(t === "time") {
+        else if(t === "time")
             return sTime;
-        }
+        else if(t === "title")
+            return [[${programInfo.title}]];
+        else if(t==="peopleNum")
+            return [[${programInfo.peopleNum}]];
     }
 </script>
 </body>

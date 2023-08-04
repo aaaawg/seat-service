@@ -1,3 +1,6 @@
+button {
+    border: none;
+}
 .btn {
     background-color: #a4d0a4;
     border: none;
@@ -11,4 +14,10 @@
 }
 div {
     margin-bottom: 10px;
+}
+.userBtn {
+    width: 185px;
+    height: 60px;
+    margin-bottom: 20px;
+    padding: 0;
 }

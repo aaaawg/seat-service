@@ -21,4 +21,7 @@ public class BizAddProgramRequest {
     private Date endDate; //신청마감일
     private List<String> viewingDateAndTime;
     private List<String> imageFiles;
+    private String seatingChart;
+    private Integer seatCol;
+    private int peopleNum;
 }

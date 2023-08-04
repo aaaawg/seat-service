@@ -23,13 +23,14 @@ create table program_viewing(
 );
 ```
 ```
-create table user_admin(
+create table user(
     user_num bigint not null auto_increment,
     address varchar(255),
     name varchar(255),
     password varchar(255),
     phone varchar(255),
     user_id varchar(255),
+    role varchar(255),
     primary key (user_num)
 );
 ```
@@ -45,13 +46,11 @@ create table  files (
 )
 ```
 ```
-create table seat_table(
-    id bigint not null auto_increment,
+create table program_seat(
     program_num bigint not null,
-    checking boolean dafault false,
-    s_row int,
-    s_col int,
-    primary key(id),
+    seat_row int,
+    seat_col int,
+    primary key(program_num, seat_row, seat_col),
     foreign key(program_num) references program(program_num)
 );
 ```

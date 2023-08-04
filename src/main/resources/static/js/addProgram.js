@@ -1,6 +1,11 @@
 let addr;
-let row;
-let num;
+let popupSeatArr;
+let popupSeatCol;
+
+window.addEventListener("load", function () {
+    showCreatSeatingChart(0);
+})
+
 function placeValue() {
     let detailAddr= document.getElementById("detailAddress").value;
     let val = '';
@@ -52,17 +57,29 @@ function addViewing() {
     viewingList.appendChild(document.createElement("br"));
 }
 function showPlaceInput(type) {
+    valueClear();
+    document.getElementById("peopleChBox").checked = false;
+    peopleNumValue();
+    document.getElementById("enterPeopleNum").style.display = "inline";
+
     if(type) {
         document.getElementById("off").style.display = "none";
         document.getElementById("on").style.display = "block";
         document.getElementById("onPlace").disabled = false;
         document.getElementById("offPlace").disabled = true;
+
+        document.getElementById("offSeatingChart").style.display = "none";
+        showCreatSeatingChart(0);
     }
     else {
         document.getElementById("off").style.display = "block";
         document.getElementById("on").style.display = "none";
         document.getElementById("onPlace").disabled = true;
         document.getElementById("offPlace").disabled = false;
+
+        document.getElementById("nsc").checked = true;
+        document.getElementById("offSeatingChart").style.display = "block"
+        document.getElementById("csc").style.display = "none";
     }
 }
 function showArea() {
@@ -108,31 +125,83 @@ function showArea() {
         drop.options[0].selected = true;
     }
 }
-function createSeatingChart() {
-    let seatNum = 0;
-    let seat = document.getElementById("seat").value;
-    let sRow = document.getElementById("seatRow").value;
-    let chart = document.getElementById("chart");
+function openPopup() {
+    const popup = window.open("/business/program/seat", "좌석배치도", "width=1000px, height=1000px");
 
-    chart.innerHTML = "";
-    for (let i = 0; i < sRow; i++) {
-        let row = document.createElement("div");
-        row.className = "row justify-content-center";
-        for (let j = 0; j < seat; j++) {
-            let sBtn = document.createElement("a");
-            sBtn.className = "seatBtn";
-            seatNum++;
-            sBtn.innerText = seatNum + "";
-
-            sBtn.addEventListener("click", function() { removedSeat();})
-            row.appendChild(sBtn);
+    popup.addEventListener("beforeunload", function () {
+        const c = document.getElementById("popupChart");
+        c.innerHTML = "";
+        let num = 1;
+        let seatNum = 1;
+        let exSeatCount = 0;
+        for (let i = 0; i < popupSeatArr.length; i++) {
+            if (popupSeatArr[i]) {
+                c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(131, 167, 131);'>" + seatNum + "</div>";
+                seatNum++;
+            }
+            else {
+                exSeatCount++;
+                c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(215, 215, 215);'></div>";
+            }
+            if(num % popupSeatCol === 0 )
+                c.innerHTML += "<br>";
+            num++;
         }
-        chart.appendChild(row);
+        let chart = JSON.stringify(popupSeatArr);
+        document.getElementById("seatingChart").value = chart;
+        document.getElementById("seatCol").value = popupSeatCol;
+
+        document.getElementById("peopleNum").value = popupSeatArr.length;
+        document.getElementById("peopleNum").readOnly = true;
+
+        document.getElementById("enterPeopleNum").style.display = "none";
+        document.getElementById("seatLength").innerText = (popupSeatArr.length - exSeatCount).toString();
+    });
+}
+function showCreatSeatingChart(v) {
+    valueClear();
+    if(v) {
+        document.getElementById("csc").style.display = "block";
+        document.getElementById("cb").disabled = false;
+        document.getElementById("seatingChart").disabled = false;
+    } else {
+        document.getElementById("popupChart").innerHTML = "";
+
+        document.getElementById("csc").style.display = "none";
+        document.getElementById("cb").disabled = true;
+        document.getElementById("seatingChart").disabled = true;
+        document.getElementById("peopleNum").readOnly = false;
+        document.getElementById("enterPeopleNum").style.display = "inline";
     }
 }
-function removedSeat() {
-    let remove = document.getElementById("removedSeat");
-    let n = document.createElement("a")
-    n.innerText = row + "열 " + seatNum + "번";
-    remove.appendChild(n)
+function popupSeat(arr, col) {
+    popupSeatArr = arr;
+    popupSeatCol = col;
+}
+function valueClear() {
+    document.getElementById("seatingChart").value = null;
+    document.getElementById("seatCol").value = null;
+    document.getElementById("peopleNum").value = null;
+    document.getElementById("seatLength").innerText = null;
+}
+function peopleNumValue() {
+    const ch = document.getElementById("peopleChBox");
+    if(ch.checked) {
+        document.getElementById("peopleNum").style.display = "none";
+        document.getElementById("peopleNum").disabled = true;
+        if(document.getElementById("offline").checked) {
+            document.getElementById("offSeatingChart").style.display = "none";
+            showCreatSeatingChart(0);
+        }
+
+    }
+    else {
+        document.getElementById("peopleNum").style.display = "inline";
+        document.getElementById("peopleNum").disabled = false;
+
+        if(document.getElementById("offline").checked) {
+            document.getElementById("offSeatingChart").style.display = "block";
+            showCreatSeatingChart(1);
+        }
+    }
 }
