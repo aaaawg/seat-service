@@ -8,11 +8,12 @@
 <div id="formContent">
 
 </div>
+<script type="text/javascript" src="/js/changeFormContent.js"></script>
 <script th:inline="javascript">
     var programInfo = /*[[${ProgramForm}]]*/ {};
     var div = document.getElementById('formContent');
     div.innerHTML = programInfo;
-    console.log(programInfo);
+    returnResult();
 </script>
 </body>
 </html>
