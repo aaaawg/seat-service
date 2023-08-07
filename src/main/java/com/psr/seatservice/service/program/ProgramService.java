@@ -106,4 +106,11 @@ public class ProgramService {
     public String getProgramForm(Long programNum){
         return programRepository.findById(programNum).get().getProgramHtml();
     }
+
+    @Transactional
+    public void updateProgramForm(Long programNum, String request) {
+        Program program = programRepository.findById(programNum)
+                .orElseThrow(IllegalAccessError::new);
+        program.updateForm(request);
+    }
 }

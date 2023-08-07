@@ -103,4 +103,15 @@ public class ProgramController {
         model.addAttribute("ProgramForm",programService.getProgramForm(programNum));
         return "program/programForm";
     }
+
+    @GetMapping("/program/{programNum}/formEdit")
+    public String programFormEdit(@PathVariable Long programNum, Model model){
+        model.addAttribute("ProgramForm",programService.getProgramForm(programNum));
+        return "program/programEdit";
+    }
+    @PostMapping("/program/{programNum}/formEdit")
+    public String programFormEdit(@PathVariable Long programNum, @RequestParam(value="formHtml") String request){
+        programService.updateProgramForm(programNum,request);
+        return "redirect:/program/{programNum}/form";
+    }
 }

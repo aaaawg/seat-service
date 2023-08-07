@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+</head>
+<body>
+<div>
+    <form th:action method="post" enctype="multipart/form-data" id="myFormEdit">
+        <div id="formContent">
+        </div>
+        <button type="submit" class="btn btn-success">등록하기</button>
+        <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
+    </form>
+</div>
+<script th:inline="javascript">
+    var programInfo = /*[[${ProgramForm}]]*/ {};
+    var div = document.getElementById('formContent');
+    div.innerHTML = programInfo;
+</script>
+<script type="text/javascript" src="/js/addProgramContent.js?ver=4"></script>
+</body>
+</html>

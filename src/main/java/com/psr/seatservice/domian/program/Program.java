@@ -61,4 +61,8 @@ public class Program {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+    public void updateForm(String programHtml){
+        this.programHtml = programHtml;
+    }
 }

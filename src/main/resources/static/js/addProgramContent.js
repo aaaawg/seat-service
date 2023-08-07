@@ -1,5 +1,8 @@
-let count = 0;
+const countSet = document.querySelectorAll('[id^=plus]');
+let count = countSet.length;
+
 //데이터 전달
+if(document.getElementById('myForm') !== null){
 document.getElementById('myForm').addEventListener('submit', function(event) {
    event.preventDefault();
    if (!check()) {
@@ -20,13 +23,34 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
    })
   .then(response => response.text())
   .then(data => {
-    console.log(data); // 서버에서 전달하는 응답 출력
     window.location.href = "http://localhost:8080/business/program";
   })
   .catch(error => {
     console.error(error);
   });
 });
+}else{
+document.getElementById('myFormEdit').addEventListener('submit', function(event) {
+   event.preventDefault();
+   if (!check()) {return;}
+    const resultHtml = document.querySelector('#content').outerHTML;
+    var additionalData = { formHtml: resultHtml};
+    var formData = new FormData(document.getElementById('myFormEdit'));
+    for (var key in additionalData) {
+            formData.append(key, additionalData[key]);
+    }
+  fetch('formEdit', {
+    method: 'POST',
+    body: formData
+   })
+  .then(response => response.text())
+  .then(data => {
+  })
+  .catch(error => {
+    console.error(error);
+  });
+});
+};
 
 //유효성 검사 함수
 function check(){
@@ -234,6 +258,8 @@ function addSelect(e){
 
 function addEditSelect(e){
     titleInputLayoutShow(e);
+    var spanTitle = document.getElementById('titleSpan'+e);
+    if(spanTitle !== null){ programEditVer(e, spanTitle);}
     const divName = document.getElementById('plus'+e);
     const selectShow = document.getElementById('select'+e);
     selectShow.style.display = "";
@@ -485,4 +511,14 @@ function reToInput(num, type){
         });
     }
     return re;
+}
+
+function programEditVer(num, spanTitle){
+    var inputTitle = document.getElementsByClassName('title'+num)[0];
+    var inputContent = document.getElementsByClassName('content'+num)[0];
+    if(inputTitle.value === ''){inputTitle.value = spanTitle.innerText;}
+    if(inputContent.value === ''){
+        var spanContent = document.getElementById('ContentSpan'+num).innerText;
+        inputContent.value = spanContent;
+    }
 }
