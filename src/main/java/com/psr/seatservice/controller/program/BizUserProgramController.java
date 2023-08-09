@@ -42,8 +42,11 @@ public class BizUserProgramController {
 
     @PostMapping( "/add")
     public String addProgram(BizAddProgramRequest request, @RequestParam("file") List<MultipartFile> files
-    , @RequestParam(value="formHtml") String formHtml) throws IOException {
-        Long proNum = programService.addProgram(request, formHtml);
+    , @RequestParam(value="formHtml") String formHtml, @RequestParam("getTitleJson") String getTitleJsonString) throws IOException {
+        Long proNum = programService.addProgram(request, formHtml, getTitleJsonString);
+
+        //System.out.println("test Json Data: "+getTitleJsonString);
+        //programService.addProgramFormTitle(proNum, getTitleJsonString);
 
         /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
             String savePath = System.getProperty("user.dir") + "\\files";

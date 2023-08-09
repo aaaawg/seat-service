@@ -10,7 +10,7 @@
     <form th:action method="post" enctype="multipart/form-data" id="myFormEdit">
         <div id="formContent">
         </div>
-        <button type="submit" class="btn btn-success">등록하기</button>
+        <button type="submit" class="btn btn-success">수정하기</button>
         <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
     </form>
 </div>
@@ -18,6 +18,10 @@
     var programInfo = /*[[${ProgramForm}]]*/ {};
     var div = document.getElementById('formContent');
     div.innerHTML = programInfo;
+    //Json 가져와보기
+    var programJson = /*[[${ProgramJson}]]*/ {};
+    let reJson = JSON.parse(programJson);
+    console.log(Object.keys(reJson).length);
 </script>
 <script type="text/javascript" src="/js/addProgramContent.js?ver=4"></script>
 </body>

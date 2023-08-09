@@ -12,9 +12,10 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
     const resultHtml = document.querySelector('#content').outerHTML;
     var additionalData = { formHtml: resultHtml};
     var formData = new FormData(document.getElementById('myForm'));
-    for (var key in additionalData) {
-            formData.append(key, additionalData[key]);
-    }
+    for (var key in additionalData) { formData.append(key, additionalData[key]);}
+
+    var getTitleJson = getTitle();
+    formData.append("getTitleJson", JSON.stringify(getTitleJson));
 
   // 서버로 폼 데이터 전송
   fetch('/business/program/add', {
@@ -39,6 +40,8 @@ document.getElementById('myFormEdit').addEventListener('submit', function(event)
     for (var key in additionalData) {
             formData.append(key, additionalData[key]);
     }
+    var getTitleJson = getTitle();
+    formData.append("getTitleJson", JSON.stringify(getTitleJson));
   fetch('formEdit', {
     method: 'POST',
     body: formData
@@ -63,6 +66,13 @@ function check(){
         return false;
     }
     return true;
+}
+
+function getTitle(){
+    var titleJson = {};
+    var titleText = document.querySelectorAll("[id^=titleSpan]");
+    for(let i=0; i< titleText.length; i++){ titleJson[i] = titleText[i].innerText;}
+    return titleJson;
 }
 
 function addContent(){

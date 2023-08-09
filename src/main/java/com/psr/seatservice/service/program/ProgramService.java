@@ -1,5 +1,7 @@
 package com.psr.seatservice.service.program;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,8 +41,9 @@ public class ProgramService {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public Long addProgram(BizAddProgramRequest request, String result) {
-        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(), request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum(), result);
+    public Long addProgram(BizAddProgramRequest request, String result, String getTitleJsonString) {
+        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(), request.getEndDate(), request.getSeatingChart(),
+                request.getSeatCol(), request.getPeopleNum(), result, getTitleJsonString);
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
@@ -112,5 +116,31 @@ public class ProgramService {
         Program program = programRepository.findById(programNum)
                 .orElseThrow(IllegalAccessError::new);
         program.updateForm(request);
+    }
+
+    public void updateProgramFormTitle(Long programNum, String getTitleJsonString){
+        Program program = programRepository.findById(programNum).orElse(null);;
+        program.updateJsonFrom(getTitleJsonString);
+        programRepository.save(program);
+        System.out.println("Success Change");
+    }
+
+    //Json 값넘기기
+    public JsonNode getJson(Long programNum){
+        Program program = programRepository.findById(programNum).orElse(null);;
+        String re = program.getProgramQuestion();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonData = null;
+        try {
+            jsonData = objectMapper.readTree(re);
+            if(program != null){
+                System.out.println("Json Change Data : "+jsonData);
+                return jsonData;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonData;
     }
 }

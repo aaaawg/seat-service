@@ -107,11 +107,15 @@ public class ProgramController {
     @GetMapping("/program/{programNum}/formEdit")
     public String programFormEdit(@PathVariable Long programNum, Model model){
         model.addAttribute("ProgramForm",programService.getProgramForm(programNum));
+        //Json 넘겨보기
+        model.addAttribute("ProgramJson",programService.getJson(programNum));
         return "program/programEdit";
     }
     @PostMapping("/program/{programNum}/formEdit")
-    public String programFormEdit(@PathVariable Long programNum, @RequestParam(value="formHtml") String request){
+    public String programFormEdit(@PathVariable Long programNum, @RequestParam(value="formHtml") String request,
+                                  @RequestParam("getTitleJson") String getTitleJsonString){
         programService.updateProgramForm(programNum,request);
+        programService.updateProgramFormTitle(programNum,getTitleJsonString);
         return "redirect:/program/{programNum}/form";
     }
 }
