@@ -67,6 +67,7 @@ public class ProgramController {
     public String booking(@PathVariable Long programNum, Model model) {
         List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
         model.addAttribute("programViewing", viewing);
+        model.addAttribute("ProgramForm",programService.getProgramForm(programNum));
         return "program/programBooking";
     }
 
@@ -92,18 +93,19 @@ public class ProgramController {
 
     @ResponseBody
     @PostMapping("/booking/{programNum}")
-    public String addBooking(@PathVariable Long programNum, BookingRequest request) {
+    public String addBooking(@PathVariable Long programNum, BookingRequest request, HttpSession session){
         //programBooking 테이블에 예약 데이터 추가
-        programService.addBooking(programNum, request);
-        return "1";
+        User loginUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        if(loginUser != null) {
+            programService.addBooking(programNum, request, loginUser.getUserId());
+            return "1";
+        }else{
+            //로그인 안된 경우
+          return "0";
+        }
     }
 
-    @GetMapping("/program/{programNum}/form")
-    public String programForm(@PathVariable Long programNum, Model model){
-        model.addAttribute("ProgramForm",programService.getProgramForm(programNum));
-        return "program/programForm";
-    }
-
+    //관리자 폼
     @GetMapping("/program/{programNum}/formEdit")
     public String programFormEdit(@PathVariable Long programNum, Model model){
         model.addAttribute("ProgramForm",programService.getProgramForm(programNum));

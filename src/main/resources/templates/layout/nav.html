@@ -21,7 +21,7 @@
             <a class="nav-link" th:onclick="|location.href='@{/login}'|">로그인</a>
           </li>
           <li th:unless="${#strings.isEmpty(session.loginMember)} and ${#strings.isEmpty(name)}" class="nav-item">
-            <p th:text="@{${name}+'님'}" />
+            <p th:text="${session.loginMember.name + '님'}" />
           </li>
 
           <li th:if="${#strings.isEmpty(session.loginMember)}" class="nav-item">

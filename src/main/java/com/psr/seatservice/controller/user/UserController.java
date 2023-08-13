@@ -34,6 +34,7 @@ public class UserController {
             HttpSession session = httpServletRequest.getSession();
             session.setAttribute(SessionConst.LOGIN_MEMBER, loginUser);
             User logUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+            System.out.println("login start: "+ logUser);
 
             model.addAttribute("name",logUser.getName());
              //return "program/bizProgramList";

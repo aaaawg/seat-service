@@ -3,6 +3,7 @@ package com.psr.seatservice.service.program;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.*;
+import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.*;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import com.psr.seatservice.SessionConst;
 
 @Service
 public class ProgramService {
@@ -102,8 +105,8 @@ public class ProgramService {
         return list;
     }
 
-    public void addBooking(Long programNum, BookingRequest request) {
-        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum());
+    public void addBooking(Long programNum, BookingRequest request, String userId) {
+        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), request.getProgramResponse(), userId);
         programBookingRepository.save(programBooking);
     }
 
@@ -122,10 +125,9 @@ public class ProgramService {
         Program program = programRepository.findById(programNum).orElse(null);;
         program.updateJsonFrom(getTitleJsonString);
         programRepository.save(program);
-        System.out.println("Success Change");
     }
 
-    //Json 값넘기기
+    //Json 값넘기기 Test
     public JsonNode getJson(Long programNum){
         Program program = programRepository.findById(programNum).orElse(null);;
         String re = program.getProgramQuestion();

@@ -43,14 +43,19 @@ public class ProgramBooking {
     })
     private ProgramViewing programViewing;
 
+    @Column(columnDefinition = "json", name = "program_response")
+    private String programResponse;
+
     public ProgramBooking(Integer seatNum) {
         this.seatNum = seatNum;
     }
 
-    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum) {
+    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum, String programResponse, String userId) {
         this.programNum = programNum;
         this.viewingDate = viewingDate;
         this.viewingTime = viewingTime;
         this.seatNum = seatNum;
+        this.programResponse = programResponse;
+        this.userId = userId;
     }
 }

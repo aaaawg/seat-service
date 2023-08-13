@@ -9,6 +9,17 @@
 <body>
 <div id="enterForm">
     <p>신청서 작성</p>
+    <form id="userResponse">
+        <div id="formContent">
+        </div>
+    </form>
+<script type="text/javascript" src="/js/changeFormContent.js?ver=1.1"></script>
+<script th:inline="javascript">
+    var programInfo = /*[[${ProgramForm}]]*/ {};
+    var div = document.getElementById('formContent');
+    div.innerHTML = programInfo;
+    returnResult();
+</script>
     <input type="hidden" id="program">
     <button type="button" id="formPage">다음</button>
 </div>
@@ -52,6 +63,7 @@
         <input type="hidden" id="seatNum" name="seatNum">
         <input type="hidden" id="selectedViewingDate" name="viewingDate">
         <input type="hidden" id="selectedViewingTime" name="viewingTime">
+        <input type="hidden" id="userResponseForm" name="programResponse">
         <button type="submit">신청하기</button>
     </form>
 </div>
@@ -82,11 +94,18 @@
 
         let btn = document.getElementById("formPage");
         btn.addEventListener("click", function () {
-            document.getElementById("enterForm").style.display = "none";
-            document.getElementById("viewingDate").style.display = "block";
-            sDate = new Date(sYear, sMonth, sDay);
-            viewingType();
-            createCalendar();
+            //답변 완료 시 실행
+            var result = getResponse();
+            if(result === 0){
+                window.alert("질문에 모두 답변해주세요.");
+            }else{
+                document.getElementById("userResponseForm").value = JSON.stringify(result);
+                document.getElementById("enterForm").style.display = "none";
+                document.getElementById("viewingDate").style.display = "block";
+                sDate = new Date(sYear, sMonth, sDay);
+                viewingType();
+                createCalendar();
+            }
         })
     })
 

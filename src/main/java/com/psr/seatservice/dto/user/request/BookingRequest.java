@@ -9,4 +9,5 @@ public class BookingRequest {
     private Integer seatNum;
     private String viewingDate;
     private String viewingTime;
+    private String programResponse;
 }

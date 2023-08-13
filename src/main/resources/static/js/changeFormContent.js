@@ -18,3 +18,47 @@ function returnResult(){
         hiddenDiv2[i].remove();
     }
 }
+
+//답변 저장하기
+function getResponse(){
+    var wholeQuestion = document.querySelectorAll('[id^=plus]');
+    var questionNum = wholeQuestion.length;
+    var responseJson = {};
+    for(let i=0; i<questionNum; i++){
+        var re = getType(wholeQuestion[i].querySelector('.reDiv'+i), i);
+        if(re === ''){ return 0;}
+        responseJson[i] = re;
+    }
+    return responseJson;
+}
+//질문 type 선정
+function getType(getDiv, i){
+    if(getDiv.querySelectorAll("input[type='text']").length !== 0){
+        //단답형
+        console.log("단답형 접근");
+        console.log("1: "+getDiv.querySelector("input[type='text']").value);
+        return getDiv.querySelector("input[type='text']").value;
+    }else if(getDiv.querySelectorAll("textarea").length !== 0){
+        //서술형
+        console.log("서술형 접근");
+        console.log("2: "+getDiv.querySelector("textarea").value);
+        return getDiv.querySelector("textarea").value;
+    }else if(getDiv.querySelectorAll("input[type='radio']").length !== 0){
+        //radio
+        console.log("radio 접근");
+        var value = getDiv.querySelector('input[name="reply'+i+'"]:checked');
+        if(value === null) return '';
+        else{return value.value;}
+    }else{
+        //checkbox
+        console.log("checkbox 접근");
+        var value = getDiv.querySelectorAll("input[type='checkbox']:checked");
+        const selectedValues = [];
+        value.forEach(checkbox => {
+            selectedValues.push(checkbox.value);
+        });
+        console.log("4: "+selectedValues);
+        return selectedValues;
+    }
+
+}
