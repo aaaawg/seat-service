@@ -12,8 +12,8 @@
         <table class="table">
             <thead>
             <tr>
-                <th> </th>
                 <th>프로그램명</th>
+                <th>등록일</th>
                 <th>상태</th>
                 <th>상세정보</th>
                 <th>예약현황</th>
@@ -21,11 +21,11 @@
             </thead>
             <tbody>
             <tr th:each="item : ${programs}">
-                <td><input type="checkbox"></td>
                 <td th:text="${item.title}">프로그램명</td>
+                <td th:text="${#dates.format(item.createDate, 'yyyy-MM-dd HH:mm:ss')}">등록일</td>
                 <td>상태</td>
                 <td><button th:onclick="|location.href='@{/program/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
-                <td><button th:onclick="|location.href='@{/business/program/booking/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
+                <td><button th:onclick="|location.href='@{/business/program/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
             </tr>
             </tbody>
         </table>

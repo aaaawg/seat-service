@@ -16,6 +16,7 @@ public class ProgramInfoResponse {
     private Date endDate; //신청마감일
     private String type;
     private int peopleNum;
+    private String contents; //상세정보
 
     public ProgramInfoResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -26,5 +27,6 @@ public class ProgramInfoResponse {
         this.endDate = program.getEndDate();
         this.type = program.getType();
         this.peopleNum = program.getPeopleNum();
+        this.contents = program.getContents();
     }
 }

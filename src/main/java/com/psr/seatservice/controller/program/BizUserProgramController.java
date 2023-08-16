@@ -1,6 +1,7 @@
 package com.psr.seatservice.controller.program;
 
 import com.psr.seatservice.domian.program.Program;
+import com.psr.seatservice.dto.program.response.BizProgramViewingDateAndTimeAndPeopleNumResponse;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.BizProgramListResponse;
@@ -30,6 +31,7 @@ public class BizUserProgramController {
     //기업 사용자 - 해당 사용자가 등록한 프로그램 목록 표시
     @GetMapping
     public String programs(Model model) {
+        //등록한 사용자 아이디 추가하기
         List<BizProgramListResponse> programs = programService.programs();
         model.addAttribute("programs", programs);
         return "program/bizProgramList";
@@ -83,9 +85,18 @@ public class BizUserProgramController {
         return "program/bizCreateSeatingChart";
     }
 
-    //해당 프로그램을 예약한 개인 사용자 목록 조회
-    @GetMapping("/booking/{programNum}")
-    public String bookingUserList(@PathVariable Long programNum) {
+    //프로그램 진행 날짜, 시간별 신청인원수 목록
+    @GetMapping("/{programNum}")
+    public String viewingAndPeopleNumList(@PathVariable Long programNum, Model model) {
+        List<BizProgramViewingDateAndTimeAndPeopleNumResponse> list = programService.getProgramViewingDateAndTimeAndPeopleNum(programNum);
+        model.addAttribute("programs", list);
+        model.addAttribute("programNum", programNum);
+        return "program/bizProgramViewingList";
+    }
+
+    @GetMapping("/{programNum}/booking")
+    public String showBookingUserListPage(@PathVariable Long programNum, @RequestParam String date, @RequestParam String time, Model model){
+
         return "user/bizBookingUserList";
     }
 }

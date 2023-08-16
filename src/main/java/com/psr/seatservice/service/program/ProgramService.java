@@ -1,6 +1,7 @@
 package com.psr.seatservice.service.program;
 
 import com.psr.seatservice.domian.program.*;
+import com.psr.seatservice.dto.program.response.BizProgramViewingDateAndTimeAndPeopleNumResponse;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.*;
@@ -8,7 +9,6 @@ import com.psr.seatservice.dto.user.request.BookingRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +40,7 @@ public class ProgramService {
 
     public Long addProgram(BizAddProgramRequest request) {
         Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(),
-                request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum());
+                request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum(), request.getContents());
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
@@ -86,8 +86,8 @@ public class ProgramService {
                 .collect(Collectors.toList());
     }
 
-    public Long getProgramBookingCount(Long programNum, String date, String time) {
-        return programBookingRepository.countByBookingList(programNum, date, time);
+    public int getProgramBookingCount(Long programNum, String date, String time) {
+        return programBookingRepository.countByProgramBooking(programNum, date, time);
     }
 
     public List<Integer> getBookingList(Long programNum, String viewingDate, String viewingTime) {
@@ -102,5 +102,10 @@ public class ProgramService {
     public void addBooking(Long programNum, BookingRequest request) {
         ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum());
         programBookingRepository.save(programBooking);
+    }
+
+    public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {
+        List<BizProgramViewingDateAndTimeAndPeopleNumResponse> list = programViewingRepository.findViewingDateAndTimeAndPeopleNumByProgramNum(programNum);
+        return list;
     }
 }

@@ -38,6 +38,12 @@
         </div>
     </div>
 
+    <hr>
+    <div id="programContents">
+        <h5>상세정보</h5>
+        <div th:utext="${programInfo.contents}"></div>
+    </div>
+
     <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">수정</button>
     <button th:onclick="|location.href='@{/business/program}'|" type="button">목록</button>
 </div>

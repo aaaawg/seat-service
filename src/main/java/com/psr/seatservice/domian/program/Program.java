@@ -4,8 +4,10 @@ import com.psr.seatservice.domian.files.Files;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,14 +34,19 @@ public class Program {
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
     private List<ProgramViewing> programViewings = new ArrayList<>();
 
-    //private String contents; //프로그램 상세 내용
+    @Lob
+    private String contents; //프로그램 상세 내용
+
     //프로그램 등록 작성자 아이디
+
+    @CreationTimestamp
+    private Timestamp createDate;
 
     private String seatingChart;
     private Integer seatCol;
     private int peopleNum; //모집인원
 
-    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum) {
+    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String contents) {
         this.title = title;
         this.place = place;
         this.target = target;
@@ -49,6 +56,7 @@ public class Program {
         this.seatingChart = seatingChart;
         this.seatCol = seatCol;
         this.peopleNum = peopleNum;
+        this.contents = contents;
     }
     public void updateInfo(String title, String place, String target, Date startDate, Date endDate) {
         this.title = title;

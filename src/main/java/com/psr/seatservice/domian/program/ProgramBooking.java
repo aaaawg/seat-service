@@ -1,11 +1,8 @@
 package com.psr.seatservice.domian.program;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -31,6 +28,9 @@ public class ProgramBooking {
 
     @Column(name = "viewing_time")
     private String viewingTime;
+
+    private String status; //참가(P), 불참(NonP), 예약 취소(C)
+    private String reason; //취소 사유
 
     @CreationTimestamp
     private Timestamp bookingDate;

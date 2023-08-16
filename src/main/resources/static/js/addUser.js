@@ -38,7 +38,7 @@ function sendEmail() {
     let email = document.getElementById("email1").value + '@' + document.getElementById("email2").value;
     document.getElementById("sendEmailMessage").innerText = "이메일을 전송했습니다.";
 
-    fetch(`/join/email`, {
+    fetch('/join/email', {
         method: "post",
         headers: {
         "Content-Type": "application/json",

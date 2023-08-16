@@ -151,11 +151,11 @@ function openPopup() {
         document.getElementById("seatingChart").value = chart;
         document.getElementById("seatCol").value = popupSeatCol;
 
-        document.getElementById("peopleNum").value = popupSeatArr.length;
+        document.getElementById("peopleNum").value = popupSeatArr.length - exSeatCount;
         document.getElementById("peopleNum").readOnly = true;
 
         document.getElementById("enterPeopleNum").style.display = "none";
-        document.getElementById("seatLength").innerText = (popupSeatArr.length - exSeatCount).toString();
+        document.getElementById("seatLength").innerText = document.getElementById("peopleNum").value;
     });
 }
 function showCreatSeatingChart(v) {

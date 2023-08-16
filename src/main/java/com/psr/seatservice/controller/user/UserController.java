@@ -43,7 +43,6 @@ public class UserController {
             return "program/programList";
         }
     }
-
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
         //세션을 삭제한다.

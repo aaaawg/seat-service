@@ -11,6 +11,8 @@ import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.user.request.BookingRequest;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -70,11 +72,10 @@ public class ProgramController {
         return "program/programBooking";
     }
 
-    @ResponseBody
     @PostMapping("/booking/seat")
-    public String getSeatingChart(@RequestBody ProgramSeatingChartRequest request, Model model) throws JsonProcessingException {
+    public @ResponseBody String getSeatingChart(@RequestBody ProgramSeatingChartRequest request, Model model) throws JsonProcessingException {
         Program program = programService.getProgramInfo(request.getProgramNum());
-        Long bookingCount = programService.getProgramBookingCount(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
+        int bookingCount = programService.getProgramBookingCount(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
         ProgramBookingInfoResponse bookingInfoResponse;
         ObjectMapper objectMapper = new ObjectMapper();
         String json;
@@ -90,11 +91,10 @@ public class ProgramController {
         return json;
     }
 
-    @ResponseBody
     @PostMapping("/booking/{programNum}")
-    public String addBooking(@PathVariable Long programNum, BookingRequest request) {
+    public @ResponseBody ResponseEntity<Object> addBooking(@PathVariable Long programNum, @RequestBody BookingRequest request) {
         //programBooking 테이블에 예약 데이터 추가
         programService.addBooking(programNum, request);
-        return "1";
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

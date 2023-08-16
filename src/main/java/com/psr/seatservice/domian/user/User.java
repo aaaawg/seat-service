@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Getter
@@ -11,7 +12,7 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userNum;
+    private Long id;
     private String userId;
     private String password;
     private String name;
@@ -19,6 +20,7 @@ public class User {
     private String phone;
     private String email;
     private String role;
+    private Date birth;
 
     public User(String userId, String password, String name, String address, String phone, String email, String role) {
         this.userId = userId;

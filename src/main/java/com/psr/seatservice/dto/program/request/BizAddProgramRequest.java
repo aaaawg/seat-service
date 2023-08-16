@@ -24,4 +24,5 @@ public class BizAddProgramRequest {
     private String seatingChart;
     private Integer seatCol;
     private int peopleNum;
+    private String contents;
 }
