@@ -1,13 +1,14 @@
 package com.psr.seatservice.controller.program;
 
 import com.psr.seatservice.domian.program.Program;
-import com.psr.seatservice.dto.program.response.BizProgramViewingDateAndTimeAndPeopleNumResponse;
+import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
+import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
-import com.psr.seatservice.dto.program.response.BizProgramListResponse;
-import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -96,7 +97,28 @@ public class BizUserProgramController {
 
     @GetMapping("/{programNum}/booking")
     public String showBookingUserListPage(@PathVariable Long programNum, @RequestParam String date, @RequestParam String time, Model model){
+        List<BizProgramBookingUserListResponse> list = programService.getBookingUserList(programNum, date, time);
+        boolean checkSC = programService.checkSeatingChart(programNum);
 
-        return "user/bizBookingUserList";
+        model.addAttribute("userList", list);
+        model.addAttribute("checkSC", checkSC);
+        model.addAttribute("programNum", programNum);
+        return "program/bizBookingUserList";
+    }
+
+    @PutMapping("/{programNum}/booking")
+    public @ResponseBody ResponseEntity<Object> updateBookingStatus(@PathVariable Long programNum, @RequestBody BizUpdateProgramBookingStatusRequest request){
+        programService.updateBookingStatus(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/{programNum}/seat")
+    public String showSeatingChart(@PathVariable Long programNum, @RequestParam String date, @RequestParam String time, Model model) {
+        Program program = programService.getProgramInfo(programNum);
+        List<Integer> list = programService.getBookedSeats(programNum, date, time);
+
+        BizProgramBookingInfoResponse bookingInfoResponse = new BizProgramBookingInfoResponse(program.getSeatingChart(), list, program.getSeatCol(), program.getTitle(), date, time);
+        model.addAttribute("seats", bookingInfoResponse);
+        return "program/bizSeatingChart";
     }
 }

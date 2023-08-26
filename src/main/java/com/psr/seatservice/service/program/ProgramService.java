@@ -1,6 +1,7 @@
 package com.psr.seatservice.service.program;
 
 import com.psr.seatservice.domian.program.*;
+import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
 import com.psr.seatservice.dto.program.response.BizProgramViewingDateAndTimeAndPeopleNumResponse;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
@@ -57,7 +58,7 @@ public class ProgramService {
     }
 
     public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
-        if(request.getViewingDateAndTime() != null) {
+        if (request.getViewingDateAndTime() != null) {
             int size = request.getViewingDateAndTime().size();
             String dateAndTime, date, time;
             List<ProgramViewing> list = new ArrayList<>();
@@ -90,7 +91,7 @@ public class ProgramService {
         return programBookingRepository.countByProgramBooking(programNum, date, time);
     }
 
-    public List<Integer> getBookingList(Long programNum, String viewingDate, String viewingTime) {
+    public List<Integer> getBookedSeats(Long programNum, String viewingDate, String viewingTime) {
         List<ProgramBooking> programBookings = programBookingRepository.findProgramBookingList(programNum, viewingDate, viewingTime);
         List<Integer> list = new ArrayList<>();
         for (ProgramBooking programBooking : programBookings) {
@@ -100,12 +101,39 @@ public class ProgramService {
     }
 
     public void addBooking(Long programNum, BookingRequest request) {
-        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum());
+        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), "예정");
         programBookingRepository.save(programBooking);
     }
 
     public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {
+        //프로그램 진행 날짜, 시간, 신청인원 목록
         List<BizProgramViewingDateAndTimeAndPeopleNumResponse> list = programViewingRepository.findViewingDateAndTimeAndPeopleNumByProgramNum(programNum);
         return list;
+    }
+
+    public List<BizProgramBookingUserListResponse> getBookingUserList(Long programNum, String date, String time) {
+        //프로그램을 예약한 사용자 목록
+        List<BizProgramBookingUserListResponse> list = programBookingRepository.findByProgramNumAndViewingDateAndViewingTime(programNum, date, time);
+        return list;
+    }
+
+    public boolean checkSeatingChart(Long num) {
+        if(programRepository.findById(num).get().getSeatingChart() == null)
+            return false;
+        return true;
+    }
+
+    @Transactional
+    public void updateBookingStatus(BizUpdateProgramBookingStatusRequest request) {
+        for (int i = 0; i < request.getBookingNumList().size(); i++) {
+            Long bookingNum = Long.valueOf(request.getBookingNumList().get(i));
+            ProgramBooking programBooking = programBookingRepository.findById(bookingNum).orElseThrow();
+            programBooking.setStatus(request.getStatus());
+
+            if(request.getReason() != null) {
+                programBooking.setReason(request.getReason());
+                programBooking.setSeatNum(null);
+            }
+        }
     }
 }

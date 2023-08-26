@@ -248,20 +248,22 @@ let bookingSeatList;
         tDiv.innerHTML = str;
     }
     function sendBookingData() {
-        //document.getElementById("selectedViewingDate").value = ssDate;
-        //document.getElementById("selectedViewingTime").value = ssTime;
         let programNum = document.getElementById("program").value;
+        let data = {
+            viewingDate: ssDate,
+            viewingTime: ssTime
+        };
+
+        if(!document.getElementById("seatNum").disabled) {
+            data['seatNum'] = document.getElementById("seatNum").value;
+        }
 
         fetch(`/booking/${programNum}`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
             },
-            body: JSON.stringify({
-                seatNum: document.getElementById("seatNum").value,
-                viewingDate: ssDate,
-                viewingTime: ssTime
-            })
+            body: JSON.stringify(data)
         }).then((response) => {
             if(response.ok) {
                 alert("예약이 완료되었습니다.");

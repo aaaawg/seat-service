@@ -2,13 +2,16 @@ package com.psr.seatservice.domian.program;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+
+import java.util.Date;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class ProgramBooking {
     //개인 사용자가 프로그램 예약한 정보
@@ -33,7 +36,7 @@ public class ProgramBooking {
     private String reason; //취소 사유
 
     @CreationTimestamp
-    private Timestamp bookingDate;
+    private Date bookingDate;
 
     @ManyToOne(targetEntity = ProgramViewing.class)
     @JoinColumns({
@@ -47,10 +50,11 @@ public class ProgramBooking {
         this.seatNum = seatNum;
     }
 
-    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum) {
+    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum, String status) {
         this.programNum = programNum;
         this.viewingDate = viewingDate;
         this.viewingTime = viewingTime;
         this.seatNum = seatNum;
+        this.status = status;
     }
 }

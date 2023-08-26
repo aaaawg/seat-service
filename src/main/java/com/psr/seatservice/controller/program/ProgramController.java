@@ -81,7 +81,7 @@ public class ProgramController {
         String json;
 
         if (program.getSeatingChart() != null) {
-            List<Integer> list = programService.getBookingList(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
+            List<Integer> list = programService.getBookedSeats(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
             bookingInfoResponse = new ProgramBookingInfoResponse(program.getSeatingChart(), program.getSeatCol(), bookingCount, list);
         } else {
             bookingInfoResponse = new ProgramBookingInfoResponse(bookingCount);
