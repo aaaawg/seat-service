@@ -6,6 +6,7 @@ import com.psr.seatservice.dto.user.request.AddUserRequest;
 import com.psr.seatservice.dto.user.request.UserLoginRequest;
 import com.psr.seatservice.dto.user.response.BookingDetailResponse;
 import com.psr.seatservice.dto.user.response.BookingListResponse;
+import com.psr.seatservice.service.program.ProgramService;
 import com.psr.seatservice.service.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +21,11 @@ import java.util.List;
 @Controller
 public class UserController {
     private final UserService userService;
+    private final ProgramService programService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ProgramService programService) {
         this.userService = userService;
+        this.programService = programService;
     }
 
     @GetMapping("/login")
@@ -86,7 +89,9 @@ public class UserController {
         return "user/bookingDetail";
     }
     @PostMapping("/myPage/{bookingNum}")
-    public void userBookingDelete(){
-
+    public String userBookingDelete(@PathVariable Long bookingNum){
+        System.out.println("test num: "+bookingNum);
+        programService.BookingDelete(bookingNum);
+        return "user/bookingList";
     }
 }

@@ -147,6 +147,7 @@ public class ProgramService {
         return jsonData;
     }
 
+    @Transactional
     public void BookingDelete(Long bookingNum){
         programBookingRepository.deleteByBookingNum(bookingNum);
     }
