@@ -146,4 +146,8 @@ public class ProgramService {
         }
         return jsonData;
     }
+
+    public void BookingDelete(Long bookingNum){
+        programBookingRepository.deleteByBookingNum(bookingNum);
+    }
 }

@@ -33,4 +33,5 @@ public class UserService {
     public BookingDetailResponse getBookingDetailByUserId(String userId, Long bookingNum){
         return userRepository.findProgramBookingDetailByUserId(userId, bookingNum);
     }
+
 }

@@ -85,4 +85,8 @@ public class UserController {
         System.out.println("test: "+detailResponse.getProgramName()+", "+ detailResponse.getBookingNum());
         return "user/bookingDetail";
     }
+    @PostMapping("/myPage/{bookingNum}")
+    public void userBookingDelete(){
+
+    }
 }
