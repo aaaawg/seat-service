@@ -4,6 +4,7 @@ import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.domian.user.UserRepository;
 import com.psr.seatservice.dto.user.request.AddUserRequest;
 import com.psr.seatservice.dto.user.request.UserLoginRequest;
+import com.psr.seatservice.dto.user.response.BookingDetailResponse;
 import com.psr.seatservice.dto.user.response.BookingListResponse;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +28,9 @@ public class UserService {
                 request.getAddress(), request.getPhone(), request.getEmail(), request.getRole()));
     }
     public List<BookingListResponse> getBookingByUserId(String userId){
-        List<BookingListResponse> bookingProgram = userRepository.findProgramBookingInfoByUserId(userId);
-        int cnt = 0;
-        for (BookingListResponse a: bookingProgram
-             ) {
-            System.out.println("***"+cnt+"name: "+ a.getProgramName());
-            System.out.println("***"+cnt+"date: "+a.getViewingDate());
-            System.out.println("***"+cnt+"time: "+ a.getViewingTime());
-            cnt++;
-        }
-        return bookingProgram;
+        return userRepository.findProgramBookingInfoByUserId(userId);
+    }
+    public BookingDetailResponse getBookingDetailByUserId(String userId, Long bookingNum){
+        return userRepository.findProgramBookingDetailByUserId(userId, bookingNum);
     }
 }
