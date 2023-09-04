@@ -1,15 +1,21 @@
-let count = 0;
-//데이터 전달
-document.getElementById('myForm').addEventListener('submit', function(event) {
-  event.preventDefault();
+const countSet = document.querySelectorAll('[id^=plus]');
+let count = countSet.length;
 
-  // 폼 데이터 생성
+//데이터 전달
+if(document.getElementById('myForm') !== null){
+document.getElementById('myForm').addEventListener('submit', function(event) {
+   event.preventDefault();
+   if (!check()) {
+     return; // fetch 실행하지 않음
+   }
+   // 폼 데이터 생성
     const resultHtml = document.querySelector('#content').outerHTML;
     var additionalData = { formHtml: resultHtml};
     var formData = new FormData(document.getElementById('myForm'));
-    for (var key in additionalData) {
-            formData.append(key, additionalData[key]);
-    }
+    for (var key in additionalData) { formData.append(key, additionalData[key]);}
+
+    var getTitleJson = getTitle();
+    formData.append("getTitleJson", JSON.stringify(getTitleJson));
 
   // 서버로 폼 데이터 전송
   fetch('/business/program/add', {
@@ -18,19 +24,55 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
    })
   .then(response => response.text())
   .then(data => {
-    console.log(data); // 서버에서 전달하는 응답 출력
     window.location.href = "http://localhost:8080/business/program";
   })
   .catch(error => {
     console.error(error);
   });
 });
+}else{
+document.getElementById('myFormEdit').addEventListener('submit', function(event) {
+   event.preventDefault();
+   if (!check()) {return;}
+    const resultHtml = document.querySelector('#content').outerHTML;
+    var additionalData = { formHtml: resultHtml};
+    var formData = new FormData(document.getElementById('myFormEdit'));
+    for (var key in additionalData) {
+            formData.append(key, additionalData[key]);
+    }
+    var getTitleJson = getTitle();
+    formData.append("getTitleJson", JSON.stringify(getTitleJson));
+  fetch('formEdit', {
+    method: 'POST',
+    body: formData
+   })
+  .then(response => response.text())
+  .then(data => {
+  })
+  .catch(error => {
+    console.error(error);
+  });
+});
+};
 
 //유효성 검사 함수
 function check(){
     const result = document.querySelectorAll('[id^=plus]');
-    if(result.length === 0) return false;
+    if(result.length === 0){ return false; }
+
+    const inputComplete = document.querySelectorAll("[id^=complete]");
+    if(inputComplete.length > 0){
+        alert("편집을 완료해주세요.");
+        return false;
+    }
     return true;
+}
+
+function getTitle(){
+    var titleJson = {};
+    var titleText = document.querySelectorAll("[id^=titleSpan]");
+    for(let i=0; i< titleText.length; i++){ titleJson[i] = titleText[i].innerText;}
+    return titleJson;
 }
 
 function addContent(){
@@ -137,14 +179,14 @@ function clickCheckPlus(divNum){
 }
 //편집, 지우기 버튼 생성
 function addButtons(newContentDiv){
-        var newBtn = makeButton("btn btn-change", count, "addEditSelect(this.id)");
+        var newBtn = makeButton("btn btn-change"+count, count, "addEditSelect(this.id)");
         var newI = document.createElement('i');
         newI.setAttribute("class","bi bi-pencil-square");
-
+        newBtn.disabled = true;
         newBtn.appendChild(newI);
         newContentDiv.appendChild(newBtn);
 
-        var newDelBtn = makeButton("btn btn-delete", count, "deleteSelect(this.id)");
+        var newDelBtn = makeButton("btn btn-delete"+count, count, "deleteSelect(this.id)");
         var newDelI = document.createElement('i');
         newDelI.setAttribute("class","bi bi-trash3");
 
@@ -157,7 +199,8 @@ function origContent(newContentDiv){
     origContent.setAttribute("id", "origContent"+count);
 
     const newDiv = document.createElement('div');
-    newDiv.setAttribute("class", count)
+    //!
+    newDiv.setAttribute("class", "classTitle"+count)
 
     var span1 = document.createElement( 'span' );
     var titleText = document.createTextNode( '항목 제목' );
@@ -169,7 +212,8 @@ function origContent(newContentDiv){
     origContent.appendChild(newDiv);
 
     const newDiv2 = document.createElement('div');
-    newDiv2.setAttribute("class", count)
+    //!
+    newDiv2.setAttribute("class", "classDetail"+count);
 
     var span2 = document.createElement( 'span' );
     var titleText2 = document.createTextNode( '항목 설명' );
@@ -189,35 +233,46 @@ function origContent(newContentDiv){
 
     newContentDiv.appendChild(origContent);
     newContentDiv.appendChild(newDiv3);
-    addEditSelect(count);
+
+    addSelect(count);
     count++;
 }
-//편집 셀렉트 생성
+function addSelect(e){
+        const divName = document.getElementById('plus'+e);
+        const newDiv = document.createElement('div');
+        newDiv.setAttribute("id","select"+e);
+
+        var span = document.createElement('span');
+        var TypeText = document.createTextNode('유형');
+        span.appendChild(TypeText);
+        newDiv.appendChild(span);
+
+        var select = document.createElement('select');
+        select.setAttribute("name", "content"+e);
+        select.setAttribute("onchange", "handleOnChange(this, "+e+")");
+
+        var con = ['주관식 단답형','주관식 서술형', '단일 선택형', '복수 선택형'];
+
+        for(let i=0; i<con.length; i++) {
+            var opt = document.createElement( 'option' );
+            opt.setAttribute("value", con[i]);
+            opt.innerText = con[i];
+            select.appendChild(opt);
+        }
+        newDiv.appendChild(select);
+        divName.appendChild(newDiv);
+        var newChBtn = makeButton("btn btn-success", "complete"+e, "complete("+e+")");
+        newChBtn.innerText = "완료";
+        divName.appendChild(newChBtn);
+}
+
 function addEditSelect(e){
     titleInputLayoutShow(e);
+    var spanTitle = document.getElementById('titleSpan'+e);
+    if(spanTitle !== null){ programEditVer(e, spanTitle);}
     const divName = document.getElementById('plus'+e);
-    const newDiv = document.createElement('div');
-    newDiv.setAttribute("id","select"+e);
-
-    var span = document.createElement('span');
-    var TypeText = document.createTextNode('유형');
-    span.appendChild(TypeText);
-    newDiv.appendChild(span);
-
-    var select = document.createElement('select');
-    select.setAttribute("name", "content"+e);
-    select.setAttribute("onchange", "handleOnChange(this, "+e+")");
-
-    var con = ['주관식 단답형','주관식 서술형', '단일 선택형', '복수 선택형'];
-
-    for(let i=0; i<con.length; i++) {
-        var opt = document.createElement( 'option' );
-        opt.setAttribute("value", con[i]);
-        opt.innerText = con[i];
-        select.appendChild(opt);
-    }
-    newDiv.appendChild(select);
-    divName.appendChild(newDiv);
+    const selectShow = document.getElementById('select'+e);
+    selectShow.style.display = "";
 
     var newChBtn = makeButton("btn btn-success", "complete"+e, "complete("+e+")");
     newChBtn.innerText = "완료";
@@ -261,7 +316,8 @@ function addEditSelect(e){
         checkBoxBtnDiv.appendChild(checkPlusBtn);
         changeSelectDiv.appendChild(checkBoxBtnDiv);
     }
-    const target = document.getElementById(e);
+    //const target = document.getElementById(e);
+    const target = document.getElementsByClassName("btn btn-change"+e)[0];
     const changeColor = document.getElementById('plus'+e);
     //버튼 눌린 상태로 변경
     if(target.disabled === false){
@@ -287,7 +343,7 @@ function handleOnChange(e, divNum) {
         changeContent[0].appendChild(changeInputText);
         break;
     case '단일 선택형':
-        const store = document.querySelector(".changeSelectDiv"+num);
+        const store = document.querySelector(".changeSelectDiv"+divNum);
         if(store === null){
            const wholeSelectDiv = document.createElement('div');
            wholeSelectDiv.setAttribute("class", "wholeSelectDiv"+divNum);
@@ -307,7 +363,7 @@ function handleOnChange(e, divNum) {
         }
         break;
     case '복수 선택형':
-        const storeCheck = document.querySelector(".changeCheckDiv"+num);
+        const storeCheck = document.querySelector(".changeCheckDiv"+divNum);
         if(storeCheck === null){
             const wholeCheckDiv = document.createElement('div');
             wholeCheckDiv.setAttribute("class", "wholeCheckDiv"+divNum);
@@ -337,10 +393,11 @@ function deleteSelect(e){
 }
 function complete(e){
     const selectName = document.getElementById('select'+e);
-    selectName.remove();
+    selectName.style.display = "none";
     const buttonName = document.getElementById('complete'+e);
     buttonName.remove();
-    const target = document.getElementById(e);
+    //const target = document.getElementById(e);
+    const target = document.getElementsByClassName("btn btn-change"+e)[0];
     const changeColor = document.getElementById('plus'+e);
     if(target.disabled === true){
        target.disabled = false;
@@ -361,22 +418,29 @@ function complete(e){
 
 function titleInputLayoutShow(num){
     var layout = document.getElementById('titleConReplyDiv'+num);
-    var removeDiv = document.getElementsByClassName(num);
-    var length = removeDiv.length;
+    var removeDiv1 = document.getElementsByClassName("classTitle"+num);
+    var removeDiv2 = document.getElementsByClassName("classDetail"+num);
+    var length = removeDiv1.length;
     if(layout != null){
         layout.style.display='none';
-        for(let i=0; i<length; i++)
-            removeDiv[i].style.display='block';
+        for(let i=0; i<length; i++){
+            removeDiv1[i].style.display='block';
+            removeDiv2[i].style.display='block';
+        }
     }
 }
 
 function titleResult(num){
-    const removeDiv = document.getElementsByClassName(num);
+//!
+    const removeDiv = document.getElementsByClassName("classTitle"+num);
+    const removeDiv2 = document.getElementsByClassName("classDetail"+num);
     var length = removeDiv.length;
     var title = document.getElementsByClassName("title"+num)[0].value;
     var content = document.getElementsByClassName("content"+num)[0].value;
-    for(let i=0; i<length; i++)
+    for(let i=0; i<length; i++){
         removeDiv[i].style.display='none';
+        removeDiv2[i].style.display='none';
+    }
 
     if(title==='')
        title = '제목을 입력해주세요.';
@@ -457,4 +521,14 @@ function reToInput(num, type){
         });
     }
     return re;
+}
+
+function programEditVer(num, spanTitle){
+    var inputTitle = document.getElementsByClassName('title'+num)[0];
+    var inputContent = document.getElementsByClassName('content'+num)[0];
+    if(inputTitle.value === ''){inputTitle.value = spanTitle.innerText;}
+    if(inputContent.value === ''){
+        var spanContent = document.getElementById('ContentSpan'+num).innerText;
+        inputContent.value = spanContent;
+    }
 }

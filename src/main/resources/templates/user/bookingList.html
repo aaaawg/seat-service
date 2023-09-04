@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="/layout/nav.html :: nav"></div>
+    <h2>신청 프로그램</h2>
+    <div>
+        <th:block th:each="list, iterStat: ${lists}">
+            <p>
+                <span th:text="${iterStat.count} + ' : '"></span>
+                <span th:text="${list.programName}"></span>
+                <span th:text="${list.viewingDate}"></span>
+                <span th:text="${list.viewingTime}"></span>
+                <button type="button" id="detail" th:onclick="|location.href='@{/myPage/{bookingNum}(bookingNum=${list.bookingNum})}'|">상세정보</button>
+            </p>
+        </th:block>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</body>
+</html>

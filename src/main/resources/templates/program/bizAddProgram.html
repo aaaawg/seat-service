@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="container" style="max-width: 1000px">
-  <form th:action method="post" enctype="multipart/form-data" onsubmit="return check()" id="myForm">
+  <form th:action method="post" enctype="multipart/form-data" id="myForm">
     <div>
       <label>구분</label>
       <input type="radio" id="offline" name="type" value="오프라인" checked onchange="showPlaceInput(0)">
@@ -103,7 +103,7 @@
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="/js/addProgram.js"></script>
-<script type="text/javascript" src="/js/addProgramContent.js?ver=3"></script>
+<script type="text/javascript" src="/js/addProgramContent.js?ver=7"></script>
 <script>
   $(document).ready(function() {
     $('.summernote').summernote({

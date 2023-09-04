@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 
@@ -11,7 +12,6 @@ import java.util.Date;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class ProgramBooking {
     //개인 사용자가 프로그램 예약한 정보
@@ -46,15 +46,20 @@ public class ProgramBooking {
     })
     private ProgramViewing programViewing;
 
+    @Column(columnDefinition = "json", name = "program_response")
+    private String programResponse;
+
     public ProgramBooking(Integer seatNum) {
         this.seatNum = seatNum;
     }
 
-    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum, String status) {
+    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum, String status, String programResponse, String userId) {
         this.programNum = programNum;
         this.viewingDate = viewingDate;
         this.viewingTime = viewingTime;
         this.seatNum = seatNum;
         this.status = status;
+        this.programResponse = programResponse;
+        this.userId = userId;
     }
 }

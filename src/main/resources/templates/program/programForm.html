@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="userResponse">
+    <div id="formContent">
+    </div>
+    <button type="submit" class="btn btn-submit">폼 제출하기</button>
+</form>
+<script type="text/javascript" src="/js/changeFormContent.js"></script>
+<script th:inline="javascript">
+    var programInfo = /*[[${ProgramForm}]]*/ {};
+    var div = document.getElementById('formContent');
+    div.innerHTML = programInfo;
+    returnResult();
+    //test중
+    var test = document.querySelector('.reDiv0');
+    getType(test);
+</script>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package com.psr.seatservice.service.program;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
 import com.psr.seatservice.dto.program.response.BizProgramViewingDateAndTimeAndPeopleNumResponse;
@@ -10,6 +12,8 @@ import com.psr.seatservice.dto.user.request.BookingRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,9 +43,9 @@ public class ProgramService {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public Long addProgram(BizAddProgramRequest request) {
+    public Long addProgram(BizAddProgramRequest request, String result, String getTitleJsonString) {
         Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(),
-                request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum(), request.getContents());
+                request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum(), request.getContents(), result, getTitleJsonString);
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
@@ -100,8 +104,8 @@ public class ProgramService {
         return list;
     }
 
-    public void addBooking(Long programNum, BookingRequest request) {
-        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), "예정");
+    public void addBooking(Long programNum, BookingRequest request, String userId) {
+        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), "예정", userId); //생성자 확인
         programBookingRepository.save(programBooking);
     }
 
@@ -135,5 +139,46 @@ public class ProgramService {
                 programBooking.setSeatNum(null);
             }
         }
+    }
+
+    public String getProgramForm(Long programNum){
+        return programRepository.findById(programNum).get().getProgramHtml();
+    }
+
+    @Transactional
+    public void updateProgramForm(Long programNum, String request) {
+        Program program = programRepository.findById(programNum)
+                .orElseThrow(IllegalAccessError::new);
+        program.updateForm(request);
+    }
+
+    public void updateProgramFormTitle(Long programNum, String getTitleJsonString){
+        Program program = programRepository.findById(programNum).orElse(null);;
+        program.updateJsonFrom(getTitleJsonString);
+        programRepository.save(program);
+    }
+
+    //Json 값넘기기 Test
+    public JsonNode getJson(Long programNum){
+        Program program = programRepository.findById(programNum).orElse(null);;
+        String re = program.getProgramQuestion();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonData = null;
+        try {
+            jsonData = objectMapper.readTree(re);
+            if(program != null){
+                System.out.println("Json Change Data : "+jsonData);
+                return jsonData;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonData;
+    }
+
+    @Transactional
+    public void BookingDelete(Long bookingNum){
+        programBookingRepository.deleteByBookingNum(bookingNum);
     }
 }

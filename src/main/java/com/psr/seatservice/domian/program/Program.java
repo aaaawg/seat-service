@@ -37,6 +37,12 @@ public class Program {
     @Lob
     private String contents; //프로그램 상세 내용
 
+    @Column(columnDefinition = "LONGTEXT")
+    private String programHtml; //html text
+
+    @Column(columnDefinition = "json")
+    private String programQuestion;
+
     //프로그램 등록 작성자 아이디
 
     @CreationTimestamp
@@ -46,7 +52,8 @@ public class Program {
     private Integer seatCol;
     private int peopleNum; //모집인원
 
-    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String contents) {
+    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String contents, String programHtml, String programQuestion) {
+        //생성자 확인하기
         this.title = title;
         this.place = place;
         this.target = target;
@@ -57,6 +64,8 @@ public class Program {
         this.seatCol = seatCol;
         this.peopleNum = peopleNum;
         this.contents = contents;
+        this.programHtml = programHtml;
+        this.programQuestion = programQuestion;
     }
     public void updateInfo(String title, String place, String target, Date startDate, Date endDate) {
         this.title = title;
@@ -65,4 +74,9 @@ public class Program {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+    public void updateForm(String programHtml){
+        this.programHtml = programHtml;
+    }
+    public void updateJsonFrom(String programQuestion){ this.programQuestion = programQuestion; }
 }

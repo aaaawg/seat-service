@@ -69,6 +69,7 @@ public class ProgramController {
     public String booking(@PathVariable Long programNum, Model model) {
         List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
         model.addAttribute("programViewing", viewing);
+        model.addAttribute("ProgramForm",programService.getProgramForm(programNum));
         return "program/programBooking";
     }
 
@@ -92,9 +93,31 @@ public class ProgramController {
     }
 
     @PostMapping("/booking/{programNum}")
-    public @ResponseBody ResponseEntity<Object> addBooking(@PathVariable Long programNum, @RequestBody BookingRequest request) {
+    public @ResponseBody ResponseEntity<Object> addBooking(@PathVariable Long programNum, @RequestBody BookingRequest request, HttpSession session) {
         //programBooking 테이블에 예약 데이터 추가
-        programService.addBooking(programNum, request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        User loginUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        if(loginUser != null) {
+            programService.addBooking(programNum, request, loginUser.getUserId());
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).build(); //상태 변경
+    }
+
+    //관리자 폼
+    @GetMapping("/program/{programNum}/formEdit")
+    public String programFormEdit(@PathVariable Long programNum, Model model){
+        model.addAttribute("ProgramForm",programService.getProgramForm(programNum));
+        //Json 넘겨보기
+        model.addAttribute("ProgramJson",programService.getJson(programNum));
+        return "program/programEdit";
+    }
+    @PostMapping("/program/{programNum}/formEdit")
+    public String programFormEdit(@PathVariable Long programNum, @RequestParam(value="formHtml") String request,
+                                  @RequestParam("getTitleJson") String getTitleJsonString){
+        programService.updateProgramForm(programNum,request);
+        programService.updateProgramFormTitle(programNum,getTitleJsonString);
+        return "redirect:/program/{programNum}/form";
     }
 }
