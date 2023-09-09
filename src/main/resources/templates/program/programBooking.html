@@ -13,13 +13,13 @@
         <div id="formContent">
         </div>
     </form>
-<script type="text/javascript" src="/js/changeFormContent.js?ver=1.1"></script>
-<script th:inline="javascript">
-    var programInfo = /*[[${ProgramForm}]]*/ {};
-    var div = document.getElementById('formContent');
-    div.innerHTML = programInfo;
-    returnResult();
-</script>
+    <script type="text/javascript" src="/js/changeFormContent.js?ver=1.1"></script>
+    <script th:inline="javascript">
+        var programInfo = /*[[${ProgramForm}]]*/ {};
+        var div = document.getElementById('formContent');
+        div.innerHTML = programInfo;
+        returnResult();
+    </script>
     <input type="hidden" id="program">
     <button type="button" id="formPage">다음</button>
 </div>
@@ -64,7 +64,6 @@
         <input type="hidden" id="selectedViewingDate" name="viewingDate">
         <input type="hidden" id="selectedViewingTime" name="viewingTime">
         <input type="hidden" id="userResponseForm" name="programResponse">
-        <button type="submit">신청하기</button>
     </form>
     <button type="button" onclick="sendBookingData()">신청하기</button>
 </div>
@@ -99,17 +98,18 @@
             var result = getResponse();
             if(result === 0){
                 window.alert("질문에 모두 답변해주세요.");
-            }else{
+            } else {
                 document.getElementById("userResponseForm").value = JSON.stringify(result);
                 document.getElementById("enterForm").style.display = "none";
                 document.getElementById("viewingDate").style.display = "block";
                 sDate = new Date(sYear, sMonth, sDay);
                 viewingType();
                 createCalendar();
+                showTime(d);
+                timeBtnEvent(d, t);
             }
         })
     })
-
 
     function prevMonth() {
         sDate = new Date(sDate.getFullYear(), sDate.getMonth() - 1, sDate.getDate());
@@ -162,7 +162,7 @@
 
     function showTime(date) {
         const viewing = [[${programViewing}]];
-        let timeBtn = document.getElementById("timeBtn");
+        const timeBtn = document.getElementById("timeBtn");
         timeBtn.innerHTML = "";
         timeBtn.innerHTML += "<div>" + date + "</div>";
         for (let i = 0; i < viewing.length; i++) {
@@ -206,8 +206,7 @@
             }
         });
     }
-let bookingSeatList;
-    let seatArray = new Array();
+    let bookingSeatList;
     function createSeatingChart(seatingChart, sCol) {
         const scDiv = document.getElementById("chart");
         let seatNum = 1;
@@ -289,8 +288,10 @@ let bookingSeatList;
                 alert("예약이 완료되었습니다.");
                 window.close();
             }
-            else
-                alert("이미 예약된 좌석입니다. 다른 좌석을 선택해주세요.");
+            else {
+                if(response.status === 401)
+                    alert("로그인 후 이용할 수 있습니다.");
+            }
         })
     }
 </script>

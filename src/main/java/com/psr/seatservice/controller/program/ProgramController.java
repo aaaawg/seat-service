@@ -102,7 +102,7 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).build(); //상태 변경
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //로그인 상태가 아닐 경우
     }
 
     //관리자 폼

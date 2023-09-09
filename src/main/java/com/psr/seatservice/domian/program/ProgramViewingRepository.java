@@ -11,11 +11,6 @@ public interface ProgramViewingRepository extends JpaRepository<ProgramViewing, 
 
     ProgramViewing findByProgramNoAndViewingDateAndViewingTime(Long programNum, String viewingDate, String viewingTime);
 
-/*    @Query(value = "select new com.psr.seatservice.dto.program.response.BizProgramViewingDateAndTimeAndPeopleNumResponse(v.viewingDate, v.viewingTime, coalesce(count(b.bookingNum), 0)) from ProgramViewing v " +
-            "left outer join ProgramBooking b on v.programNo = b.programNum and v.viewingDate = b.viewingDate and v.viewingTime = b.viewingTime where v.programNo = ?1 " +
-            "group by v.viewingDate, v.viewingTime")
-    List<BizProgramViewingDateAndTimeAndPeopleNumResponse> findViewingDateAndTimeAndPeopleNumByProgramNum(Long programNo);*/
-
     @Query(value = "select new com.psr.seatservice.dto.program.response.BizProgramViewingDateAndTimeAndPeopleNumResponse(v.viewingDate, v.viewingTime, sum(case when b.status != '취소' then 1 else 0 end)) from ProgramViewing v " +
             "left outer join ProgramBooking b on v.programNo = b.programNum and v.viewingDate = b.viewingDate and v.viewingTime = b.viewingTime where v.programNo = ?1 " +
             "group by v.viewingDate, v.viewingTime") //count에 case 지원X(조건 설정 불가) -> sum 사용

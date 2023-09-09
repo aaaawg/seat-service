@@ -200,7 +200,7 @@ function peopleNumValue() {
 
         if(document.getElementById("offline").checked) {
             document.getElementById("offSeatingChart").style.display = "block";
-            showCreatSeatingChart(1);
+            showCreatSeatingChart(0);
         }
     }
 }

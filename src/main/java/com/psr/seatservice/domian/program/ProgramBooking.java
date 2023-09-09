@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 
@@ -12,6 +11,7 @@ import java.util.Date;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class ProgramBooking {
     //개인 사용자가 프로그램 예약한 정보
@@ -32,7 +32,7 @@ public class ProgramBooking {
     @Column(name = "viewing_time")
     private String viewingTime;
 
-    private String status; //참가(P), 불참(NonP), 예약 취소(C)
+    private String status; //참가, 불참, 예약취소, 예정
     private String reason; //취소 사유
 
     @CreationTimestamp

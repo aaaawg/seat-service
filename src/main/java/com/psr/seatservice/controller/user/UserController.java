@@ -37,13 +37,12 @@ public class UserController {
     @PostMapping("/login")
     public String login(UserLoginRequest request, HttpServletRequest httpServletRequest, Model model) {
         User loginUser = userService.login(request);
-        if(loginUser != null && loginUser.getRole().equals("biz")) {
+        if(loginUser != null) {
             HttpSession session = httpServletRequest.getSession();
             session.setAttribute(SessionConst.LOGIN_MEMBER, loginUser);
             User logUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
             model.addAttribute("name",logUser.getName());
-             //return "program/bizProgramList";
             return "program/programList";
         }
         else {
