@@ -1,6 +1,7 @@
 package com.psr.seatservice.controller.program;
 
 import com.psr.seatservice.domian.program.Program;
+import com.psr.seatservice.dto.files.FileDto;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.BizProgramListResponse;
@@ -70,7 +71,19 @@ public class BizUserProgramController {
     @GetMapping("/update/{programNum}")
     public String updateProgramInfo(@PathVariable Long programNum, Model model) {
         Program program = programService.getProgramInfo(programNum);
+
+        FileDto fileDto;
+        List<FileDto> list = fileService.getFileByProNum(program.getProgramNum());
+        fileDto = new FileDto();
+        if(list != null) {
+            fileDto.setFilename("InImage");
+            model.addAttribute("fileList", list);
+        } else {
+            fileDto.setFilename("NoInImage");
+        }
+
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
+        model.addAttribute("file", fileDto);
         return "program/bizUpdateProgramInfo";
     }
 

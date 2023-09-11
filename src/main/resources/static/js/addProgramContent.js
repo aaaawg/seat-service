@@ -42,12 +42,25 @@ document.getElementById('myFormEdit').addEventListener('submit', function(event)
     }
     var getTitleJson = getTitle();
     formData.append("getTitleJson", JSON.stringify(getTitleJson));
+
+    var currentUrl = window.location.href;
+    var urlParams = new URLSearchParams(currentUrl);
+    var programNum = urlParams.get("programNum");
+    console.log(currentUrl);
+    console.log(urlParams);
+    console.log(programNum);
+
   fetch('formEdit', {
     method: 'POST',
     body: formData
    })
   .then(response => response.text())
   .then(data => {
+      var currentUrl = window.location.href;
+      var urlParts = currentUrl.split("/");
+      var programNumIndex = urlParts.indexOf("program");
+      var programNum = urlParts[programNumIndex + 1];
+      window.location.href = "http://localhost:8080/program/"+programNum;
   })
   .catch(error => {
     console.error(error);

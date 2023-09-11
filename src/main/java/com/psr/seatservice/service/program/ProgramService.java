@@ -130,13 +130,15 @@ public class ProgramService {
 
     //Json 값넘기기 Test
     public JsonNode getJson(Long programNum){
-        Program program = programRepository.findById(programNum).orElse(null);;
+        Program program = programRepository.findById(programNum).orElse(null);
         String re = program.getProgramQuestion();
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonData = null;
         try {
-            jsonData = objectMapper.readTree(re);
+            if(re!=null) {
+                jsonData = objectMapper.readTree(re);
+            }
             if(program != null){
                 System.out.println("Json Change Data : "+jsonData);
                 return jsonData;
