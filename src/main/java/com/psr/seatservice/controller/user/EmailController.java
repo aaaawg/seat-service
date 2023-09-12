@@ -1,6 +1,6 @@
 package com.psr.seatservice.controller.user;
 
-import com.psr.seatservice.dto.user.request.CheckEmailRequest;
+import com.psr.seatservice.dto.user.request.EmailCheckRequest;
 import com.psr.seatservice.service.user.EmailService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +15,7 @@ public class EmailController {
     }
 
     @PostMapping("/join/email")
-    public String checkEmail(@RequestBody CheckEmailRequest request) {
+    public String checkEmail(@RequestBody EmailCheckRequest request) {
         String num = emailService.sendEmail(request.getUserEmail());
         return num;
     }

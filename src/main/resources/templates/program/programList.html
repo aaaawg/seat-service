@@ -4,15 +4,33 @@
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/programList.css}" href="../css/programList.css" rel="stylesheet">
 
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
-<div class="container" style="max-width: 800px">
-    <th:block th:each="program: ${programs}">
-        <div class="p-3 mb-2 bg-light text-dark rounded-3" style="width: 250px; height: 300px" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
-            <p th:text="${program.title}"></p>
-            <p>[[${program.startDate}]] ~ [[${program.endDate}]] </p>
+<div style="max-width: 600px">
+    <button>전체</button>
+    <button>온라인</button>
+    <button>오프라인</button>
+</div>
+<div class="container" style="max-width: 1400px">
+    <th:block th:each="program: ${programs}" th:if="!${#dates.createToday().after(program.endDate)}">
+        <div class="p-3 mx-1 my-2 bg-light text-dark rounded-3 row pDiv" style="width: 250px; height: 400px" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
+            <div class="imgDiv">
+                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 300px">
+                <div id="noImg" th:unless="${program.filename != null}">No Image</div>
+                <span class="badge bg-secondary imgBadge">[[${program.type}]]</span>
+                <div>
+                    <span class="badge bg-secondary" th:if="${#dates.createToday().before(program.startDate)}">예정</span>
+                    <span class="badge bg-secondary" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
+                    <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
+                </div>
+            </div>
+            <div id="textDiv">
+                <p th:text="${program.title}"></p>
+                <p>[[${program.startDate}]] ~ [[${program.endDate}]] </p>
+            </div>
         </div>
     </th:block>
 </div>

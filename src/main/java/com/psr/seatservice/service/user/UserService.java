@@ -34,4 +34,7 @@ public class UserService {
         return userRepository.findProgramBookingDetailByUserId(userId, bookingNum);
     }
 
+    public boolean checkUserId(String userId) {
+        return userRepository.existsByUserId(userId);
+    }
 }

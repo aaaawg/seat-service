@@ -33,7 +33,7 @@
             <td th:text="${booking.birth}"></td>
             <td th:text="${booking.phone}"></td>
             <td th:text="${booking.email}"></td>
-            <td th:text="${booking.seatNum}"></td>
+            <td th:if="${checkSC}" th:text="${booking.seatNum}"></td>
             <td><button>보기</button></td>
             <td th:text="${booking.status}"></td>
         </tr>

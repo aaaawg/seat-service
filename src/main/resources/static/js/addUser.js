@@ -23,9 +23,9 @@ function userEnterData() {
     phone.value = phone1 + "-" + phone2 + "-" + phone3;
 
     if(document.getElementById("detailAddress").value !== "")
-    document.getElementById("fullAddress").value = document.getElementById("address").value + ', ' + document.getElementById("detailAddress").value;
+        document.getElementById("fullAddress").value = document.getElementById("address").value + ', ' + document.getElementById("detailAddress").value;
     else
-    document.getElementById("fullAddress").value = document.getElementById("address").value;
+        document.getElementById("fullAddress").value = document.getElementById("address").value;
 
     document.getElementById("email").value = document.getElementById("email1").value + '@' + document.getElementById("email2").value;
 }
@@ -82,4 +82,28 @@ function changeText(id) {
         document.getElementById("p").textContent = "전화번호";
         document.getElementById("role").value = "biz"
     }
+}
+
+function checkId() {
+    const userId = document.getElementById("userId");
+
+    fetch('/join/id', {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "userId": userId.value
+        })
+    }).then((r) => {
+        if(r.ok) {
+            userId.readOnly = true;
+            document.getElementById("idMessage").style.display = "none";
+            document.getElementById("checkIdBtn").style.display = "none";
+            document.getElementById("idDiv").className = "";
+        }
+        else {
+            document.getElementById("idMessage").innerText = "사용할 수 없는 아이디 입니다.";
+        }
+    })
 }

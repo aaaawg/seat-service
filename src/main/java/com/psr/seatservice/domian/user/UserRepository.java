@@ -16,4 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new com.psr.seatservice.dto.user.response.BookingDetailResponse(p.title, pb.viewingDate, pb.viewingTime, p.place, p.type, pb.seatNum, pb.bookingNum) FROM ProgramBooking pb JOIN Program p ON pb.programNum = p.programNum WHERE pb.userId = ?1 AND pb.bookingNum = ?2")
     BookingDetailResponse findProgramBookingDetailByUserId(String userId, Long bookingNum);
 
+    boolean existsByUserId(String userId);
 }

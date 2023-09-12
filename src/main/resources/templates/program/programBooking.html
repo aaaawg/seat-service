@@ -269,8 +269,9 @@
     function sendBookingData() {
         let programNum = document.getElementById("program").value;
         let data = {
-            viewingDate: ssDate,
-            viewingTime: ssTime
+            "viewingDate": ssDate,
+            "viewingTime": ssTime,
+            "peopleNum":peopleNum
         };
 
         if(!document.getElementById("seatNum").disabled) {
@@ -284,14 +285,16 @@
             },
             body: JSON.stringify(data)
         }).then((response) => {
-            if(response.ok) {
+            if (response.ok) {
                 alert("예약이 완료되었습니다.");
+                opener.location.reload();
                 window.close();
             }
             else {
-                if(response.status === 401)
-                    alert("로그인 후 이용할 수 있습니다.");
+                return response.json();
             }
+        }).then((r) => {
+            alert(r.message);
         })
     }
 </script>

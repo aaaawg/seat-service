@@ -75,11 +75,18 @@ public class ProgramService {
         }
     }
 
-    public List<ProgramListResponse> mainPrograms() {
-        List<Program> programs = programRepository.findAll();
-        return programs.stream()
-                .map(ProgramListResponse::new)
-                .collect(Collectors.toList());
+    public List<ProgramListResponse> getProgramList(String t) {
+        List<ProgramListResponse> programs;
+
+        if(t.equals("online")) {
+            programs = programRepository.findAllByType("온라인");
+        } else if (t.equals("offline")) {
+            programs = programRepository.findAllByType("오프라인");
+        } else {
+            programs = programRepository.findAllProgramAndImg();
+        }
+
+        return programs;
     }
 
     public List<ProgramViewingDateAndTimeResponse> getProgramViewingDateAndTime(Long programNum) {
@@ -102,9 +109,19 @@ public class ProgramService {
         return list;
     }
 
-    public void addBooking(Long programNum, BookingRequest request, String userId) {
-        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), "예정", request.getProgramResponse(), userId);
-        programBookingRepository.save(programBooking);
+    public int addBooking(Long programNum, BookingRequest request, String userId) {
+        int count = getProgramBookingCount(programNum, request.getViewingDate(), request.getViewingTime());
+        if(count < request.getPeopleNum() || request.getPeopleNum() == -1) {
+            if (programBookingRepository.existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(programNum, request.getSeatNum(), request.getViewingDate(), request.getViewingTime())) {
+                return 1;
+            }
+            else {
+                ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), "예정", request.getProgramResponse(), userId);
+                programBookingRepository.save(programBooking);
+                return 2;
+            }
+        }
+        return 0;
     }
 
     public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {

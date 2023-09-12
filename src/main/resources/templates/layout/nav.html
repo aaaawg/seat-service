@@ -10,7 +10,15 @@
       <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" th:onclick="|location.href='@{/}'|">프로그램</a>
+            <div class="btn-group">
+              <a class="nav-link" th:href="@{/}">프로그램</a>
+              <a role="button" class="nav-link dropdown-toggle dropdown-toggle-split" id="navbarDropdownProgram" data-bs-toggle="dropdown" aria-expanded="false"></a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownProgram">
+                <li><a class="dropdown-item" th:href="@{/}">전체</a></li>
+                <li><a class="dropdown-item" th:href="@{/online}">온라인</a></li>
+                <li><a class="dropdown-item" th:href="@{/offline}">오프라인</a></li>
+              </ul>
+            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" th:onclick="|location.href='@{/business/program}'|">프로그램 관리</a>

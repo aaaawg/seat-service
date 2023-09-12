@@ -18,4 +18,6 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
     List<BizProgramBookingUserListResponse> findByProgramNumAndViewingDateAndViewingTime(Long programNum, String viewingDate, String viewingTime);
 
     void deleteByBookingNum(Long bookingNum);
+
+    boolean existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(Long programNum, Integer seatNum, String viewingDate, String viewingTime);
 }

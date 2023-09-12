@@ -3,16 +3,17 @@ package com.psr.seatservice.controller.user;
 import com.psr.seatservice.SessionConst;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.user.request.AddUserRequest;
+import com.psr.seatservice.dto.user.request.IdCheckRequest;
 import com.psr.seatservice.dto.user.request.UserLoginRequest;
 import com.psr.seatservice.dto.user.response.BookingDetailResponse;
 import com.psr.seatservice.dto.user.response.BookingListResponse;
 import com.psr.seatservice.service.program.ProgramService;
 import com.psr.seatservice.service.user.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -91,5 +92,14 @@ public class UserController {
         System.out.println("test num: "+bookingNum);
         programService.BookingDelete(bookingNum);
         return "user/bookingList";
+    }
+
+    @PostMapping("/join/id")
+    public @ResponseBody ResponseEntity<Object> checkId(@RequestBody IdCheckRequest request) {
+        //아이디 중복 검사
+        if(userService.checkUserId(request.getUserId())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); //409 이미 존재하는 아이디
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
