@@ -39,12 +39,19 @@
                 </div>
                 <div id="image_container"></div>
             </div>
+            <div>
+                <button type="button" id="deleteAllFile" onclick="deleteAll()">파일 삭제</button>
+            </div>
             <div id="origImg">
                 <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
                 <span th:unless="${file.filename == 'NoInImage'}">
                 <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" width="200" alt="Selected Image"/>
+                <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile" />
                 </span>
             </div>
+        </div>
+        <div id="deleteFile2">
+            <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile2" />
         </div>
         <button type="submit" class="btn btn-success">수정하기</button>
     </form>
@@ -71,6 +78,15 @@
             };
             reader.readAsDataURL(event.target.files[i]);
         }
+    }
+
+    function deleteAll() {
+        var changeImg = document.querySelector("div#image_container");
+        changeImg.innerHTML = "";
+        var fileInput = document.getElementById('customFile');
+        fileInput.value = '';
+        var changeImg2 = document.querySelector("div#origImg");
+        changeImg2.innerHTML = "";
     }
 </script>
 </body>
