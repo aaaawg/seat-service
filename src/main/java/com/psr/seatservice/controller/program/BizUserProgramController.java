@@ -10,6 +10,8 @@ import com.psr.seatservice.dto.program.response.BizProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
