@@ -56,6 +56,7 @@
     </div>
 
     <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">수정</button>
+    <button th:onclick="|location.href='@{/program/{programNum}(programNum=${programInfo.programNum})}/formEdit'|" type="button">신청폼 수정</button>
     <button th:onclick="|location.href='@{/business/program}'|" type="button">목록</button>
 </div>
 <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=@&libraries=services"></script>

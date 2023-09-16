@@ -4,9 +4,9 @@ import com.psr.seatservice.domian.files.FilesRepository;
 import com.psr.seatservice.dto.files.FileDto;
 import lombok.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,4 +75,6 @@ public class FilesService {
         if(re==null) return null;
         return re;
     }
+    @Transactional
+    public void deleteFile(Long postId){filesRepository.deleteByPostId(postId);}
 }

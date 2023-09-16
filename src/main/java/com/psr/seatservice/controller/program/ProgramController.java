@@ -137,7 +137,7 @@ public class ProgramController {
                                   @RequestParam("getTitleJson") String getTitleJsonString){
         programService.updateProgramForm(programNum,request);
         programService.updateProgramFormTitle(programNum,getTitleJsonString);
-        return "redirect:/program/{programNum}/form";
+        return "redirect:/program/"+ programNum;
     }
 
     @PostMapping("/program/peopleCount")

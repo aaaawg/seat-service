@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface FilesRepository extends JpaRepository<Files, Long>{
     List<Files> findBypostId(Long num);
+
+    void deleteByPostId(Long postId);
 }
