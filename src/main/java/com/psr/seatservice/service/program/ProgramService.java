@@ -197,4 +197,9 @@ public class ProgramService {
     public void BookingDelete(Long bookingNum){
         programBookingRepository.deleteByBookingNum(bookingNum);
     }
+
+    public List<ProgramListResponse> getProgramSearchResult(String keyword) {
+        String str = "%" + keyword + "%";
+        return programRepository.findAllByTitleLike(str);
+    }
 }

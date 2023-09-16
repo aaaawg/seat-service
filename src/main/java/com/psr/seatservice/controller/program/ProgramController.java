@@ -145,4 +145,11 @@ public class ProgramController {
         //프로그램 상세정보 - 날짜, 시간 선택 시 예약한 사람 수 표시
         return programService.getProgramBookingCount(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
     }
+
+    @GetMapping("/program/search")
+    public String programKeywordSearch(@RequestParam String keyword, Model model) {
+        List<ProgramListResponse> list = programService.getProgramSearchResult(keyword);
+        model.addAttribute("list", list);
+        return "program/programSearch";
+    }
 }

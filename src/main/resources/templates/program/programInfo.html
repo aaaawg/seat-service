@@ -31,8 +31,7 @@
                 </ul>
             </div>
             <div class="col">
-                <ul id="selectTime" class="list-group">
-                </ul>
+                <ul id="selectTime" class="list-group"></ul>
             </div>
             <div class="col" id="appDiv">
                 <div th:if="${#dates.createToday().compareTo(programInfo.startDate) >= 0} and ${programInfo.endDate.compareTo(#dates.createToday()) >= 0}">
