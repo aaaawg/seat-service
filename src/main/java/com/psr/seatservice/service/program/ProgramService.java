@@ -147,11 +147,10 @@ public class ProgramService {
         for (int i = 0; i < request.getBookingNumList().size(); i++) {
             Long bookingNum = Long.valueOf(request.getBookingNumList().get(i));
             ProgramBooking programBooking = programBookingRepository.findById(bookingNum).orElseThrow();
-            programBooking.setStatus(request.getStatus());
+            programBooking.updateStatus(request.getStatus());
 
             if(request.getReason() != null) {
-                programBooking.setReason(request.getReason());
-                programBooking.setSeatNum(null);
+                programBooking.updateCancelReason(request.getReason());
             }
         }
     }

@@ -17,9 +17,10 @@ public class BizProgramBookingUserListResponse {
     private Integer seatNum;
     private Long bookingNum;
     private Date bookingDate;
+    private Date updateDate;
     private String status;
 
-    public BizProgramBookingUserListResponse(String name, String phone, Date birth, String email, String address, Integer seatNum, Long bookingNum, Date bookingDate, String status) {
+    public BizProgramBookingUserListResponse(String name, String phone, Date birth, String email, String address, Integer seatNum, Long bookingNum, Date bookingDate, Date updateDate, String status) {
         this.name = name;
         this.phone = phone;
         this.birth = birth;
@@ -28,6 +29,7 @@ public class BizProgramBookingUserListResponse {
         this.seatNum = seatNum;
         this.bookingNum = bookingNum;
         this.bookingDate = bookingDate;
+        this.updateDate = updateDate;
         this.status = status;
     }
 }

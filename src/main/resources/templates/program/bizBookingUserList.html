@@ -15,6 +15,7 @@
             <th><input type="checkbox" onclick="checkAll(this)" id="allCheck"></th>
             <th>예약번호</th>
             <th>신청일</th>
+            <th>수정일</th>
             <th>이름</th>
             <th>생년월일</th>
             <th>전화번호</th>
@@ -28,7 +29,8 @@
         <tr th:each="booking: ${userList}">
             <td><input name="listCheckbox" type="checkbox" th:disabled="${booking.status} == '취소'"></td>
             <td th:text="${booking.bookingNum}"></td>
-            <td th:text="${#dates.format(booking.bookingDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${#dates.format(booking.bookingDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#dates.format(booking.updateDate, 'yyyy-MM-dd HH:mm')}">수정일</td>
             <td th:text="${booking.name}"></td>
             <td th:text="${booking.birth}"></td>
             <td th:text="${booking.phone}"></td>
