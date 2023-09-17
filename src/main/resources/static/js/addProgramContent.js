@@ -1,5 +1,6 @@
 const countSet = document.querySelectorAll('[id^=plus]');
-let count = countSet.length;
+let count = 0;
+count = countSet.length;
 
 //데이터 전달
 if(document.getElementById('myForm') !== null){
@@ -35,13 +36,20 @@ document.getElementById('myFormEdit').addEventListener('submit', function(event)
    event.preventDefault();
    if (!check()) {return;}
     const resultHtml = document.querySelector('#content').outerHTML;
-    var additionalData = { formHtml: resultHtml};
-    var formData = new FormData(document.getElementById('myFormEdit'));
-    for (var key in additionalData) {
-            formData.append(key, additionalData[key]);
+    if(count === 0){
+         var additionalData = { formHtml: null};
+    }else{
+        var additionalData = { formHtml: resultHtml};
     }
-    var getTitleJson = getTitle();
-    formData.append("getTitleJson", JSON.stringify(getTitleJson));
+
+    var formData = new FormData(document.getElementById('myFormEdit'));
+    if(additionalData !== null){
+        for (var key in additionalData) {
+            formData.append(key, additionalData[key]);
+        }
+        var getTitleJson = getTitle();
+        formData.append("getTitleJson", JSON.stringify(getTitleJson));
+    }
 
     var currentUrl = window.location.href;
     var urlParams = new URLSearchParams(currentUrl);
@@ -71,7 +79,7 @@ document.getElementById('myFormEdit').addEventListener('submit', function(event)
 //유효성 검사 함수
 function check(){
     const result = document.querySelectorAll('[id^=plus]');
-    if(result.length === 0){ return false; }
+    if(result.length === 0){ return true; }
 
     const inputComplete = document.querySelectorAll("[id^=complete]");
     if(inputComplete.length > 0){

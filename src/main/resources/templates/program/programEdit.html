@@ -17,12 +17,22 @@
 <script th:inline="javascript">
     var programInfo = /*[[${ProgramForm}]]*/ {};
     var div = document.getElementById('formContent');
-    div.innerHTML = programInfo;
+
+    console.log("test: "+programInfo);
+    if(programInfo === null || programInfo === "null"){
+        const contentDiv = document.createElement('div');
+        contentDiv.setAttribute("id","content");
+        div.appendChild(contentDiv);
+    }else{
+        div.innerHTML = programInfo;
+    }
     //Json 가져와보기
     var programJson = /*[[${ProgramJson}]]*/ {};
-    let reJson = JSON.parse(programJson);
-    console.log(Object.keys(reJson).length);
+    if(programJson !== null){
+        let reJson = JSON.parse(programJson);
+        console.log(Object.keys(reJson).length);
+    }
 </script>
-<script type="text/javascript" src="/js/addProgramContent.js?ver=4.1"></script>
+<script type="text/javascript" src="/js/addProgramContent.js?ver=4.3"></script>
 </body>
 </html>

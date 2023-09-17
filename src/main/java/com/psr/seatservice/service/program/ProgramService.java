@@ -123,7 +123,8 @@ public class ProgramService {
     }
 
     public void updateProgramFormTitle(Long programNum, String getTitleJsonString){
-        Program program = programRepository.findById(programNum).orElse(null);;
+        Program program = programRepository.findById(programNum).orElse(null);
+
         program.updateJsonFrom(getTitleJsonString);
         programRepository.save(program);
     }
