@@ -16,6 +16,8 @@ public class ProgramInfoResponse {
     private Date endDate; //신청마감일
     private String type;
     private int peopleNum;
+    private Integer seatCol;
+    private String seatingChart;
 
     public ProgramInfoResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -26,5 +28,7 @@ public class ProgramInfoResponse {
         this.endDate = program.getEndDate();
         this.type = program.getType();
         this.peopleNum = program.getPeopleNum();
+        this.seatCol = program.getSeatCol();
+        this.seatingChart = program.getSeatingChart();
     }
 }
