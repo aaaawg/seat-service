@@ -1,6 +1,7 @@
 package com.psr.seatservice.domian.program;
 
 import com.psr.seatservice.domian.files.Files;
+import com.psr.seatservice.domian.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +23,10 @@ public class Program {
     private String title; //프로그램 제목
     @Column(length = 100)
     private String place; //장소
+    private String way;
     @Column(length = 10)
     private String target; //신청대상
+    private String targetDetail;
     @Temporal(value = TemporalType.DATE)
     private Date startDate; //신청시작일
     @Temporal(value = TemporalType.DATE)
@@ -43,7 +46,9 @@ public class Program {
     @Column(columnDefinition = "json")
     private String programQuestion;
 
-    //프로그램 등록 작성자 아이디
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @CreationTimestamp
     private Timestamp createDate;
@@ -52,11 +57,12 @@ public class Program {
     private Integer seatCol;
     private int peopleNum; //모집인원
 
-    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String contents, String programHtml, String programQuestion) {
-        //생성자 확인하기
+    public Program(String title, String place, String way, String target, String targetDetail, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String contents, String programHtml, String programQuestion, User user) {
         this.title = title;
         this.place = place;
+        this.way = way;
         this.target = target;
+        this.targetDetail = targetDetail;
         this.type = type;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -66,6 +72,7 @@ public class Program {
         this.contents = contents;
         this.programHtml = programHtml;
         this.programQuestion = programQuestion;
+        this.user = user;
     }
     public void updateInfo(String title, String place, String target, Date startDate, Date endDate) {
         this.title = title;

@@ -1,5 +1,6 @@
 package com.psr.seatservice.domian.program;
 
+import com.psr.seatservice.domian.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +23,6 @@ public class ProgramBooking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingNum;
 
-    private String userId;
-
     private Integer seatNum;
 
     @Column(name = "program_num")
@@ -37,6 +36,11 @@ public class ProgramBooking {
 
     private String status; //참가, 불참, 예약취소, 예정
     private String reason; //취소 사유
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     @CreatedDate
     private Date bookingDate;
@@ -59,14 +63,14 @@ public class ProgramBooking {
         this.seatNum = seatNum;
     }
 
-    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum, String status, String programResponse, String userId) {
+    public ProgramBooking(Long programNum, String viewingDate, String viewingTime, Integer seatNum, String status, String programResponse, User user) {
         this.programNum = programNum;
         this.viewingDate = viewingDate;
         this.viewingTime = viewingTime;
         this.seatNum = seatNum;
         this.status = status;
         this.programResponse = programResponse;
-        this.userId = userId;
+        this.user = user;
     }
 
     public void updateStatus(String status) {

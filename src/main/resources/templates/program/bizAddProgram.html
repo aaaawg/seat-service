@@ -28,22 +28,21 @@
     </div>
     <div>
       <label>장소</label>
-      <div id="off">
-        <input type="button" id="searchAddr" value="주소 검색" onclick="findAddress()">
-        <input type="text" id="address" readonly placeholder="주소">
-        <input type="text" id="detailAddress" onchange="placeValue()" placeholder="상세주소" value="">
-        <input type="hidden" id="offPlace" name="place">
-      </div>
-      <div id="on" style="display: none">
-        <input type="text" id="onPlace" name="place" value="온라인" readonly disabled>
+      <div id="placeDiv" style="display: inline;"></div>
+      <div id="onlineWay" style="display: none">
+        <label for="way">참여방법</label>
+        <textarea id="way" name='way' placeholder='접속 링크와 같은 정보를 입력해 주세요.' rows="4" cols="40"></textarea>
+        <button type="button" id=tooltipBtn th:style="|background-image: url(@{/img/icon-notice.png})|" data-bs-toggle="tooltip" data-bs-placement="right" title="해당 정보는 프로그램 진행 당일 신청자에게 표시됩니다."></button>
       </div>
     </div>
     <div>
       <label for="drop">신청대상</label>
-      <select id="drop" name="target">
+      <select id="drop" name="target" onchange="showArea()">
         <option value="제한없음" selected>제한없음</option>
-        <option id="area" value="지역">지역</option>
+        <option id="area">지역</option>
+        <option>직접입력</option>
       </select>
+      <div id="detail" style="display: inline;"></div>
     </div>
     <div>
       <label for="peopleNum" >모집인원</label>
@@ -93,8 +92,7 @@
       <textarea class="summernote" rows="5" id="contents" name="contents"></textarea>
     </div>
 
-    <div id="content">
-    </div>
+    <div id="content"></div>
 
     <button type="submit" class="btn btn-success">등록하기</button>
     <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
@@ -102,6 +100,7 @@
 </div>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script type="text/javascript" src="/js/addProgram.js"></script>
 <script type="text/javascript" src="/js/addProgramContent.js?ver=7"></script>
 <script>
@@ -122,7 +121,35 @@
         ['view', ['help']],
       ]
     });
+    $("[data-bs-toggle='tooltip']").tooltip({
+      trigger: "click hover"
+    });
   });
+
+</script>
+<script th:inline="javascript">
+  const userAddr = [[${userAddr}]];
+
+  function showArea() {
+    const drop = document.getElementById("drop");
+    const detailDiv = document.getElementById("detail");
+    let html;
+
+    if(drop.selectedIndex === 1) {
+      let addr = userAddr.split(' ', 2);
+      let addr1 = addr[0];
+      let addr2 = addr[1];
+
+      html = `<select name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
+    }
+    else if(drop.selectedIndex === 2) {
+      html = '<input type=text name="targetDetail">';
+    }
+    else
+      html = "";
+
+    detailDiv.innerHTML = html;
+  }
 </script>
 </body>
 </html>

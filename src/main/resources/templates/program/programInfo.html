@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
@@ -11,8 +12,8 @@
     <p th:text="|구분 : ${programInfo.type}|"></p>
     <p th:text="|프로그램명 : ${programInfo.title}|"></p>
     <p th:text="|장소 : ${programInfo.place} |"></p>
-    <p th:text="|대상 : ${programInfo.target}|"></p>
-    <p>모집인원: <span th:text="${programInfo.peopleNum} == -1? '무제한' : ${programInfo.peopleNum} "></span></p>
+    <p>대상 : <span th:text="${programInfo.target} == '제한없음'? ${programInfo.target} : ${programInfo.targetDetail} "></span></p>
+    <p>모집인원 : <span th:text="${programInfo.peopleNum} == -1? '무제한' : ${programInfo.peopleNum} "></span></p>
     <p th:text="|신청기간 : ${programInfo.startDate} ~ ${programInfo.endDate}|"></p>
 
     <div>
@@ -34,8 +35,8 @@
                 <ul id="selectTime" class="list-group"></ul>
             </div>
             <div class="col" id="appDiv">
-                <div th:if="${#dates.createToday().compareTo(programInfo.startDate) >= 0} and ${programInfo.endDate.compareTo(#dates.createToday()) >= 0}">
-                    <button type="button" th:s="${programInfo.programNum}" onclick="openPopup(this.getAttribute('s'))">신청하기</button>
+                <div th:if="${#dates.createToday().compareTo(programInfo.startDate) >= 0} and ${programInfo.endDate.compareTo(#dates.createToday()) >= 0} and !${#authorization.expression('hasRole(''' + 'BIZ' + ''')')}">
+                    <button type="button" th:a="${#authorization.expression('isAuthenticated()')}" th:s="${programInfo.programNum}" onclick="openPopup(this.getAttribute('s'), this.getAttribute('a'))">신청하기</button>
                     <div id="peopleCount" th:if="${programInfo.peopleNum} != -1"></div>
                 </div>
             </div>
@@ -56,7 +57,6 @@
 
     <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">수정</button>
     <button th:onclick="|location.href='@{/program/{programNum}(programNum=${programInfo.programNum})}/formEdit'|" type="button">신청폼 수정</button>
-    <button th:onclick="|location.href='@{/business/program}'|" type="button">목록</button>
 </div>
 <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=@&libraries=services"></script>
 <script th:inline="javascript">
@@ -120,33 +120,38 @@
         if([[${#dates.createToday().compareTo(programInfo.startDate) >= 0} and ${programInfo.endDate.compareTo(#dates.createToday()) >= 0}]])
             u.addEventListener("click", showPeopleCount);
     }
-    function openPopup(num) {
-        if (sDate == null) {
-            alert("날짜를 선택해주세요.");
-        }
-        else if(sTime == null) {
-            alert("시간을 선택해주세요.");
-        }
-        else {
-            let url = "/booking/" + num;
-            window.open(url, "예약", "width=1000px, height=600px");
+
+    function openPopup(num, a) {
+        if (a === "true") {
+            if (sDate == null) {
+                alert("날짜를 선택해주세요.");
+            } else if (sTime == null) {
+                alert("시간을 선택해주세요.");
+            } else {
+                let url = "/booking/" + num;
+                window.open(url, "예약", "width=1000px, height=600px");
+            }
+        } else {
+            const answer = confirm("로그인이 필요합니다.")
+            if (answer)
+                location.href = "/login";
         }
     }
 
     function selectedProgramInfo(t) {
-        if(t === "date")
+        if (t === "date")
             return sDate;
-        else if(t === "time")
+        else if (t === "time")
             return sTime;
-        else if(t === "title")
+        else if (t === "title")
             return [[${programInfo.title}]];
-        else if(t==="peopleNum")
+        else if (t === "peopleNum")
             return [[${programInfo.peopleNum}]];
     }
 
     function showPeopleCount() {
         let iHtml;
-        if([[${programInfo.peopleNum}]] !== -1) {
+        if ([[${programInfo.peopleNum}]] !== -1) {
             fetch('/program/peopleCount', {
                 method: "post",
                 headers: {
@@ -161,10 +166,9 @@
                 return r.json();
             }).then((r) => {
                 let count = JSON.parse(r);
-                if([[${programInfo.peopleNum}]] === count) {
+                if ([[${programInfo.peopleNum}]] === count) {
                     iHtml = "<span class='badge bg-secondary'>인원 마감</span>";
-                }
-                else
+                } else
                     iHtml = "<span>" + count + "/" + [[${programInfo.peopleNum}]] + "</span>";
                 document.getElementById("peopleCount").innerHTML = iHtml;
             })

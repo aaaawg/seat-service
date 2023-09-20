@@ -14,7 +14,7 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
     List<ProgramBooking> findProgramBookingList(Long num, String date, String time);
 
     @Query("select new com.psr.seatservice.dto.program.response.BizProgramBookingUserListResponse(u.name, u.phone, u.birth, u.email, u.address, b.seatNum, b.bookingNum, b.bookingDate, b.updateDate, b.status) " +
-            "from User u, ProgramBooking b where u.userId = b.userId and b.programNum = ?1 and b.viewingDate = ?2 and b.viewingTime = ?3")
+            "from User u, ProgramBooking b where u.id = b.user.id and b.programNum = ?1 and b.viewingDate = ?2 and b.viewingTime = ?3")
     List<BizProgramBookingUserListResponse> findByProgramNumAndViewingDateAndViewingTime(Long programNum, String viewingDate, String viewingTime);
 
     void deleteByBookingNum(Long bookingNum);

@@ -15,12 +15,11 @@ import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -33,18 +32,13 @@ public class ProgramController {
         this.filesService = filesService;
     }
 
-    //메인 페이지 - 프로그램 목록 표시
     @GetMapping("/")
-    public String main(Model model, HttpServletRequest request) {
+    public String main(Model model) {
         List<ProgramListResponse> programs = programService.getProgramList("main");
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            User logUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
-            model.addAttribute("name",logUser.getName());
-        }
         model.addAttribute("programs", programs);
         return "program/programList";
     }
+
     @GetMapping("/online")
     public String onlineProgramList(Model model) {
         List<ProgramListResponse> programs = programService.getProgramList("online");
@@ -63,9 +57,9 @@ public class ProgramController {
     @GetMapping("/program/{programNum}")
     public String programInfo(@PathVariable Long programNum, Model model) throws IllegalArgumentException {
         Program program = programService.getProgramInfo(programNum);
-        FileDto fileDto;
         List<FileDto> list = filesService.getFileByProNum(program.getProgramNum());
-        fileDto = new FileDto();
+        FileDto fileDto = new FileDto();
+
         if(list != null) {
             fileDto.setFilename("InImage");
             model.addAttribute("fileList", list);
@@ -108,11 +102,10 @@ public class ProgramController {
     }
 
     @PostMapping("/booking/{programNum}")
-    public @ResponseBody ResponseEntity<Object> addBooking(@PathVariable Long programNum, @RequestBody BookingRequest request, HttpSession session) {
+    public @ResponseBody ResponseEntity<Object> addBooking(@PathVariable Long programNum, @RequestBody BookingRequest request, @AuthenticationPrincipal User user) {
         //programBooking 테이블에 예약 데이터 추가
-        User loginUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        if(loginUser != null) {
-            int result = programService.addBooking(programNum, request, loginUser.getUserId());
+        if(user != null) {
+            int result = programService.addBooking(programNum, request, user);
             if(result == 2)
                 return ResponseEntity.status(HttpStatus.OK).build();
             else if(result == 1)

@@ -14,6 +14,8 @@ public class BizAddProgramRequest {
     private String title; //프로그램 제목
     private String place; //장소
     private String target; //신청대상
+    private String targetDetail;
+    private String way; //온라인-참여방법
     private String type;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate; //신청시작일

@@ -1,6 +1,7 @@
 package com.psr.seatservice.controller.program;
 
 import com.psr.seatservice.domian.program.Program;
+import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
 import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.files.FileDto;
@@ -12,6 +13,7 @@ import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,22 +36,23 @@ public class BizUserProgramController {
 
     //기업 사용자 - 해당 사용자가 등록한 프로그램 목록 표시
     @GetMapping
-    public String programs(Model model) {
+    public String programs(@AuthenticationPrincipal User user, Model model) {
         //등록한 사용자 아이디 추가하기
-        List<BizProgramListResponse> programs = programService.programs();
+        List<BizProgramListResponse> programs = programService.programs(user.getId());
         model.addAttribute("programs", programs);
         return "program/bizProgramList";
     }
 
     @GetMapping("/add")
-    public String addProgram() {
+    public String addProgram(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("userAddr", user.getAddress());
         return "program/bizAddProgram";
     }
 
     @PostMapping( "/add")
     public String addProgram(BizAddProgramRequest request, @RequestParam("file") List<MultipartFile> files
-    , @RequestParam(value="formHtml") String formHtml, @RequestParam("getTitleJson") String getTitleJsonString) throws IOException {
-        Long proNum = programService.addProgram(request, formHtml, getTitleJsonString);
+    , @RequestParam(value="formHtml") String formHtml, @RequestParam("getTitleJson") String getTitleJsonString, @AuthenticationPrincipal User user) throws IOException {
+        Long proNum = programService.addProgram(request, formHtml, getTitleJsonString, user);
 
         //System.out.println("test Json Data: "+getTitleJsonString);
         //programService.addProgramFormTitle(proNum, getTitleJsonString);

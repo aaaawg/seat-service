@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:fragment="nav">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
@@ -20,33 +21,33 @@
               </ul>
             </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="hasRole('BIZ')">
             <a class="nav-link" th:onclick="|location.href='@{/business/program}'|">프로그램 관리</a>
           </li>
         </ul>
         <ul class="navbar-nav">
-          <li th:if="${#strings.isEmpty(session.loginMember)}" class="nav-item">
-            <a class="nav-link" th:onclick="|location.href='@{/login}'|">로그인</a>
-          </li>
-          <li th:unless="${#strings.isEmpty(session.loginMember)} and ${#strings.isEmpty(name)}" class="nav-item">
-            <p th:text="${session.loginMember.name + '님'}" />
+          <li sec:authorize="isAuthenticated()" class="nav-item navbar-text" style="margin-right: 10px">
+            <span class="badge rounded-pill bg-primary" sec:authorize="hasRole('BIZ')">기업</span>
+            <span th:text="${#authentication.name} + '님'"></span>
           </li>
 
-          <li th:if="${#strings.isEmpty(session.loginMember)}" class="nav-item">
-            <a class="nav-link" th:onclick="|location.href='@{/join}'|">회원가입</a>
-          </li>
-          <li th:unless="${#strings.isEmpty(session.loginMember)}" class="nav-item">
-            <a class="nav-link" th:onclick="|location.href='@{/logout}'|">로그아웃</a>
-          </li>
-
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" sec:authorize="hasRole('USER')">
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               마이페이지
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">예약내역</a></li>
+              <li><a class="dropdown-item" th:href="@{/myPage}">신청내역</a></li>
               <li><a class="dropdown-item" href="#">정보수정</a></li>
             </ul>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
+            <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/join}">회원가입</a>
           </li>
         </ul>
       </div>
