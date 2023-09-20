@@ -13,8 +13,19 @@
             <input type="text" id="title" name="title" th:value="${programInfo.title}">
         </div>
         <div>
+            <label>구분</label>
+            <input type="radio" id="offline" name="type" value="오프라인" onchange="showPlaceInput(0)">
+            <label for="offline">오프라인</label>
+            <input type="radio" id="online" name="type" value="온라인" onchange="showPlaceInput(1)">
+            <label for="online">온라인</label>
+        </div>
+        <div id="off">
             <label for="place">장소</label>
             <input type="text" id="place" name="place" th:value="${programInfo.place}">
+        </div>
+        <div id="on">
+            <label for="place">장소</label>
+            <input type="text" id="onPlace" name="place" value="온라인 관람" readonly disabled>
         </div>
         <div>
             <label for="target">신청대상</label>
@@ -36,7 +47,7 @@
             <div id="popupChart" class="container"></div>
             <input type="hidden" id="seatingChart" name="seatingChart">
             <input type="hidden" id="seatCol" name="seatCol">
-            <span id="seatLength"></span>
+            <input type="hidden" id="changePeopleNum" name="peopleNum">
         </div>
         <div>
             <div>
@@ -66,8 +77,19 @@
         <button type="submit" class="btn btn-success">수정하기</button>
     </form>
 </div>
-<script>
-    var programInfo = /*[[${ProgramInfo}]]*/ {};
+<script th:inline="javascript">
+var programInfo = /*[[${programInfo}]]*/ null;
+if (programInfo !== null) {
+    const type = programInfo.type;
+    console.log("type: "+type);
+    if(type === "오프라인"){
+         document.getElementById("offline").checked = true;
+         document.getElementById("on").style.display = "none";
+    }else{
+        document.getElementById("online").checked = true;
+        document.getElementById("off").style.display = "none";
+    }
+}
 
     function displaySelectedImage(event) {
         var changeImg = document.querySelector("div#image_container");
@@ -102,59 +124,75 @@
     }
 
     function openPopup(){
-    let popupSeatArr;
-    let popupSeatCol;
-    const popup = window.open("/business/program/seat", "좌석배치도", "width=1000px, height=1000px");
+        const popup = window.open("/business/program/updateSeat", "좌석배치도", "width=1000px, height=1000px");
 
-    popup.onload = function() {
-    // 자식 창의 요소에 접근
-    const updateSeatElement = popup.document.getElementById("updateSeat");
-    if (updateSeatElement) {
-        // 요소가 존재하면 값 설정
-        updateSeatElement.value = "update";
-    } else {
-        console.error("updateSeat element not found in popup.");
-    }
+        popup.onload = function() {
+            // 자식 창의 요소에 접근
+            var programInfoP = /*[[${programInfo}]]*/ null;
+            const updateSeatElement = popup.document.getElementById("updateSeat");
+            const updateSeat = popup.document.getElementById("seat");
+            const updateSeatRow = popup.document.getElementById("seatRow");
+
+            let seatArray = new Array();
+            let ht = "";
+            const scDiv = popup.document.getElementById("chart");
+            if (programInfoP !== null) {
+                var sCol = programInfoP.seatCol;
+                updateSeat.value = sCol;
+                seatArray = JSON.parse(programInfoP.seatingChart);
+
+                let seatNum = 1;
+                let num = 0;
+                let exNum = 0;
+
+                for (let i = 0; i < seatArray.length; i++) {
+                    if(num % sCol === 0) {
+                        ht += "<div class='row'>"
+                    }
+                    if(seatArray[i]){
+                        ht += "<button type='button' class='seatBtn' style='background-color: #83A783'>" + seatNum + "</button>";
+                        seatNum++;
+                    }
+                    else {
+                        ht += "<div class='seatBtn' style='background-color: #ffffff'></div>"
+                    }
+                    num++;
+                    if(num % sCol === 0) {
+                        ht += "</div>";
+                        exNum++;
+                    }
+                }
+                updateSeatRow.value = exNum;
+                scDiv.innerHTML = ht;
+            }
     }
 
     popup.addEventListener("beforeunload", function () {
-        const c = document.getElementById("popupChart");
-        c.innerHTML = "";
-        let num = 1;
-        let seatNum = 1;
-        let exSeatCount = 0;
-        popupSeatArr = programInfo.seatingChart;
-
-        for (let i = 0; i < popupSeatArr.length; i++) {
-            if (popupSeatArr[i]) {
-                c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(131, 167, 131);'>" + seatNum + "</div>";
-                seatNum++;
-            }
-            else {
-                exSeatCount++;
-                c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(215, 215, 215);'></div>";
-            }
-            if(num % popupSeatCol === 0 )
-                c.innerHTML += "<br>";
-            num++;
-        }
         let chart = JSON.stringify(popupSeatArr);
+        let exSeatCount = 0;
+        for(let i=0; i<popupSeatArr.length; i++){
+            if(popupSeatArr[i]===0){ exSeatCount++; }
+        }
+
         document.getElementById("seatingChart").value = chart;
         document.getElementById("seatCol").value = popupSeatCol;
 
-        document.getElementById("peopleNum").value = popupSeatArr.length;
+        let result = popupSeatArr.length - exSeatCount;
+        console.log("result: "+ result);
+        document.getElementById("peopleNum").blur().value = result;
         document.getElementById("peopleNum").readOnly = true;
+        document.getElementById("changePeopleNum").value = result;
 
-        document.getElementById("enterPeopleNum").style.display = "none";
-        document.getElementById("seatLength").innerText = (popupSeatArr.length - exSeatCount).toString();
+        //document.getElementById("enterPeopleNum").style.display = "none";
+        //document.getElementById("seatLength").innerText = popupSeatArr.length;
     });
-}
+    }
     function popupSeat(arr, col) {
         popupSeatArr = arr;
         popupSeatCol = col;
     }
 
 </script>
-
+<script type="text/javascript" src="/js/updateProgram.js?ver=1.1"></script>
 </body>
 </html>

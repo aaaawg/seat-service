@@ -58,12 +58,17 @@ public class Program {
         this.programHtml = programHtml;
         this.programQuestion = programQuestion;
     }
-    public void updateInfo(String title, String place, String target, Date startDate, Date endDate) {
+    public void updateInfo(String title, String place, String target, Date startDate, Date endDate, int peopleNum,
+                           Integer seatCol, String seatingChart) { //String type,
         this.title = title;
         this.place = place;
         this.target = target;
         this.startDate = startDate;
         this.endDate = endDate;
+        //this.type = type;
+        this.peopleNum = peopleNum;
+        this.seatCol = seatCol;
+        this.seatingChart = seatingChart;
     }
 
     public void updateForm(String programHtml){

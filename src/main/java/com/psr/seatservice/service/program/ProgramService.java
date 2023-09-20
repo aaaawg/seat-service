@@ -60,7 +60,9 @@ public class ProgramService {
         Program program = programRepository.findById(programNum)
                 .orElseThrow(IllegalAccessError::new);
         program.updateInfo(request.getTitle(), request.getPlace(), request.getTarget(),
-                request.getStartDate(), request.getEndDate());
+                request.getStartDate(), request.getEndDate(), request.getPeopleNum(),
+                request.getSeatCol(), request.getSeatingChart());
+        //request.getType(),
     }
 
     public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
