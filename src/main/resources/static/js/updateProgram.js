@@ -1,6 +1,6 @@
 function showPlaceInput(type) {
-    /*valueClear();
-    document.getElementById("peopleChBox").checked = false;
+    valueClear();
+    /*document.getElementById("peopleChBox").checked = false;
     peopleNumValue();
     document.getElementById("enterPeopleNum").style.display = "inline";*/
 
@@ -29,4 +29,33 @@ function valueClear() {
     document.getElementById("seatCol").value = null;
     document.getElementById("peopleNum").value = null;
     document.getElementById("seatLength").innerText = null;
+}
+function peopleNumValue() {
+
+    const ch = document.getElementById("peopleChBox");
+    if(ch.checked) {
+        document.getElementById("peopleNum").style.display = "none";
+        document.getElementById("peopleNum").disabled = true;
+
+        if(document.getElementById("deleteChart") != null){
+           document.getElementById("deleteChart").style.display = "none";
+        }
+        if(document.getElementById("isSeatColSelect") != null){
+            document.getElementById("isSeatColSelect").style.display = "none";
+        }else{
+            document.getElementById("isNotSeatColSelect").style.display = "none";
+        }
+    }
+    else {
+        document.getElementById("peopleNum").style.display = "inline";
+        document.getElementById("peopleNum").disabled = false;
+        if(document.getElementById("deleteChart") != null){
+                   document.getElementById("deleteChart").style.display = "inline";
+                }
+        if(document.getElementById("isSeatColSelect") != null){
+             document.getElementById("isSeatColSelect").style.display = "inline";
+        }else{
+             document.getElementById("isNotSeatColSelect").style.display = "inline";
+        }
+    }
 }

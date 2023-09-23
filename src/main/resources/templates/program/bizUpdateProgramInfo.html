@@ -41,13 +41,15 @@
         </div>
         <div>
             <label for="endDate">모집 인원</label>
-            <input  type="text" id="peopleNum" th:value="${programInfo.peopleNum}==-1? '무제한' : ${programInfo.peopleNum}"/>
+            <label th:if="${bookingCount <= 0}"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
+            <input  type="text" id="peopleNum" name="peopleNum" />
             <button th:if="${programInfo.seatCol != null}" type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
-            <button th:unless="${programInfo.seatCol != null}" type="button" id="isNotSeatColSelect" onclick="">좌석 추가</button>
+            <button th:unless="${programInfo.seatCol != null}" type="button" id="isNotSeatColSelect" onclick="openPopup()">좌석 추가</button>
+            <button th:if="${programInfo.seatCol != null}" id="deleteChart" onclick="deleteChart()">좌석 삭제</button>
             <div id="popupChart" class="container"></div>
-            <input type="hidden" id="seatingChart" name="seatingChart">
+            <input type="hidden" id="seatingChart" name="seatingChart" value=null>
             <input type="hidden" id="seatCol" name="seatCol">
-            <input type="hidden" id="changePeopleNum" name="peopleNum">
+
         </div>
         <div>
             <div>
@@ -90,6 +92,19 @@ if (programInfo !== null) {
         document.getElementById("off").style.display = "none";
     }
 }
+var people = document.getElementById("peopleNum");
+if(programInfo.seatCol !== null){
+    people.readOnly=true;
+    people.style.backgroundColor = "#f8f8f8";
+    people.style.color = "#545454";
+
+}
+if(programInfo.peopleNum === -1){
+    people.value = "무제한";
+}else{
+    people.value = programInfo.peopleNum;
+}
+
 
     function displaySelectedImage(event) {
         var changeImg = document.querySelector("div#image_container");
@@ -124,6 +139,11 @@ if (programInfo !== null) {
     }
 
     function openPopup(){
+        var bookingCount = /*[[${bookingCount}]]*/ 0;
+        if(bookingCount > 0){
+            alert("수정이 불가합니다.");
+        }
+        else{
         const popup = window.open("/business/program/updateSeat", "좌석배치도", "width=1000px, height=1000px");
 
         popup.onload = function() {
@@ -141,6 +161,7 @@ if (programInfo !== null) {
                 updateSeat.value = sCol;
                 seatArray = JSON.parse(programInfoP.seatingChart);
 
+                if(seatArray != null){
                 let seatNum = 1;
                 let num = 0;
                 let exNum = 0;
@@ -164,11 +185,16 @@ if (programInfo !== null) {
                 }
                 updateSeatRow.value = exNum;
                 scDiv.innerHTML = ht;
+                }
+
             }
     }
 
+
     popup.addEventListener("beforeunload", function () {
         let chart = JSON.stringify(popupSeatArr);
+        console.log(chart);
+
         let exSeatCount = 0;
         for(let i=0; i<popupSeatArr.length; i++){
             if(popupSeatArr[i]===0){ exSeatCount++; }
@@ -177,22 +203,23 @@ if (programInfo !== null) {
         document.getElementById("seatingChart").value = chart;
         document.getElementById("seatCol").value = popupSeatCol;
 
-        let result = popupSeatArr.length - exSeatCount;
+        let result = (popupSeatArr.length - exSeatCount);
         console.log("result: "+ result);
-        document.getElementById("peopleNum").blur().value = result;
-        document.getElementById("peopleNum").readOnly = true;
-        document.getElementById("changePeopleNum").value = result;
 
-        //document.getElementById("enterPeopleNum").style.display = "none";
-        //document.getElementById("seatLength").innerText = popupSeatArr.length;
+        document.getElementById("peopleNum").readOnly = true;
+        document.getElementById("peopleNum").value = result;
     });
+    }
     }
     function popupSeat(arr, col) {
         popupSeatArr = arr;
         popupSeatCol = col;
     }
 
+    function deleteChart(){
+         //document.getElementById("peopleNum").value = result;
+    }
 </script>
-<script type="text/javascript" src="/js/updateProgram.js?ver=1.1"></script>
+<script type="text/javascript" src="/js/updateProgram.js?ver=1.3"></script>
 </body>
 </html>

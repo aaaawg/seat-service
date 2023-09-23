@@ -13,4 +13,8 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
     List<ProgramBooking> findProgramBookingList(Long num, String date, String time);
 
     void deleteByBookingNum(Long bookingNum);
+
+    @Query("SELECT count(*) FROM ProgramBooking WHERE programNum = ?1")
+    Long countByProgramNum(Long programNum);
+
 }

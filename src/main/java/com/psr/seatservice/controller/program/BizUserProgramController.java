@@ -81,8 +81,11 @@ public class BizUserProgramController {
             fileDto.setFilename("NoInImage");
         }
 
+        Long bookingCount = programService.getBookingNumCount(programNum);
+
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
         model.addAttribute("file", fileDto);
+        model.addAttribute("bookingCount", bookingCount);
         return "program/bizUpdateProgramInfo";
     }
 
@@ -91,6 +94,7 @@ public class BizUserProgramController {
     public String updateProgramInfo(@PathVariable Long programNum, BizUpdateProgramRequest request, @RequestParam("file") List<MultipartFile> files,
                                     @RequestParam(value ="deleteFile", required = false) List<String> deleteFiles,
                                     @RequestParam(value ="deleteFile2", required = false) List<String> deleteFiles2) throws IOException {
+        System.out.println("TEst: "+ request.getPeopleNum());
 
         programService.updateProgramInfo(programNum, request);
         String savePath = System.getProperty("user.dir");

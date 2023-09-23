@@ -34,9 +34,13 @@ public class ProgramController {
     public String main(Model model, HttpServletRequest request) {
         List<ProgramListResponse> programs = programService.mainPrograms();
         HttpSession session = request.getSession(false);
+        System.out.println("test1: "+session);
         if (session != null) {
-            User logUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
-            model.addAttribute("name",logUser.getName());
+            if(session.getAttribute(SessionConst.LOGIN_MEMBER)!=null){
+                User logUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+                model.addAttribute("name",logUser.getName());
+            }
+            System.out.println("test1: "+session.getAttribute(SessionConst.LOGIN_MEMBER));
         }
         model.addAttribute("programs", programs);
         return "program/programList";

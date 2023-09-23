@@ -36,6 +36,14 @@ spring:
         show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+        devtools:
+          livereload:
+            enabled: true
+          restart:
+            enabled: ture
+          thymeleaf:
+            cache: false
 ---
 spring:
   mail:

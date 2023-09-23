@@ -156,4 +156,8 @@ public class ProgramService {
     public void BookingDelete(Long bookingNum){
         programBookingRepository.deleteByBookingNum(bookingNum);
     }
+
+    public Long getBookingNumCount(Long programNum){
+        return programBookingRepository.countByProgramNum(programNum);
+    }
 }
