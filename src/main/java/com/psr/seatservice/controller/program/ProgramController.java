@@ -126,9 +126,12 @@ public class ProgramController {
         return "program/programEdit";
     }
     @PostMapping("/program/{programNum}/formEdit")
-    public String programFormEdit(@PathVariable Long programNum, @RequestParam(value="formHtml") String request,
-                                  @RequestParam("getTitleJson") String getTitleJsonString){
+    public String programFormEdit(@PathVariable Long programNum, @RequestParam(value="formHtml", required = false) String request,
+                                  @RequestParam(value="getTitleJson",  required = false) String getTitleJsonString){
         programService.updateProgramForm(programNum,request);
+        if(getTitleJsonString.equals("{}")){
+            getTitleJsonString = null;
+        }
         programService.updateProgramFormTitle(programNum,getTitleJsonString);
         return "redirect:/program/"+ programNum;
     }

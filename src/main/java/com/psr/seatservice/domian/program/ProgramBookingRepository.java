@@ -19,5 +19,9 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
 
     void deleteByBookingNum(Long bookingNum);
 
+    @Query("SELECT count(*) FROM ProgramBooking WHERE programNum = ?1")
+    Long countByProgramNum(Long programNum);
+
+
     boolean existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(Long programNum, Integer seatNum, String viewingDate, String viewingTime);
 }

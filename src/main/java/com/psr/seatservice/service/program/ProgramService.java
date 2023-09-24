@@ -4,18 +4,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.domian.user.User;
-import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
-import com.psr.seatservice.dto.program.response.BizProgramViewingDateAndTimeAndPeopleNumResponse;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.user.request.BookingRequest;
+import com.psr.seatservice.dto.user.response.BookingListResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import com.psr.seatservice.SessionConst;
 
 @Service
 public class ProgramService {
@@ -57,7 +60,9 @@ public class ProgramService {
         Program program = programRepository.findById(programNum)
                 .orElseThrow(IllegalAccessError::new);
         program.updateInfo(request.getTitle(), request.getPlace(), request.getTarget(),
-                request.getStartDate(), request.getEndDate());
+                request.getStartDate(), request.getEndDate(), request.getPeopleNum(),
+                request.getSeatCol(), request.getSeatingChart());
+        //request.getType(),
     }
 
     public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
@@ -168,7 +173,8 @@ public class ProgramService {
     }
 
     public void updateProgramFormTitle(Long programNum, String getTitleJsonString){
-        Program program = programRepository.findById(programNum).orElse(null);;
+        Program program = programRepository.findById(programNum).orElse(null);
+
         program.updateJsonFrom(getTitleJsonString);
         programRepository.save(program);
     }
@@ -202,5 +208,9 @@ public class ProgramService {
     public List<ProgramListResponse> getProgramSearchResult(String keyword) {
         String str = "%" + keyword + "%";
         return programRepository.findAllByTitleLike(str);
+    }
+
+    public Long getBookingNumCount(Long programNum){
+        return programBookingRepository.countByProgramNum(programNum);
     }
 }

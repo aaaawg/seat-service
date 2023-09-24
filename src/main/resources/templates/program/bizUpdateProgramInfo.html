@@ -13,8 +13,19 @@
             <input type="text" id="title" name="title" th:value="${programInfo.title}">
         </div>
         <div>
+            <label>구분</label>
+            <input type="radio" id="offline" name="type" value="오프라인" onchange="showPlaceInput(0)">
+            <label for="offline">오프라인</label>
+            <input type="radio" id="online" name="type" value="온라인" onchange="showPlaceInput(1)">
+            <label for="online">온라인</label>
+        </div>
+        <div id="off">
             <label for="place">장소</label>
             <input type="text" id="place" name="place" th:value="${programInfo.place}">
+        </div>
+        <div id="on">
+            <label for="place">장소</label>
+            <input type="text" id="onPlace" name="place" value="온라인 관람" readonly disabled>
         </div>
         <div>
             <label for="target">신청대상</label>
@@ -29,6 +40,18 @@
             <input type="date" id="endDate" name="endDate" th:value="${programInfo.endDate}">
         </div>
         <div>
+            <label for="endDate">모집 인원</label>
+            <label th:if="${bookingCount <= 0}"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
+            <input  type="text" id="peopleNum" name="peopleNum" />
+            <button th:if="${programInfo.seatCol != null}" type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
+            <button th:unless="${programInfo.seatCol != null}" type="button" id="isNotSeatColSelect" onclick="openPopup()">좌석 추가</button>
+            <button th:if="${programInfo.seatCol != null}" id="deleteChart" onclick="deleteChart()">좌석 삭제</button>
+            <div id="popupChart" class="container"></div>
+            <input type="hidden" id="seatingChart" name="seatingChart" value=null>
+            <input type="hidden" id="seatCol" name="seatCol">
+
+        </div>
+        <div>
             <div>
                 <label for="inputFile"><strong>첨부 파일</strong></label>
                 <div>
@@ -39,17 +62,50 @@
                 </div>
                 <div id="image_container"></div>
             </div>
+            <div>
+                <button type="button" id="deleteAllFile" onclick="deleteAll()">파일 삭제</button>
+            </div>
             <div id="origImg">
                 <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
                 <span th:unless="${file.filename == 'NoInImage'}">
                 <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" width="200" alt="Selected Image"/>
+                <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile" />
                 </span>
             </div>
+        </div>
+        <div id="deleteFile2">
+            <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile2" />
         </div>
         <button type="submit" class="btn btn-success">수정하기</button>
     </form>
 </div>
-<script>
+<script th:inline="javascript">
+var programInfo = /*[[${programInfo}]]*/ null;
+if (programInfo !== null) {
+    const type = programInfo.type;
+    console.log("type: "+type);
+    if(type === "오프라인"){
+         document.getElementById("offline").checked = true;
+         document.getElementById("on").style.display = "none";
+    }else{
+        document.getElementById("online").checked = true;
+        document.getElementById("off").style.display = "none";
+    }
+}
+var people = document.getElementById("peopleNum");
+if(programInfo.seatCol !== null){
+    people.readOnly=true;
+    people.style.backgroundColor = "#f8f8f8";
+    people.style.color = "#545454";
+
+}
+if(programInfo.peopleNum === -1){
+    people.value = "무제한";
+}else{
+    people.value = programInfo.peopleNum;
+}
+
+
     function displaySelectedImage(event) {
         var changeImg = document.querySelector("div#image_container");
         changeImg.innerHTML = "";
@@ -72,6 +128,98 @@
             reader.readAsDataURL(event.target.files[i]);
         }
     }
+
+    function deleteAll() {
+        var changeImg = document.querySelector("div#image_container");
+        changeImg.innerHTML = "";
+        var fileInput = document.getElementById('customFile');
+        fileInput.value = '';
+        var changeImg2 = document.querySelector("div#origImg");
+        changeImg2.innerHTML = "";
+    }
+
+    function openPopup(){
+        var bookingCount = /*[[${bookingCount}]]*/ 0;
+        if(bookingCount > 0){
+            alert("수정이 불가합니다.");
+        }
+        else{
+        const popup = window.open("/business/program/updateSeat", "좌석배치도", "width=1000px, height=1000px");
+
+        popup.onload = function() {
+            // 자식 창의 요소에 접근
+            var programInfoP = /*[[${programInfo}]]*/ null;
+            const updateSeatElement = popup.document.getElementById("updateSeat");
+            const updateSeat = popup.document.getElementById("seat");
+            const updateSeatRow = popup.document.getElementById("seatRow");
+
+            let seatArray = new Array();
+            let ht = "";
+            const scDiv = popup.document.getElementById("chart");
+            if (programInfoP !== null) {
+                var sCol = programInfoP.seatCol;
+                updateSeat.value = sCol;
+                seatArray = JSON.parse(programInfoP.seatingChart);
+
+                if(seatArray != null){
+                let seatNum = 1;
+                let num = 0;
+                let exNum = 0;
+
+                for (let i = 0; i < seatArray.length; i++) {
+                    if(num % sCol === 0) {
+                        ht += "<div class='row'>"
+                    }
+                    if(seatArray[i]){
+                        ht += "<button type='button' class='seatBtn' style='background-color: #83A783'>" + seatNum + "</button>";
+                        seatNum++;
+                    }
+                    else {
+                        ht += "<div class='seatBtn' style='background-color: #ffffff'></div>"
+                    }
+                    num++;
+                    if(num % sCol === 0) {
+                        ht += "</div>";
+                        exNum++;
+                    }
+                }
+                updateSeatRow.value = exNum;
+                scDiv.innerHTML = ht;
+                }
+
+            }
+    }
+
+
+    popup.addEventListener("beforeunload", function () {
+        let chart = JSON.stringify(popupSeatArr);
+        console.log(chart);
+
+        let exSeatCount = 0;
+        for(let i=0; i<popupSeatArr.length; i++){
+            if(popupSeatArr[i]===0){ exSeatCount++; }
+        }
+
+        document.getElementById("seatingChart").value = chart;
+        document.getElementById("seatCol").value = popupSeatCol;
+
+        let result = (popupSeatArr.length - exSeatCount);
+        console.log("result: "+ result);
+
+        document.getElementById("peopleNum").readOnly = true;
+        document.getElementById("peopleNum").value = result;
+    });
+    }
+    }
+    function popupSeat(arr, col) {
+        popupSeatArr = arr;
+        popupSeatCol = col;
+    }
+
+    function deleteChart(){
+         //document.getElementById("peopleNum").value = result;
+    }
 </script>
+<script type="text/javascript" src="/js/updateProgram.js?ver=1.3"></script>
 </body>
 </html>

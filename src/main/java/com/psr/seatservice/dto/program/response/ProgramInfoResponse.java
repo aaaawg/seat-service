@@ -18,6 +18,8 @@ public class ProgramInfoResponse {
     private String type;
     private int peopleNum;
     private String contents; //상세정보
+    private Integer seatCol;
+    private String seatingChart;
 
     public ProgramInfoResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -30,5 +32,7 @@ public class ProgramInfoResponse {
         this.type = program.getType();
         this.peopleNum = program.getPeopleNum();
         this.contents = program.getContents();
+        this.seatCol = program.getSeatCol();
+        this.seatingChart = program.getSeatingChart();
     }
 }

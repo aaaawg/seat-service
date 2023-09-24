@@ -37,7 +37,6 @@ public class BizUserProgramController {
     //기업 사용자 - 해당 사용자가 등록한 프로그램 목록 표시
     @GetMapping
     public String programs(@AuthenticationPrincipal User user, Model model) {
-        //등록한 사용자 아이디 추가하기
         List<BizProgramListResponse> programs = programService.programs(user.getId());
         model.addAttribute("programs", programs);
         return "program/bizProgramList";
@@ -51,10 +50,9 @@ public class BizUserProgramController {
 
     @PostMapping( "/add")
     public String addProgram(BizAddProgramRequest request, @RequestParam("file") List<MultipartFile> files
-    , @RequestParam(value="formHtml") String formHtml, @RequestParam("getTitleJson") String getTitleJsonString, @AuthenticationPrincipal User user) throws IOException {
+    , @RequestParam(value="formHtml") String formHtml, @RequestParam(value = "getTitleJson", required = false) String getTitleJsonString, @AuthenticationPrincipal User user) throws IOException {
         Long proNum = programService.addProgram(request, formHtml, getTitleJsonString, user);
 
-        //System.out.println("test Json Data: "+getTitleJsonString);
         //programService.addProgramFormTitle(proNum, getTitleJsonString);
 
         /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
@@ -90,43 +88,66 @@ public class BizUserProgramController {
             fileDto.setFilename("NoInImage");
         }
 
+        Long bookingCount = programService.getBookingNumCount(programNum);
+
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
         model.addAttribute("file", fileDto);
+        model.addAttribute("bookingCount", bookingCount);
         return "program/bizUpdateProgramInfo";
     }
 
     //프로그램 정보 수정
     @PostMapping("/update/{programNum}")
-    public String updateProgramInfo(@PathVariable Long programNum, BizUpdateProgramRequest request, @RequestParam("file") List<MultipartFile> files) throws IOException {
+    public String updateProgramInfo(@PathVariable Long programNum, BizUpdateProgramRequest request, @RequestParam("file") List<MultipartFile> files,
+                                    @RequestParam(value ="deleteFile", required = false) List<String> deleteFiles,
+                                    @RequestParam(value ="deleteFile2", required = false) List<String> deleteFiles2) throws IOException {
+        System.out.println("TEst: "+ request.getPeopleNum());
+
         programService.updateProgramInfo(programNum, request);
-        String savePath = System.getProperty("user.dir") + "\\files";
+        String savePath = System.getProperty("user.dir");
+        //1. 변경 안하는 경우 - files files.get(0).getOriginalFilename().equals("")), deleteFiles O, 삭제X 추가X @
+        //2. 사진 없다가 새로 추가 - files O, deleteFiles X, 삭제X 추가O @
+        //3. 사진 있었고 새로 변경 - files O, deleteFiles O, 삭제O 추가O @
+        //4. 사진 없애기 - files X, deleteFiles X, deleteFiles2 O, 삭제O 추가X @
+        if (files.get(0).getOriginalFilename().equals("")){
+            if (deleteFiles==null && deleteFiles2==null) {
 
-        //파일 수정
-        // 먼저 있던 사진들 지우고 새로 추가하기
-        //삭제
-        fileService.deleteFile(programNum);
-
-        //실제로 파일 삭제
-        /*File fileToDelete = new File(filePath);
-
-        if (fileToDelete.exists()) {
-            if (fileToDelete.delete()) {
-                System.out.println("파일이 성공적으로 삭제되었습니다.");
-            } else {
-                System.err.println("파일을 삭제하는 중 오류가 발생했습니다.");
+            }else if(deleteFiles==null){
+                fileService.deleteFile(programNum);
+                //실제로 파일 삭제
+                int num = deleteFiles2.size();
+                for (int i = 0; i < num; i++) {
+                    File fileToDelete = new File(savePath + deleteFiles2.get(i));
+                    if (fileToDelete.exists()) {
+                        fileToDelete.delete();
+                    }
+                }
             }
-        } else {
-            System.err.println("파일이 존재하지 않습니다.");
-        }*/
-
-        /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-        if (!new File(savePath).exists()) {
-            try{new File(savePath).mkdir();}
-            catch(Exception e){e.getStackTrace();}
-        }
-        //추가
-        for (MultipartFile multipartFile : files) {
-            fileService.saveFiles(multipartFile, programNum);
+        }else {
+            if (deleteFiles!=null){
+                //삭제
+                fileService.deleteFile(programNum);
+                //실제로 파일 삭제
+                int num = deleteFiles.size();
+                for (int i = 0; i < num; i++) {
+                    File fileToDelete = new File(savePath + deleteFiles.get(i));
+                    if (fileToDelete.exists()) {
+                        fileToDelete.delete();
+                    }
+                }
+            }
+            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            if (!new File(savePath).exists()) {
+                try {
+                    new File(savePath).mkdir();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+            //추가
+            for (MultipartFile multipartFile : files) {
+                fileService.saveFiles(multipartFile, programNum);
+            }
         }
 
         //return "redirect:/business/program/info/{programNum}";
@@ -172,5 +193,10 @@ public class BizUserProgramController {
         BizProgramBookingInfoResponse bookingInfoResponse = new BizProgramBookingInfoResponse(program.getSeatingChart(), list, program.getSeatCol(), program.getTitle(), date, time);
         model.addAttribute("seats", bookingInfoResponse);
         return "program/bizSeatingChart";
+    }
+
+    @GetMapping("/updateSeat")
+    public String updateSeatingChart() {
+        return "program/bizUpdateSeatingChart";
     }
 }
