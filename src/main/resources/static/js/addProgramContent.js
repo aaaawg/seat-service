@@ -11,20 +11,17 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
    }
    // 폼 데이터 생성
     const resultHtml = document.querySelector('#content').outerHTML;
-    //var additionalData = { formHtml: resultHtml};
-
-    if(count === 0){
-         var additionalData = { formHtml: null};
-    }else{
-         var additionalData = { formHtml: resultHtml};
-    }
+    var additionalData;
     var formData = new FormData(document.getElementById('myForm'));
-    if(additionalData !== null){
-        for (var key in additionalData) {
-            formData.append(key, additionalData[key]);
-        }
-        var getTitleJson = getTitle();
-        formData.append("getTitleJson", JSON.stringify(getTitleJson));
+    if(count === 0){
+         additionalData = { formHtml: ''};
+    }else{
+         additionalData = { formHtml: resultHtml};
+            for (var key in additionalData) {
+                formData.append(key, additionalData[key]);
+            }
+            var getTitleJson = getTitle();
+            formData.append("getTitleJson", JSON.stringify(getTitleJson));
     }
 
   // 서버로 폼 데이터 전송
@@ -44,17 +41,15 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
 document.getElementById('myFormEdit').addEventListener('submit', function(event) {
    event.preventDefault();
    if (!check()) {return;}
+   var additionalData;
     const resultHtml = document.querySelector('#content').outerHTML;
-    if(count === 0){
-         var additionalData = { formHtml: null};
-    }else{
-        var additionalData = { formHtml: resultHtml};
-    }
-
     var formData = new FormData(document.getElementById('myFormEdit'));
-    if(additionalData !== null){
+    if(count === 0){
+         additionalData = { formHtml: ''};
+    }else{
+        additionalData = { formHtml: resultHtml};
         for (var key in additionalData) {
-            formData.append(key, additionalData[key]);
+                    formData.append(key, additionalData[key]);
         }
         var getTitleJson = getTitle();
         formData.append("getTitleJson", JSON.stringify(getTitleJson));

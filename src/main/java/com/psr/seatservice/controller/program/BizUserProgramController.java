@@ -44,6 +44,7 @@ public class BizUserProgramController {
     @PostMapping( "/add")
     public String addProgram(BizAddProgramRequest request, @RequestParam("file") List<MultipartFile> files
     , @RequestParam(value="formHtml", required = false) String formHtml, @RequestParam(value="getTitleJson", required = false) String getTitleJsonString) throws IOException {
+        System.out.println("FormHtml: "+formHtml);
         Long proNum = programService.addProgram(request, formHtml, getTitleJsonString);
 
         //programService.addProgramFormTitle(proNum, getTitleJsonString);
@@ -94,8 +95,8 @@ public class BizUserProgramController {
     public String updateProgramInfo(@PathVariable Long programNum, BizUpdateProgramRequest request, @RequestParam("file") List<MultipartFile> files,
                                     @RequestParam(value ="deleteFile", required = false) List<String> deleteFiles,
                                     @RequestParam(value ="deleteFile2", required = false) List<String> deleteFiles2) throws IOException {
-        System.out.println("TEst: "+ request.getPeopleNum());
-
+        if(request.getSeatingChart().isEmpty()){request.setSeatingChart(null);}
+        System.out.println("TEst: "+ request.getSeatingChart());
         programService.updateProgramInfo(programNum, request);
         String savePath = System.getProperty("user.dir");
         //1. 변경 안하는 경우 - files files.get(0).getOriginalFilename().equals("")), deleteFiles O, 삭제X 추가X @

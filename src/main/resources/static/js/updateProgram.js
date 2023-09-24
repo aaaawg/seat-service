@@ -28,7 +28,6 @@ function valueClear() {
     document.getElementById("seatingChart").value = null;
     document.getElementById("seatCol").value = null;
     document.getElementById("peopleNum").value = null;
-    document.getElementById("seatLength").innerText = null;
 }
 function peopleNumValue() {
 
@@ -58,4 +57,14 @@ function peopleNumValue() {
              document.getElementById("isNotSeatColSelect").style.display = "inline";
         }
     }
+}
+
+function deleteSeatChart(){
+     document.getElementById("seatingChart").value = '';
+     document.getElementById("peopleNum").value = 0;
+     document.getElementById("peopleNum").readOnly = false;
+     document.getElementById("peopleNum").style.backgroundColor = "white";
+     document.getElementById("peopleNum").style.color ="black";
+     document.getElementById("seatCol").value = '';
+     console.log("del");
 }

@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="container">
-    <form th:action method="post" enctype="multipart/form-data">
+    <form th:action method="post" enctype="multipart/form-data" id="updateForm">
         <div>
             <label for="title">프로그램명</label>
             <input type="text" id="title" name="title" th:value="${programInfo.title}">
@@ -42,13 +42,13 @@
         <div>
             <label for="endDate">모집 인원</label>
             <label th:if="${bookingCount <= 0}"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
-            <input  type="text" id="peopleNum" name="peopleNum" />
+            <input  type="text" id="peopleNum" name="peopleNum" th:value="${programInfo.peopleNum}" />
             <button th:if="${programInfo.seatCol != null}" type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
             <button th:unless="${programInfo.seatCol != null}" type="button" id="isNotSeatColSelect" onclick="openPopup()">좌석 추가</button>
-            <button th:if="${programInfo.seatCol != null}" id="deleteChart" onclick="deleteChart()">좌석 삭제</button>
+            <button th:if="${programInfo.seatCol != null}" type="button" id="deleteChart" onclick="deleteSeatChart()">좌석 삭제</button>
             <div id="popupChart" class="container"></div>
-            <input type="hidden" id="seatingChart" name="seatingChart" value=null>
-            <input type="hidden" id="seatCol" name="seatCol">
+            <input type="hidden" id="seatingChart" name="seatingChart" th:value="${programInfo.seatingChart}" />
+            <input type="hidden" id="seatCol" name="seatCol" th:value="${programInfo.seatCol}" />
 
         </div>
         <div>
@@ -81,6 +81,9 @@
 </div>
 <script th:inline="javascript">
 var programInfo = /*[[${programInfo}]]*/ null;
+var file = /*[[${file}]]*/ null;
+if(file.valueOf.length === 0) {document.getElementById("deleteAllFile").style.display = "none";}
+
 if (programInfo !== null) {
     const type = programInfo.type;
     console.log("type: "+type);
@@ -104,7 +107,13 @@ if(programInfo.peopleNum === -1){
 }else{
     people.value = programInfo.peopleNum;
 }
-
+document.getElementById("updateForm").addEventListener("submit", function(event) {
+        if (document.getElementById("peopleNum").value === '0') {
+            // 원하는 조건에 맞지 않으면 제출을 막습니다.
+            alert("모집 인원은 0명 이상이어야 합니다.");
+            event.preventDefault(); // 제출 막음
+        }
+});
 
     function displaySelectedImage(event) {
         var changeImg = document.querySelector("div#image_container");
@@ -127,6 +136,7 @@ if(programInfo.peopleNum === -1){
             };
             reader.readAsDataURL(event.target.files[i]);
         }
+        if(lengthImg > 0) {document.getElementById("deleteAllFile").style.display = "block";}
     }
 
     function deleteAll() {
@@ -168,14 +178,15 @@ if(programInfo.peopleNum === -1){
 
                 for (let i = 0; i < seatArray.length; i++) {
                     if(num % sCol === 0) {
-                        ht += "<div class='row'>"
+                        ht += "<div class='row justify-content-center'>"
                     }
                     if(seatArray[i]){
-                        ht += "<button type='button' class='seatBtn' style='background-color: #83A783'>" + seatNum + "</button>";
+                        ht += "<button class='seatBtn' style='background-color: #83A783'>" + seatNum + "</button>";
                         seatNum++;
                     }
                     else {
-                        ht += "<div class='seatBtn' style='background-color: #ffffff'></div>"
+                        ht += "<button class='seatBtn' style='background-color: rgb(215, 215, 215);'>"+ seatNum +"</button>";
+                        seatNum++;
                     }
                     num++;
                     if(num % sCol === 0) {
@@ -189,7 +200,6 @@ if(programInfo.peopleNum === -1){
 
             }
     }
-
 
     popup.addEventListener("beforeunload", function () {
         let chart = JSON.stringify(popupSeatArr);
@@ -214,10 +224,6 @@ if(programInfo.peopleNum === -1){
     function popupSeat(arr, col) {
         popupSeatArr = arr;
         popupSeatCol = col;
-    }
-
-    function deleteChart(){
-         //document.getElementById("peopleNum").value = result;
     }
 </script>
 <script type="text/javascript" src="/js/updateProgram.js?ver=1.3"></script>

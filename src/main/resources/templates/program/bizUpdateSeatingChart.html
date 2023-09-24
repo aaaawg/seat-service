@@ -35,5 +35,24 @@
     </div>
 </div>
 </body>
-<script type="text/javascript" src="/js/seatingChart.js"></script>
+<script>
+//선택지를 모두 가져온다
+document.getElementById("chart").onload = function(){
+const items = document.querySelectorAll(".seatBtn");
+//배열로 저장되기 때문에 forEach로 하나씩 이벤트를 등록해준다.
+items.forEach((item)=>{
+    item.addEventListener('click',()=>{
+      // 선택한 그 아이만 효과를 추가해준다.
+      item.style.backgroundColor = "blue";
+        if(item.style.backgroundColor === "rgb(131, 167, 131)"){
+            item.style.backgroundColor = "rgb(215, 215, 215)";
+        }else{
+            item.style.backgroundColor = "rgb(131, 167, 131)";
+        }
+
+    });
+});
+}
+</script>
+<script type="text/javascript" src="/js/seatingChart.js?ver=1.1"></script>
 </html>
