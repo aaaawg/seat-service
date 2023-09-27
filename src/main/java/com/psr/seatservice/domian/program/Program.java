@@ -53,6 +53,7 @@ public class Program {
     @CreationTimestamp
     private Timestamp createDate;
 
+    @Lob
     private String seatingChart;
     private Integer seatCol;
     private int peopleNum; //모집인원

@@ -5,6 +5,7 @@
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/seatingChart.css}" href="../css/seatingChart.css" rel="stylesheet">
+    <link th:href="@{/css/bookingCalendar.css}" href="../css/bookingCalendar.css" rel="stylesheet">
 </head>
 <body>
 <div id="enterForm">
@@ -24,51 +25,86 @@
     <button type="button" id="formPage">다음</button>
 </div>
 
-<div class="container row row-cols-3">
-<div id="viewingDate" class="col" style="display: none">
-    <p>시간/날짜 선택</p>
-    <table>
-        <thead>
-            <tr>
-                <td onclick="prevMonth()"><</td>
-                <td id="yearAndDate"></td>
-                <td onclick="nextMonth()">></td>
-            </tr>
-            <tr>
-                <td>일</td>
-                <td>월</td>
-                <td>화</td>
-                <td>수</td>
-                <td>목</td>
-                <td>금</td>
-                <td>토</td>
-            </tr>
-        </thead>
-        <tbody id="calendar"></tbody>
-    </table>
-    <div id="timeBtn"></div>
-    <div id="appCount"></div>
+<div>
+<div id="viewingDate" style="display: none">
+    <div class="bookingSe">시간/날짜 선택</div>
+    <div class="vDiv">
+        <div id="sMonth" class="input-group mb-3">
+            <div class="btn btn-outline-secondary" onclick="prevMonth()"><img src="/img/icon-arrow-64.png"></div>
+            <span id="yearAndDate" class="form-control"></span>
+            <div class="btn btn-outline-secondary" onclick="nextMonth()"><img src="/img/icon-arrow-63.png"></div>
+        </div>
+        <table class="table table-borderless">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 14%">일</th>
+                    <th style="width: 14%">월</th>
+                    <th style="width: 14%">화</th>
+                    <th style="width: 14%">수</th>
+                    <th style="width: 14%">목</th>
+                    <th style="width: 14%">금</th>
+                    <th style="width: 14%">토</th>
+                </tr>
+            </thead>
+            <tbody id="calendar"></tbody>
+        </table>
+        <div id="timeDiv"></div>
+        <div id="appCount"></div>
+    </div>
 </div>
 
-<div id="selectSeat" class="col" style="display: none">
-    <p>좌석 선택</p>
-    <div id="chart" class="container"></div>
+<div id="selectSeat" style="display: none;">
+    <div class="bookingSe">좌석 선택</div>
+    <div class="sDiv">
+        <div id="cal">
+            <img src="/img/icon-calendar.png">
+            <span id="calText"></span>
+        </div>
+        <div style="height: 400px;" id="scrollDiv">
+            <div id="stage" style="width: 100%"></div>
+            <div id="chart" class="container" style="padding: 0px"></div>
+        </div>
+        <div id="seatB">
+            <div><div class="seatBtn" style="background-color: #e5e5e5"></div><span>선택 불가</span></div>
+            <div><div class="seatBtn" style="background-color: #83A783"></div><span>선택 가능</span></div>
+            <div><div class="seatBtn activeSeatBtn"></div><span>선택 좌석</span></div>
+        </div>
+    </div>
 </div>
 
-<div id="checkInfo" class="col" style="display: none">
-    <p>신청 정보 확인</p>
-    <div id="bookingInfo"></div>
-
-    <form>
-        <input type="hidden" id="seatNum" name="seatNum">
-        <input type="hidden" id="selectedViewingDate" name="viewingDate">
-        <input type="hidden" id="selectedViewingTime" name="viewingTime">
-        <input type="hidden" id="userResponseForm" name="programResponse">
-    </form>
-    <button type="button" onclick="sendBookingData()">신청하기</button>
+<div id="checkInfo" style="display: none;">
+    <div class="bookingSe">신청 정보 확인</div>
+    <div class="bDiv">
+        <div id="bookingInfo">
+            <p id="chTitle"></p>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>일시</th>
+                        <td id="chDate"></td>
+                    </tr>
+                    <tr id="chSeat" style="display: none">
+                        <th>좌석</th>
+                        <td id="chSeatNum"></td>
+                    </tr>
+                    <tr>
+                        <th>취소</th>
+                        <td id="chCancel"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <form>
+            <input type="hidden" id="seatNum" name="seatNum">
+            <input type="hidden" id="selectedViewingDate" name="viewingDate">
+            <input type="hidden" id="selectedViewingTime" name="viewingTime">
+            <input type="hidden" id="userResponseForm" name="programResponse">
+        </form>
+        <button class="btn btn-secondary" type="button" onclick="sendBookingData()">신청하기</button>
+    </div>
 </div>
 </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script th:inline="javascript">
     let d;
     let t;
@@ -76,13 +112,19 @@
     let peopleNum;
     let sDate;
     let vDate = new Array();
+    let acDate;
+    let acTime;
+    let endDate;
 
     window.addEventListener("load", function () {
         d = window.opener.selectedProgramInfo("date");
         t = window.opener.selectedProgramInfo("time");
         title = window.opener.selectedProgramInfo("title");
         peopleNum = window.opener.selectedProgramInfo("peopleNum");
+        endDate = window.opener.selectedProgramInfo("endDate");
 
+        acDate = d;
+        acTime = t;
 
         let sYear = d.split("-")[0];
         let sMonth = d.split("-")[1];
@@ -106,6 +148,7 @@
                 viewingType();
                 createCalendar();
                 showTime(d);
+                addTimeBtnClass();
                 timeBtnEvent(d, t);
             }
         })
@@ -140,8 +183,12 @@
             if(cnt % 7 === 0)
                 tr += "<tr>";
 
-            if(vDate.includes(d))
-                tr += "<td><button type='button' class='dayBtn' onclick='showTime(this.value)' value='"+ d +"'>" + i + "</button></td>";
+            if(vDate.includes(d)) {
+                if(d === acDate)
+                    tr += "<td><button type='button' class='dayBtn rounded activeBtn' onclick='showTime(this.value)' value='" + d + "'>" + i + "</button></td>";
+                else
+                    tr += "<td><button type='button' class='dayBtn rounded' onclick='showTime(this.value)' value='" + d + "'>" + i + "</button></td>";
+            }
             else
                 tr += "<td>" + i + "</td>";
 
@@ -150,6 +197,13 @@
                 tr += "</tr>"
         }
         calendar.innerHTML = tr;
+
+
+        $(".dayBtn").click(function() {
+            $(".dayBtn").removeClass("activeBtn");
+            $(this).addClass("activeBtn");
+        });
+
     }
     function viewingType () {
         const viewing = [[${programViewing}]];
@@ -162,15 +216,19 @@
 
     function showTime(date) {
         const viewing = [[${programViewing}]];
-        const timeBtn = document.getElementById("timeBtn");
-        timeBtn.innerHTML = "";
-        timeBtn.innerHTML += "<div>" + date + "</div>";
+        const timeDiv = document.getElementById("timeDiv");
+        timeDiv.innerHTML = "";
         for (let i = 0; i < viewing.length; i++) {
             if(viewing[i].viewingDate === date) {
                 dt = date;
-                timeBtn.innerHTML += "<button type='button' value='" + viewing[i].viewingTime + "' onclick='timeBtnEvent(dt, this.value)'>" + viewing[i].viewingTime + "</button>"
+                timeDiv.innerHTML += "<button type='button' class='timeBtn rounded-pill' value='" + viewing[i].viewingTime + "' onclick='timeBtnEvent(dt, this.value)'>" + viewing[i].viewingTime + "</button>"
             }
         }
+
+        $("#timeDiv > button").click(function() {
+            $("#timeDiv > button").removeClass("activeBtn");
+            $(this).addClass("activeBtn");
+        });
     }
     let ssDate;
     let ssTime;
@@ -178,6 +236,8 @@
         let programNum = document.getElementById("program").value;
         ssDate = date;
         ssTime = time;
+
+        document.getElementById("calText").innerText = `${date} ${time}`
 
         fetch(`/booking/seat`, {
             method: "post",
@@ -215,18 +275,23 @@
 
         for (let i = 0; i < seatingChart.length; i++) {
             if(num % sCol === 0) {
-                ht += "<div class='row'>"
+                if(sCol < 19)
+                    ht += "<div class='row justify-content-center' style='margin: 0px;'>"
+                else {
+                    ht += "<div class='row' style='margin: 0px;'>"
+                    document.getElementById("stage").style.width = "200%"
+                }
             }
 
             if(seatingChart[i]){
                 if(bookingSeatList.includes(seatNum))
-                    ht += "<div class='seatBtn' style='background-color: #e5e5e5'></div>"
+                    ht += "<div class='seatBtn' style='background-color: #e5e5e5;'></div>"
                 else
-                    ht += "<button type='button' class='seatBtn' style='background-color: #83A783'>" + seatNum + "</button>";
+                    ht += "<button type='button' class='seatBtn' style='background-color: #83A783;'>" + seatNum + "</button>";
                 seatNum++;
             }
             else {
-                ht += "<div class='seatBtn' style='background-color: #ffffff'></div>"
+                ht += "<div class='seatBtn' style='background-color: #ffffff;'></div>"
             }
 
             num++;
@@ -243,26 +308,30 @@
                 showBookingInfo(e.target.innerText);
             });
         }
+
+        $(qa).click(function() {
+            $(qa).removeClass("activeSeatBtn");
+            $(this).addClass("activeSeatBtn");
+        });
     }
     function showBookingInfo(seatNum) {
-        const d = document.getElementById("bookingInfo");
+        document.getElementById("chTitle").innerText = title;
 
-        let ht = "";
-        ht += "<p>" + title +"</p>";
-        ht += "<p>일시: " +  ssDate + " " + ssTime + "</p>";
-        if(bookingSeatList != null)
-            ht += "<p id='selectedSeat'>좌석: " + seatNum + "번</p>";
+        if(bookingSeatList != null) {
+            document.getElementById("chSeatNum").innerText = seatNum + "번";
+            document.getElementById("chSeat").style = "block";
+            document.getElementById("seatNum").value = seatNum;
+        }
 
-        d.innerHTML = ht;
-        document.getElementById("seatNum").value = seatNum;
+        document.getElementById("chDate").innerText = ssDate + " " + ssTime;
+        document.getElementById("chCancel").innerText = endDate + " 24:00까지"
     }
     function showAppCount(num) {
         const tDiv = document.getElementById("appCount");
         let str = "";
 
-        str += "<p>신청인원: " + num +"</p>";
         if(peopleNum !== -1)
-            str += "<p>잔여인원: " + (peopleNum - num) +"</p>";
+            str += "<p>(잔여 " + (peopleNum - num) +"명)</p>";
 
         tDiv.innerHTML = str;
     }
@@ -296,6 +365,13 @@
         }).then((r) => {
             alert(r.message);
         })
+    }
+    function addTimeBtnClass() {
+        const at = document.querySelectorAll(".timeBtn")
+        for (let i = 0; i < at.length; i++) {
+            if(at[i].value === acTime)
+                at[i].classList.add("activeBtn");
+        }
     }
 </script>
 </body>

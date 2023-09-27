@@ -2,7 +2,6 @@ package com.psr.seatservice.controller.program;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.psr.seatservice.SessionConst;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.ErrorResponse;
@@ -66,11 +65,13 @@ public class ProgramController {
         } else {
             fileDto.setFilename("NoInImage");
         }
+        boolean ch = programService.checkSeatingChart(programNum);
 
         List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
         model.addAttribute("file", fileDto);
         model.addAttribute("programViewing", viewing);
+        model.addAttribute("chSC", ch);
         return "program/programInfo";
     }
 

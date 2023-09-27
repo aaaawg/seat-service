@@ -5,20 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
+import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.user.request.BookingRequest;
-import com.psr.seatservice.dto.user.response.BookingListResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import com.psr.seatservice.SessionConst;
 
 @Service
 public class ProgramService {
@@ -132,14 +128,12 @@ public class ProgramService {
 
     public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {
         //프로그램 진행 날짜, 시간, 신청인원 목록
-        List<BizProgramViewingDateAndTimeAndPeopleNumResponse> list = programViewingRepository.findViewingDateAndTimeAndPeopleNumByProgramNum(programNum);
-        return list;
+        return programViewingRepository.findViewingDateAndTimeAndPeopleNumByProgramNum(programNum);
     }
 
     public List<BizProgramBookingUserListResponse> getBookingUserList(Long programNum, String date, String time) {
         //프로그램을 예약한 사용자 목록
-        List<BizProgramBookingUserListResponse> list = programBookingRepository.findByProgramNumAndViewingDateAndViewingTime(programNum, date, time);
-        return list;
+        return programBookingRepository.findByProgramNumAndViewingDateAndViewingTime(programNum, date, time);
     }
 
     public boolean checkSeatingChart(Long num) {

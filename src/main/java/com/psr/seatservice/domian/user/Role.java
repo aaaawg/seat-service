@@ -9,5 +9,5 @@ public enum Role {
     USER("ROLE_USER"),
     BIZ("ROLE_BIZ");
 
-    private final String value;
+    private String value;
 }

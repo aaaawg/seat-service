@@ -129,7 +129,13 @@
                 alert("시간을 선택해주세요.");
             } else {
                 let url = "/booking/" + num;
-                window.open(url, "예약", "width=1000px, height=600px");
+                let width;
+                if([[${chSC}]])
+                    width = "1000px";
+                else
+                    width = "520px";
+
+                window.open(url, "예약", `width=${width}, height=535px`);
             }
         } else {
             const answer = confirm("로그인이 필요합니다.")
@@ -147,6 +153,8 @@
             return [[${programInfo.title}]];
         else if (t === "peopleNum")
             return [[${programInfo.peopleNum}]];
+        else if(t === "endDate")
+            return [[${programInfo.endDate}]];
     }
 
     function showPeopleCount() {
