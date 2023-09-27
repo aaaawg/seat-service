@@ -99,6 +99,9 @@ public class ProgramController {
     @PostMapping("/booking/{programNum}")
     public String addBooking(@PathVariable Long programNum, BookingRequest request, HttpSession session){
         //programBooking 테이블에 예약 데이터 추가
+        if(request.getProgramResponse().equals("null")){
+            request.setProgramResponse(null);
+        }
         User loginUser = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
         if(loginUser != null) {
             programService.addBooking(programNum, request, loginUser.getUserId());

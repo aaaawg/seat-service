@@ -1,27 +1,22 @@
 function showPlaceInput(type) {
     valueClear();
-    /*document.getElementById("peopleChBox").checked = false;
-    peopleNumValue();
-    document.getElementById("enterPeopleNum").style.display = "inline";*/
-
     if(type) {
+    //온라인
         document.getElementById("off").style.display = "none";
         document.getElementById("on").style.display = "block";
-       // document.getElementById("onPlace").disabled = false;
-      //  document.getElementById("offPlace").disabled = true;
-
-       // document.getElementById("offSeatingChart").style.display = "none";
-       // showCreatSeatingChart(0);
+        document.getElementById("peopleNum").readOnly=false;
+        document.getElementById("seatingChart").value = '';
+        if(document.getElementById("isSeatColSelect") != null){
+            document.getElementById("isSeatColSelect").style.display = "none";
+        }else{
+            document.getElementById("isNotSeatColSelect").style.display = "none";
+        }
+        document.getElementById("deleteChart").style.display = "none";
     }
     else {
+    //오프라인
         document.getElementById("off").style.display = "block";
         document.getElementById("on").style.display = "none";
-      //  document.getElementById("onPlace").disabled = true;
-      //  document.getElementById("offPlace").disabled = false;
-
-      //  document.getElementById("nsc").checked = true;
-      //  document.getElementById("offSeatingChart").style.display = "block"
-     //   document.getElementById("csc").style.display = "none";
     }
 }
 function valueClear() {
