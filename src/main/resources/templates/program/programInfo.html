@@ -3,49 +3,82 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/programInfo.css}" href="../css/programInfo.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
 <div class="container" style="max-width: 1000px">
-    <p th:text="|구분 : ${programInfo.type}|"></p>
-    <p th:text="|프로그램명 : ${programInfo.title}|"></p>
-    <p th:text="|장소 : ${programInfo.place} |"></p>
-    <p>대상 : <span th:text="${programInfo.target} == '제한없음'? ${programInfo.target} : ${programInfo.targetDetail} "></span></p>
-    <p>모집인원 : <span th:text="${programInfo.peopleNum} == -1? '무제한' : ${programInfo.peopleNum} "></span></p>
-    <p th:text="|신청기간 : ${programInfo.startDate} ~ ${programInfo.endDate}|"></p>
-
-    <div>
-        <strong>파일 : </strong>
-        <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
-        <span th:unless="${file.filename == 'NoInImage'}">
-            <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" title=${im.origfilename} width="200"/>
-        </span>
+    <div class="row programInfoDiv">
+        <div class="programImgDiv col-3">
+            <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
+            <span th:unless="${file.filename == 'NoInImage'}">
+                <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" title=${im.origfilename}/>
+            </span>
+        </div>
+        <div class="programTextDiv col">
+            <div>
+                <span class="badge bg-secondary" th:text="${programInfo.type}"></span>
+            </div>
+            <h2 th:text="${programInfo.title}"></h2>
+            <table class="table table-borderless">
+                <tr>
+                    <th style="width: 15%">대상</th>
+                    <td th:text="${programInfo.target} == '제한없음'? ${programInfo.target} : ${programInfo.targetDetail}"></td>
+                </tr>
+                <tr>
+                    <th>장소</th>
+                    <td th:text="${programInfo.place}"></td>
+                </tr>
+                <tr>
+                    <th>모집인원</th>
+                    <td th:text="${programInfo.peopleNum} == -1? '무제한' : ${programInfo.peopleNum} + '명'"></td>
+                </tr>
+                <tr>
+                    <th>신청기간</th>
+                    <td th:text="${programInfo.startDate} + ' ~ ' + ${programInfo.endDate}"></td>
+                </tr>
+                <tr>
+                    <th>문의</th>
+                    <td th:text="${programInfo.userPhone}"></td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <ul id="selectDate" class="list-group" th:each="i, viewing: ${programViewing}" th:if="${viewing.index == 0||(viewing.index > 0 && programViewing[viewing.index].viewingDate != programViewing[(viewing.index)-1].viewingDate)}">
-                    <li class="list-group-item" ><a onclick="selectedDate(this.innerText)" th:text="${i.viewingDate}"></a></li>
+        <div class="row programDateDiv rounded-2">
+            <div class="col" style="padding-right: 20px">
+                <div style="margin-bottom: 5px">
+                    <i class="bi bi-calendar4-event"></i>
+                    <h5>날짜 선택</h5>
+                </div>
+                <ul id="selectDate" class="list-group">
+                    <li class="list-group-item" th:each="i, viewing: ${programViewing}" th:if="${viewing.index == 0||(viewing.index > 0 && programViewing[viewing.index].viewingDate != programViewing[(viewing.index)-1].viewingDate)}" onclick="selectedDate(this.innerText)" th:text="${i.viewingDate}"></li>
                 </ul>
             </div>
-            <div class="col">
+            <div class="col" style="padding-left: 20px; border-left: solid #c9c9c9 1px">
+                <div style="margin-bottom: 5px">
+                    <i class="bi bi-clock"></i>
+                    <h5>시간 선택</h5>
+                </div>
                 <ul id="selectTime" class="list-group"></ul>
             </div>
-            <div class="col" id="appDiv">
-                <div th:if="${#dates.createToday().compareTo(programInfo.startDate) >= 0} and ${programInfo.endDate.compareTo(#dates.createToday()) >= 0} and !${#authorization.expression('hasRole(''' + 'BIZ' + ''')')}">
-                    <button type="button" th:a="${#authorization.expression('isAuthenticated()')}" th:s="${programInfo.programNum}" onclick="openPopup(this.getAttribute('s'), this.getAttribute('a'))">신청하기</button>
-                    <div id="peopleCount" th:if="${programInfo.peopleNum} != -1"></div>
+            <div id="appDiv">
+                <div th:if="${#dates.createToday().compareTo(programInfo.startDate) >= 0} and ${programInfo.endDate.compareTo(#dates.createToday()) >= 0} and !${#authorization.expression('hasRole(''' + 'BIZ' + ''')')}" class="row justify-content-end" style="padding-right: 10px; padding-top: 20px">
+                    <div class="col" id="peopleCount" th:if="${programInfo.peopleNum} != -1"></div>
+                    <button class="col-3 btn rounded-2" type="button" th:a="${#authorization.expression('isAuthenticated()')}" th:s="${programInfo.programNum}" onclick="openPopup(this.getAttribute('s'), this.getAttribute('a'))">신청하기</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <hr>
+    <div class="infoMenu">
+        <div><h5 class="activeDiv">상세정보</h5></div>
+        <div><h5>Q&A</h5></div>
+    </div>
     <div id="programContents">
-        <h5>상세정보</h5>
         <div th:utext="${programInfo.contents}"></div>
     </div>
 
@@ -95,7 +128,21 @@
         }
     });
 </script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script th:inline="javascript">
+
+    $(document).ready(function() {
+        $(".infoMenu>div>h5").click(function() {
+            $(".infoMenu>div>h5").removeClass("activeDiv");
+            $(this).addClass("activeDiv");
+        });
+
+        $("#selectDate > li").click(function() {
+            $("#selectDate > li").removeClass("activeli");
+            $(this).addClass("activeli");
+        });
+    });
+
     let sDate;
     let sTime;
 
@@ -107,18 +154,21 @@
         for (let i = 0; i < list.length; i++) {
             if(date == list[i].viewingDate) {
                 let tt = document.createElement("li");
-                let a = document.createElement("a")
                 tt.className = "list-group-item";
-                a.innerText = list[i].viewingTime;
-                a.onclick = function selectedTime() {
+                tt.innerText = list[i].viewingTime;
+                tt.onclick = function selectedTime() {
                     sTime = this.innerText;
                 };
-                tt.appendChild(a);
                 u.appendChild(tt);
             }
         }
         if([[${#dates.createToday().compareTo(programInfo.startDate) >= 0} and ${programInfo.endDate.compareTo(#dates.createToday()) >= 0}]])
             u.addEventListener("click", showPeopleCount);
+
+        $("#selectTime > li").click(function() {
+            $("#selectTime > li").removeClass("activeli");
+            $(this).addClass("activeli");
+        });
     }
 
     function openPopup(num, a) {
@@ -131,9 +181,9 @@
                 let url = "/booking/" + num;
                 let width;
                 if([[${chSC}]])
-                    width = "1000px";
+                    width = "1025px";
                 else
-                    width = "520px";
+                    width = "545px";
 
                 window.open(url, "예약", `width=${width}, height=535px`);
             }
@@ -177,12 +227,13 @@
                 if ([[${programInfo.peopleNum}]] === count) {
                     iHtml = "<span class='badge bg-secondary'>인원 마감</span>";
                 } else
-                    iHtml = "<span>" + count + "/" + [[${programInfo.peopleNum}]] + "</span>";
+                    iHtml = "<span>(잔여 " + ([[${programInfo.peopleNum}]] - count) + "명)</span>";
                 document.getElementById("peopleCount").innerHTML = iHtml;
             })
         }
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
 </body>
 </html>
