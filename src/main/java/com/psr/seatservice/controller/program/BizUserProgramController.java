@@ -96,7 +96,6 @@ public class BizUserProgramController {
                                     @RequestParam(value ="deleteFile", required = false) List<String> deleteFiles,
                                     @RequestParam(value ="deleteFile2", required = false) List<String> deleteFiles2) throws IOException {
         if(request.getSeatingChart().isEmpty()){request.setSeatingChart(null);}
-        System.out.println("TEst: "+ request.getSeatingChart());
         programService.updateProgramInfo(programNum, request);
         String savePath = System.getProperty("user.dir");
         //1. 변경 안하는 경우 - files files.get(0).getOriginalFilename().equals("")), deleteFiles O, 삭제X 추가X @
