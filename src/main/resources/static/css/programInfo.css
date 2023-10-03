@@ -64,12 +64,44 @@ i {
     color: white;
     font-weight: bold;
 }
-#appDiv button:hover {
-    background-color: #618264;
-}
 .activeli {
     background-color: #E4E4D0;
 }
 #peopleCount {
     padding-top: 30px;
+}
+.hide {
+    display: none;
+}
+.card-body button {
+    width: 100px;
+    font-weight: bold;
+}
+.card-body button:hover {
+    background-color: #618264 !important;
+}
+.card {
+    margin-bottom: 10px;
+}
+
+.bi-trash-fill {
+    float: right;
+}
+.showEnterAnswerBtn {
+    margin-bottom: 5px;
+}
+.bg-success {
+    background-color: #618264 !important;
+}
+.answerDiv {
+    margin-top: 5px;
+    background-color: #f8f9fa;
+    padding: 5px;
+    border: solid #dee2e6 1px;
+}
+.showAnswerBtn {
+    margin-top: 5px;
+}
+#qnaList p {
+    margin-bottom: 0;
 }

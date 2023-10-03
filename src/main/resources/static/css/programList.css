@@ -33,9 +33,26 @@ p {
     border-bottom-right-radius: 5px;
 }
 .searchDiv {
-    width: 300px;
+    width: 280px;
+    height: 35px;
     float: right;
 }
 input[type=text] {
-    width: 265px;
+    height: 100%;
+}
+
+.menu {
+    width: 100px;
+    height: 100%;
+    float: left;
+    padding: 5px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.areaSelect {
+    width: 200px;
+    height: 35px;
+    float: right;
+    margin-right: 10px;
 }

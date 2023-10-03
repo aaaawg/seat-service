@@ -41,7 +41,6 @@ public class ProgramBooking {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     @CreatedDate
     private Date bookingDate;
 

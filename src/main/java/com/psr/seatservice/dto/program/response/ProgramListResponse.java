@@ -14,6 +14,8 @@ public class ProgramListResponse {
     private String type;
     private String place;
     private String filename;
+    private String target;
+    private String targetDetail;
 
     public ProgramListResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -24,7 +26,7 @@ public class ProgramListResponse {
         this.place = program.getPlace();
     }
 
-    public ProgramListResponse(Long programNum, String title, Date startDate, Date endDate, String type, String place, String filename) {
+    public ProgramListResponse(Long programNum, String title, Date startDate, Date endDate, String type, String place, String filename, String target, String targetDetail) {
         this.programNum = programNum;
         this.title = title;
         this.startDate = startDate;
@@ -32,5 +34,7 @@ public class ProgramListResponse {
         this.type = type;
         this.place = place;
         this.filename = filename;
+        this.target = target;
+        this.targetDetail = targetDetail;
     }
 }

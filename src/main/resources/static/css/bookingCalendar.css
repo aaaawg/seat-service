@@ -1,5 +1,6 @@
 .activeBtn {
-    background-color: #ffc107 !important;
+    background-color: #E4E4D0 !important;
+    border: solid rgba(0, 0, 0, 0.12) 1px !important;
 }
 #viewingDate {
     width: 280px;

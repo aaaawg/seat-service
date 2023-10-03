@@ -1,6 +1,7 @@
 package com.psr.seatservice.dto.program.response;
 
 import com.psr.seatservice.domian.program.Program;
+import com.psr.seatservice.domian.user.User;
 import lombok.Getter;
 
 import java.util.Date;
@@ -19,6 +20,7 @@ public class ProgramInfoResponse {
     private int peopleNum;
     private String contents; //상세정보
     private String userPhone;
+    private String userId;
 
     public ProgramInfoResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -32,5 +34,6 @@ public class ProgramInfoResponse {
         this.peopleNum = program.getPeopleNum();
         this.contents = program.getContents();
         this.userPhone = program.getUser().getPhone();
+        this.userId = program.getUser().getUserId();
     }
 }

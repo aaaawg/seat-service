@@ -25,7 +25,8 @@
             <table class="table table-borderless">
                 <tr>
                     <th style="width: 15%">대상</th>
-                    <td th:text="${programInfo.target} == '제한없음'? ${programInfo.target} : ${programInfo.targetDetail}"></td>
+                    <td th:if="${programInfo.target} == '직접입력'" th:text="${programInfo.targetDetail}"></td>
+                    <td th:unless="${programInfo.target} == '직접입력'" th:text="${programInfo.target} == '제한없음'? ${programInfo.target} : ${programInfo.targetDetail} + ' 거주'"></td>
                 </tr>
                 <tr>
                     <th>장소</th>
@@ -37,7 +38,7 @@
                 </tr>
                 <tr>
                     <th>신청기간</th>
-                    <td th:text="${programInfo.startDate} + ' ~ ' + ${programInfo.endDate}"></td>
+                    <td th:text="${#dates.format(programInfo.startDate,'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(programInfo.endDate, 'yyyy.MM.dd')}"></td>
                 </tr>
                 <tr>
                     <th>문의</th>
@@ -75,21 +76,87 @@
     </div>
 
     <div class="infoMenu">
-        <div><h5 class="activeDiv">상세정보</h5></div>
-        <div><h5>Q&A</h5></div>
-    </div>
-    <div id="programContents">
-        <div th:utext="${programInfo.contents}"></div>
+        <div><h5 class="activeDiv pDetail">상세정보</h5></div>
+        <div><h5 class="qnaDetail" id="infoQna">Q&A</h5></div>
     </div>
 
-    <hr>
-    <div th:if="${programInfo.type == '오프라인'}">
-        <h5>장소</h5>
-        <div id="map" style="width:400px; height:300px;"></div>
-    </div>
+    <div id="infoC">
+        <div class="pDetail">
+            <div id="programContents">
+                <div th:utext="${programInfo.contents}"></div>
+            </div>
+            <hr>
+            <div th:if="${programInfo.type == '오프라인'}">
+                <h5>장소</h5>
+                <div id="map" style="width:400px; height:300px;"></div>
+            </div>
+        </div>
 
-    <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">수정</button>
-    <button th:onclick="|location.href='@{/program/{programNum}(programNum=${programInfo.programNum})}/formEdit'|" type="button">신청폼 수정</button>
+        <div class="qnaDetail hide">
+            <div class="card" sec:authorize="isAuthenticated()">
+                <div class="input-group card-body">
+                    <textarea class="form-control" rows="2" id="qnaContent"></textarea>
+                    <button class="btn btn-outline-secondary" type="button" onclick="addQnA()">등록</button>
+                </div>
+                <div class="card-footer text-end">
+                    <input type="checkbox" class="form-check-input" id="chSecret">
+                    <label class="form-check-label" for="chSecret">비밀글</label>
+                </div>
+            </div>
+
+            <div id="qnaList">
+                <th:block th:each="qna: ${qnaList}">
+                    <div>
+                        <span th:if="${qna.answer} == null" class="badge bg-secondary">미답변</span>
+                        <span th:unless="${qna.answer} == null" class="badge bg-secondary">답변완료</span>
+                        <span th:if="${qna.applicant}" class="badge bg-success">신청자</span>
+                    </div>
+                    <div>
+                        <input type="hidden" class="qnaNum" th:value="${qna.qnaNum}">
+                        <div th:if="${qna.secret}">
+                            <div th:if="${programInfo.userId} == ${#authentication.name} or ${qna.writer} == ${#authentication.name}">
+                                <input type="hidden" class="qnaNum" th:value="${qna.qnaNum}">
+                                <i class="bi bi-lock-fill"></i>
+                                <p th:utext="${qna.content}"></p>
+                                <span th:text="${#dates.format(qna.createDate,'yyyy.MM.dd HH:mm')}"></span><i th:if="${qna.writer} == ${#authentication.name}" class="bi bi-trash-fill" onclick="deleteQna(this)"></i>
+                                <br>
+                                <button class="showAnswerBtn btn btn-outline-secondary btn-sm" th:if="${qna.answer} != null">답변</button>
+
+                                <div class="answerDiv rounded-2" th:if="${qna.answer} != null">
+                                    <p th:utext="${qna.answer}"></p>
+                                    <span th:text="${#dates.format(qna.answerDate,'yyyy.MM.dd HH:mm')}"></span>
+                                </div>
+                            </div>
+                            <div th:unless="${programInfo.userId} == ${#authentication.name} or ${qna.writer} == ${#authentication.name}"><i class="bi bi-lock-fill"></i>비밀글입니다.</div>
+                        </div>
+                        <div th:unless="${qna.secret}">
+                            <input type="hidden" class="qnaNum" th:value="${qna.qnaNum}">
+                            <p th:utext="${qna.content}"></p>
+                            <span th:text="${#dates.format(qna.createDate,'yyyy.MM.dd HH:mm')}"></span><i th:if="${qna.writer} == ${#authentication.name}" class="bi bi-trash-fill" onclick="deleteQna(this)"></i>
+                            <br>
+                            <button class="showAnswerBtn btn btn-sm btn-outline-secondary" th:if="${qna.answer} != null">답변</button>
+                            <div class="answerDiv rounded-2" th:if="${qna.answer} != null">
+                                <p th:utext="${qna.answer}"></p>
+                                <span th:text="${#dates.format(qna.answerDate,'yyyy.MM.dd HH:mm')}"></span>
+                            </div>
+                        </div>
+                        <div th:if="${qna.answer} == null and ${programInfo.userId} == ${#authentication.name}">
+                            <button class="showEnterAnswerBtn btn btn-outline-secondary btn-sm">답변등록</button>
+                            <div class="input-group enterAnswerDiv">
+                                <textarea class="form-control" placeholder="답변을 입력해주세요." rows="2" id="qnaAnswer"></textarea>
+                                <button class="btn btn-outline-secondary" type="button" onclick="addAnswer(this)">등록</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </th:block>
+            </div>
+        </div>
+    </div>
+    <div th:if="${programInfo.userId} == ${#authentication.name}">
+        <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button" sec:authorize="hasRole('BIZ')">수정</button>
+        <button th:onclick="|location.href='@{/program/{programNum}(programNum=${programInfo.programNum})}/formEdit'|" type="button" sec:authorize="hasRole('BIZ')">신청폼 수정</button>
+    </div>
 </div>
 <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=@&libraries=services"></script>
 <script th:inline="javascript">
@@ -134,17 +201,40 @@
     $(document).ready(function() {
         $(".infoMenu>div>h5").click(function() {
             $(".infoMenu>div>h5").removeClass("activeDiv");
+            $("#infoC>div").removeClass("hide");
+
             $(this).addClass("activeDiv");
+
+            if($(this).hasClass("pDetail")) {
+                $("#infoC > .qnaDetail").addClass("hide");
+            }
+            else {
+                $("#infoC > .pDetail").addClass("hide");
+            }
         });
 
         $("#selectDate > li").click(function() {
             $("#selectDate > li").removeClass("activeli");
             $(this).addClass("activeli");
         });
+
+        $(".answerDiv").hide();
+        $(".enterAnswerDiv").hide();
+
+        $(".showAnswerBtn").click(function () {
+            $(this).next(".answerDiv").toggle();
+        })
+
+        $(".showEnterAnswerBtn").click(function () {
+            $(".enterAnswerDiv").hide();
+            $(this).next(".enterAnswerDiv").toggle();
+        });
+
     });
 
     let sDate;
     let sTime;
+    const pNum = [[${programInfo.programNum}]];
 
     function selectedDate(date) {
         sDate = date;
@@ -232,6 +322,78 @@
             })
         }
     }
+
+    function addQnA() {
+        let chValue = document.getElementById("chSecret").checked;
+        let programNum = [[${programInfo.programNum}]];
+        const content = document.getElementById("qnaContent").value;
+        let rContent = content.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
+        if(content.trim().length !== 0) {
+            fetch(`/qna/${programNum}`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "content": rContent,
+                    "secret": chValue
+                })
+            }).then((r) => {
+                if (r.ok) {
+                    alert("등록되었습니다.");
+                    document.getElementById("qnaContent").value = "";
+                    document.getElementById("chSecret").checked = false;
+                    location.replace(`/program/${pNum}`)
+                } else
+                    alert("등록에 실패하였습니다.");
+            })
+        } else {
+            alert("내용을 입력해주세요.");
+        }
+    }
+
+    function addAnswer(t) {
+        const content = document.getElementById("qnaAnswer").value;
+        let answer = content.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        const qnaNum = t.parentNode.parentNode.parentNode.querySelector(".qnaNum").value;
+        if(content.trim().length !== 0) {
+            fetch(`/answer/${qnaNum}`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "answer": answer
+                })
+            }).then((r) => {
+                if (r.ok) {
+                    alert("등록되었습니다.");
+                    location.replace(`/program/${pNum}`)
+                } else
+                    alert("등록에 실패하였습니다.");
+            })
+        } else {
+            alert("내용을 입력해주세요.");
+        }
+    }
+
+    function deleteQna(t) {
+        const a = confirm("정말 삭제하시겠습니까?");
+        const qnaNum = t.parentNode.parentNode.querySelector(".qnaNum").value;
+        if(a) {
+            fetch(`/qna/${qnaNum}`, {
+                method: "delete",
+            }).then((r) => {
+                if (r.ok) {
+                    alert("삭제되었습니다.");
+                    location.replace(`/program/${pNum}`)
+                } else
+                    alert("삭제에 실패하였습니다.");
+            })
+        }
+    }
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 

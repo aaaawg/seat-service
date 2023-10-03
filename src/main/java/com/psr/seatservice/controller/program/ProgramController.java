@@ -12,6 +12,7 @@ import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.user.request.BookingRequest;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
+import com.psr.seatservice.service.program.QnaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,16 +26,19 @@ import java.util.List;
 public class ProgramController {
     private final ProgramService programService;
     private final FilesService filesService;
+    private final QnaService qnaService;
 
-    public ProgramController(ProgramService programService, FilesService filesService) {
+    public ProgramController(ProgramService programService, FilesService filesService, QnaService qnaService) {
         this.programService = programService;
         this.filesService = filesService;
+        this.qnaService = qnaService;
     }
 
     @GetMapping("/")
     public String main(Model model) {
         List<ProgramListResponse> programs = programService.getProgramList("main");
         model.addAttribute("programs", programs);
+
         return "program/programList";
     }
 
@@ -58,6 +62,7 @@ public class ProgramController {
         Program program = programService.getProgramInfo(programNum);
         List<FileDto> list = filesService.getFileByProNum(program.getProgramNum());
         FileDto fileDto = new FileDto();
+        List<QnaListResponse> qnaList = qnaService.getQnaList(program.getProgramNum());
 
         if(list != null) {
             fileDto.setFilename("InImage");
@@ -72,6 +77,8 @@ public class ProgramController {
         model.addAttribute("file", fileDto);
         model.addAttribute("programViewing", viewing);
         model.addAttribute("chSC", ch);
+        model.addAttribute("qnaList", qnaList);
+
         return "program/programInfo";
     }
 

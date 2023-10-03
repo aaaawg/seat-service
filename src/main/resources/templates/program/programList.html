@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
@@ -9,11 +10,27 @@
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
 <br>
-<div class="input-group searchDiv" style="margin-right: 20px">
-    <input class="form-control h-25" type="text" placeholder="검색어 입력" id="enterKeyword">
-    <button type="button" id="searchBtn" th:style="|background-image: url(@{/img/icon-search.png})|" onclick="search()"></button>
-</div>
 <div class="container" style="max-width: 1400px; clear: both">
+    <div style="height: 50px;">
+        <div>
+            <div class="menu"><h5>전체</h5></div>
+            <div class="menu"><h5>누구나</h5></div>
+            <div class="menu"><h5>지역</h5></div>
+        </div>
+
+        <div class="input-group searchDiv" style="margin-right: 20px;">
+            <input class="form-control" type="text" placeholder="검색어 입력" id="enterKeyword">
+            <button type="button" id="searchBtn" th:style="|background-image: url(@{/img/icon-search.png})|" onclick="search()"></button>
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+            <select class="form-select areaSelect">
+                <option disabled selected>내 지역 보기</option>
+                <option></option>
+                <option></option>
+            </select>
+        </div>
+    </div>
     <th:block th:each="program: ${programs}" th:if="!${#dates.createToday().after(program.endDate)}">
         <div class="p-3 mx-1 my-2 bg-light text-dark rounded-3 row pDiv" style="width: 250px; height: 400px" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
             <div class="imgDiv">
@@ -24,6 +41,9 @@
                     <span class="badge bg-secondary" th:if="${#dates.createToday().before(program.startDate)}">예정</span>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
+
+                    <span class="badge bg-secondary" th:if="${program.target} != '직접입력' and ${program.target} == '지역'" th:text="${program.targetDetail}"></span>
+                    <span class="badge bg-secondary" th:unless="!${program.target} != '직접입력' and ${program.target} == '지역'">누구나</span>
                 </div>
             </div>
             <div id="textDiv">
