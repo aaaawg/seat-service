@@ -48,10 +48,10 @@
         <div>
             <label for="endDate">모집 인원</label>
             <label th:if="${bookingCount <= 0}"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
-            <input  type="text" id="peopleNum" name="peopleNum" th:value="${programInfo.peopleNum}" onchange="writeNum()" />
-            <button th:if="${programInfo.seatCol != null}" type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
-            <button th:unless="${programInfo.seatCol != null}" type="button" id="isNotSeatColSelect" onclick="openPopup()">좌석 추가</button>
-            <button th:if="${programInfo.seatCol != null}" type="button" id="deleteChart" onclick="deleteSeatChart()">좌석 삭제</button>
+            <input  type="text" id="peopleNum" name="peopleNum" th:value="${programInfo.peopleNum}" onchange="writeNum(-5)" />
+            <button type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
+            <button type="button" id="isNotSeatColSelect" onclick="openPopup()">좌석 추가</button>
+            <button type="button" id="deleteChart" th:attr="bookCount=${bookingCount}"onclick="deleteSeatChart(this.getAttribute('bookCount'))">좌석 삭제</button>
             <div id="popupChart" class="container"></div>
             <input type="hidden" id="seatingChart" name="seatingChart" th:value="${programInfo.seatingChart}" />
             <input type="hidden" id="seatCol" name="seatCol" th:value="${programInfo.seatCol}" />
@@ -87,9 +87,21 @@
 </div>
 <script th:inline="javascript">
 var programInfo = /*[[${programInfo}]]*/ null;
-var file = /*[[${file}]]*/ null;
+var fileList = /*[[${fileList}]]*/ null;
 var bookingCount = /*[[${bookingCount}]]*/ 0;
-if(file.valueOf.length === 0) {document.getElementById("deleteAllFile").style.display = "none";}
+if(fileList.length === 0) {document.getElementById("deleteAllFile").style.display = "none";}
+
+//무제한 체크
+if(programInfo.peopleNum === -1){
+    document.getElementById("peopleChBox").checked = true;
+    document.getElementById("peopleNum").style.display = "none";
+}
+//disabled 변경
+if(bookingCount > 0){
+    document.getElementById("drop").disabled = true;
+    document.getElementById("offline").disabled = true;
+    document.getElementById("online").disabled = true;
+}
 
 var programPlace = programInfo.place;
 let words = programPlace.split(',');
@@ -99,21 +111,31 @@ document.getElementById("detailAddress").value = words[1];
 
 if (programInfo !== null) {
     const type = programInfo.type;
-    console.log("type: "+type);
     if(type === "오프라인"){
          document.getElementById("offline").checked = true;
          document.getElementById("on").style.display = "none";
+         if(programInfo.seatingChart.value === null){
+            document.getElementById("isNotSeatColSelect").style.display = "inline";
+            document.getElementById("isSeatColSelect").style.display = "none";
+            document.getElementById("deleteChart").style.display = "none";
+         }else{
+            document.getElementById("isNotSeatColSelect").style.display = "none";
+            document.getElementById("isSeatColSelect").style.display = "inline";
+            document.getElementById("deleteChart").style.display = "inline";
+         }
     }else{
         document.getElementById("online").checked = true;
         document.getElementById("off").style.display = "none";
+        document.getElementById("isNotSeatColSelect").style.display = "none";
+        document.getElementById("isSeatColSelect").style.display = "none";
+        document.getElementById("deleteChart").style.display = "none";
     }
 }
+
 var people = document.getElementById("peopleNum");
 if(programInfo.seatCol !== null){
     people.readOnly=true;
-    people.style.backgroundColor = "#f8f8f8";
-    people.style.color = "#545454";
-
+    people.disabled = true;
 }
 if(programInfo.peopleNum === -1){
     people.value = "무제한";
@@ -237,16 +259,17 @@ if (programInfo.target === "제한없음") {
         }
 
         document.getElementById("seatingChart").value = chart;
-        console.log("test: "+popupSeat);
-        console.log("test: "+popupSeatArr);
-        console.log("test: "+popupSeatCol);
         document.getElementById("seatCol").value = popupSeatCol;
 
         let result = (popupSeatArr.length - exSeatCount);
-        console.log("result: "+ result);
 
         document.getElementById("peopleNum").readOnly = true;
+        document.getElementById("peopleNum").disabled = true;
+        document.getElementById('peopleNum').style.display = "inline";
         document.getElementById("peopleNum").value = result;
+        document.getElementById("peopleChBox").checked = false;
+        document.getElementById('deleteChart').style.display = "inline";
+        writeNum(result);
     });
     }
     }
@@ -255,14 +278,17 @@ if (programInfo.target === "제한없음") {
         popupSeatCol = col;
     }
 
-    function writeNum(){
+    function writeNum(num){
+        if(num !== -5){
+            document.getElementById('peopleNum').value = num;
+        }else{
         var bookingCount = /*[[${bookingCount}]]*/ 0;
         let value = document.getElementById('peopleNum').value;
-        console.log("value test"+ value);
 
         if(value < bookingCount){
             alert(bookingCount+"이상의 숫자를 입력해주세요.");
             document.getElementById('peopleNum').value = bookingCount;
+        }
         }
     }
 </script>

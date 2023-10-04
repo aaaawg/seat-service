@@ -26,20 +26,27 @@ document.getElementById('updateForm').addEventListener('submit', function(event)
 function check(){
     const place1 = document.getElementById("detailAddress").value;
     const place2 = document.getElementById("address").value;
-var formData = new FormData(document.getElementById('updateForm'));
-if(formData===null){
-    console.log("null");
-    return false;
-}
 
-    if( place1 !== '온라인 관람' && (place1 === '' || place2 === '')){
-        alert("장소를 입력해주세요.");
-        return false;
-    }
-    if (document.getElementById("peopleNum").value === '0' || document.getElementById("peopleNum").value === '') {
-        // 원하는 조건에 맞지 않으면 제출을 막습니다.
-        alert("모집 인원은 0명 이상이어야 합니다.");
-        return false;
+    document.getElementById("peopleNum").readOnly = false;
+    document.getElementById("peopleNum").disabled = false;
+    document.getElementById("drop").disabled = false;
+    document.getElementById("offline").disabled = false;
+    document.getElementById("online").disabled = false;
+
+    if(document.getElementById("offline").checked === true){
+        if(place1 === '' || place2 === ''){
+            alert("장소를 입력해주세요.");
+                    return false;
+        }
+        if (document.getElementById("peopleNum").value === '0' || document.getElementById("peopleNum").value === '') {
+            alert("모집 인원은 0명 이상이어야 합니다.");
+            return false;
+        }
+    }else{
+        if (document.getElementById("peopleNum").value === '0') {
+            alert("모집 인원은 0명 이상이어야 합니다.");
+            return false;
+        }
     }
     return true;
 }
@@ -59,18 +66,16 @@ function showPlaceInput(type, result) {
         document.getElementById("off").style.display = "none";
         document.getElementById("on").style.display = "block";
         document.getElementById("peopleNum").readOnly=false;
+        document.getElementById("peopleNum").disabled = false;
         document.getElementById("seatingChart").value = '';
         document.getElementById("searchAddr").style.display = "none";
         document.getElementById("searchAddr").readOnly=true;
         document.getElementById("detailAddress").style.display = "none";
-        if(document.getElementById("isSeatColSelect") != null){
-            document.getElementById("isSeatColSelect").style.display = "none";
-        }else{
-            document.getElementById("isNotSeatColSelect").style.display = "none";
-        }
-        if(document.getElementById("deleteChart") != null){
-            document.getElementById("deleteChart").style.display = "none";
-        }
+
+        document.getElementById("isSeatColSelect").style.display = "none";
+        document.getElementById("isNotSeatColSelect").style.display = "none";
+        document.getElementById("deleteChart").style.display = "none";
+        document.getElementById("peopleNum").value = '';
     }
     else {
     //오프라인
@@ -80,6 +85,19 @@ function showPlaceInput(type, result) {
         document.getElementById("searchAddr").style.display = "inline";
         document.getElementById("detailAddress").style.display = "inline";
         document.getElementById("detailAddress").value = '';
+
+        const checkSeat = document.getElementById("seatingChart");
+        console.log(checkSeat.value);
+        if(checkSeat.value === ""){
+            document.getElementById("isNotSeatColSelect").style.display = "inline";
+            document.getElementById("isSeatColSelect").style.display = "none";
+            document.getElementById("deleteChart").style.display = "none";
+        }else {
+            document.getElementById("isSeatColSelect").style.display = "inline";
+            document.getElementById("deleteChart").style.display = "inline";
+            document.getElementById("isNotSeatColSelect").style.display = "none";
+        }
+
     }
     }
 }
@@ -93,38 +111,50 @@ function peopleNumValue() {
     if(ch.checked) {
         document.getElementById("peopleNum").style.display = "none";
         document.getElementById("peopleNum").disabled = true;
+        document.getElementById("peopleNum").value = '';
 
-        if(document.getElementById("deleteChart") != null){
-           document.getElementById("deleteChart").style.display = "none";
-        }
-        if(document.getElementById("isSeatColSelect") != null){
-            document.getElementById("isSeatColSelect").style.display = "none";
-        }else{
-            document.getElementById("isNotSeatColSelect").style.display = "none";
-        }
+        document.getElementById("deleteChart").style.display = "none";
+
+        document.getElementById("isSeatColSelect").style.display = "none";
+        document.getElementById("isNotSeatColSelect").style.display = "none";
     }
     else {
         document.getElementById("peopleNum").style.display = "inline";
         document.getElementById("peopleNum").disabled = false;
-        if(document.getElementById("deleteChart") != null){
-                   document.getElementById("deleteChart").style.display = "inline";
+
+        const checkSeat = document.getElementById("seatingChart");
+        if(document.getElementById("offline").checked === true){
+                if(checkSeat.value === ""){
+                    document.getElementById("isNotSeatColSelect").style.display = "inline";
+                    document.getElementById("isSeatColSelect").style.display = "none";
+                    document.getElementById("deleteChart").style.display = "none";
+                }else {
+                    document.getElementById("isSeatColSelect").style.display = "inline";
+                    document.getElementById("deleteChart").style.display = "inline";
+                    document.getElementById("isNotSeatColSelect").style.display = "none";
                 }
-        if(document.getElementById("isSeatColSelect") != null){
-             document.getElementById("isSeatColSelect").style.display = "inline";
         }else{
-             document.getElementById("isNotSeatColSelect").style.display = "inline";
+                document.getElementById("isSeatColSelect").style.display = "none";
+                document.getElementById("isNotSeatColSelect").style.display = "none";
+                document.getElementById("deleteChart").style.display = "none";
+                document.getElementById("peopleNum").value = '';
         }
     }
 }
 
-function deleteSeatChart(){
+function deleteSeatChart(bookingCnt){
+    if(bookingCnt > 0){
+        alert("신청자가 존재하므로 변경이 불가능합니다.");
+    }else{
      document.getElementById("seatingChart").value = '';
      document.getElementById("peopleNum").value = 0;
      document.getElementById("peopleNum").readOnly = false;
+     document.getElementById("peopleNum").disabled = false;
      document.getElementById("peopleNum").style.backgroundColor = "white";
      document.getElementById("peopleNum").style.color ="black";
      document.getElementById("seatCol").value = '';
-     console.log("del");
+     document.getElementById('deleteChart').style.display = "none";
+     }
 }
 
 let addr;
