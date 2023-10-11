@@ -74,8 +74,9 @@ public class BizUserProgramController {
 
         FileDto fileDto;
         List<FileDto> list = fileService.getFileByProNum(program.getProgramNum());
+
         fileDto = new FileDto();
-        if(list != null) {
+        if(!list.isEmpty()) {
             fileDto.setFilename("InImage");
             model.addAttribute("fileList", list);
         } else {

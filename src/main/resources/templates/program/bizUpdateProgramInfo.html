@@ -68,35 +68,44 @@
                         <input multiple="multiple" name="file" type="file" class="custom-file-input" id="customFile" onchange="displaySelectedImage(event)"/>
                         <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
                     </div>
+                    <div>
+                        <button type="button" id="deleteAllFile" onclick="deleteAll()">파일 삭제</button>
+                    </div>
                 </div>
+                <div class="fileAddDiv">
                 <div class="album" style="display: none;">
-                <div id="image_container"></div>
+                    <div id="image_container"></div>
                 </div>
                 <button type="button" class="previous" style="display: none;" >←</button>
                 <button type="button" class="next" style="display: none;" >→</button>
+                </div>
             </div>
-            <div>
-                <button type="button" id="deleteAllFile" onclick="deleteAll()">파일 삭제</button>
-            </div>
+
             <div id="origImg">
-                <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
+                <span th:if="${file.filename == 'NoInImage'}"></span>
                 <span th:unless="${file.filename == 'NoInImage'}">
-                <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" alt="Selected Image"/>
-                <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile" />
+                    <div class="album">
+                    <div id="origImage_container">
+                        <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" alt="Selected Image"/>
+                        <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile" />
+                    </div>
+                    </div>
+                    <button type="button" class="previousOrig">←</button>
+                    <button type="button" class="nextOrig">→</button>
                 </span>
             </div>
         </div>
         <div id="deleteFile2">
             <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile2" />
         </div>
-        <button type="submit" class="btn btn-success">수정하기</button>
+        <button type="submit" class="button button--shikoba button--text-medium button--round-l button--inverted"><span>수정하기</span></button>
     </form>
 </div>
 <script th:inline="javascript">
 var programInfo = /*[[${programInfo}]]*/ null;
 var fileList = /*[[${fileList}]]*/ null;
 var bookingCount = /*[[${bookingCount}]]*/ 0;
-if(fileList.length === 0) {document.getElementById("deleteAllFile").style.display = "none";}
+if(fileList === null) {document.getElementById("deleteAllFile").style.display = "none";}
 
 //무제한 체크
 if(programInfo.peopleNum === -1){
