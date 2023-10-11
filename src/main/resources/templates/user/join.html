@@ -1,9 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <div th:replace="/layout/head.html :: header"></div>
+<head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/addUser.css}" href="../css/addUser.css" rel="stylesheet">
-    <title>회원가입</title>
 </head>
 <body>
 <div class="container" style="max-width: 400px">

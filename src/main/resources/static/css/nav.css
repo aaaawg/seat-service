@@ -1,0 +1,16 @@
+.searchDiv {
+    width: 280px;
+    height: 35px;
+}
+input[type=text] {
+    height: 100%;
+}
+#searchBtn {
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    border: solid 1px #c9c9c9;
+    background-color: #ffffff;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

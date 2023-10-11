@@ -77,15 +77,20 @@ public class ProgramService {
         }
     }
 
-    public List<ProgramListResponse> getProgramList(String t) {
+    public List<ProgramListResponse> getProgramList(String type, String target) {
         List<ProgramListResponse> programs;
 
-        if(t.equals("online")) {
-            programs = programRepository.findAllByType("온라인");
-        } else if (t.equals("offline")) {
-            programs = programRepository.findAllByType("오프라인");
-        } else {
-            programs = programRepository.findAllProgramAndImg();
+        if(type.equals("online") || type.equals("offline")) {
+            if(target == null)
+                programs = programRepository.findAllByType(type);
+            else
+                programs = programRepository.findAllByTarget(type, target);
+        }
+        else {
+            if(target == null)
+                programs = programRepository.findAllProgramAndImg();
+            else
+                programs = programRepository.findAllProgramAndImgByTarget(target);
         }
 
         return programs;
@@ -206,5 +211,32 @@ public class ProgramService {
 
     public Long getBookingNumCount(Long programNum){
         return programBookingRepository.countByProgramNum(programNum);
+    }
+
+    public List<ProgramListResponse> getUserAroundProgramList(String area, String target, String detail){
+        List<ProgramListResponse> programs;
+        String str;
+
+        if(target.equals("all")) {
+            //프로그램 target = 제한없음, 프로그램 진행 장소 기준 - 대면 프로그램만
+            str = (detail == null || detail.equals("01")) ? area.split(" ")[0] + "%" : area + "%";
+            programs = programRepository.findAllByTargetAndTypeAndPlaceStartsWith(target, str, "offline");
+        }
+        else {
+            //프로그램 target = 지역, 사용자 주소 = 지역
+            if(detail == null) {
+                str = area.split(" ")[0];
+                programs = programRepository.findAllByTargetAndTargetDetailAll(target, str, area);
+            }
+            else {
+                if(detail.equals("01") || detail.equals("02")) {
+                    str = (detail.equals("01")) ? area.split(" ")[0] : area;
+                    programs = programRepository.findAllByTargetAndTargetDetail(target, str);
+                }
+                else
+                    programs = null;
+            }
+        }
+        return programs;
     }
 }

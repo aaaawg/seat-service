@@ -8,7 +8,7 @@
     top: 10px;
     right: 10px;
 }
-#noImg {
+.noImg {
     width: 100%;
     height: 300px;
     background-color: #a2a2a2;
@@ -19,30 +19,44 @@ p {
 }
 .pDiv {
     display: inline-block;
+    width: 250px;
+    height: 400px;
 }
-#textDiv {
+.textDiv {
     margin-top: 3px;
+    padding: 0;
 }
-#searchBtn {
-    width: 35px;
-    height: 35px;
-    background-size: cover;
-    border: solid 1px #c9c9c9;
-    background-color: #ffffff;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+.menu {
+    text-align: center;
 }
-.searchDiv {
-    width: 280px;
-    height: 35px;
-    float: right;
-}
-input[type=text] {
+.menu div {
+    width: 100px;
     height: 100%;
+    padding: 5px;
+    text-align: center;
+    margin-right: 10px;
+    display: inline-block;
+}
+.menu h6 {
+    font-weight: bolder;
+    margin: 0;
+    padding: 5px;
+}
+.menu h6:hover {
+    color: #618264;
+}
+.rounded-pill {
+    border: solid rgba(0, 0, 0, 0.12) 1px !important;
+    color: #618264;
 }
 
-.menu {
-    width: 100px;
+.ar {
+    height: 50px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.arDiv {
+    width: 130px;
     height: 100%;
     float: left;
     padding: 5px;
@@ -50,9 +64,24 @@ input[type=text] {
     margin-right: 10px;
 }
 
-.areaSelect {
+#areaSelect {
     width: 200px;
     height: 35px;
     float: right;
     margin-right: 10px;
+}
+.activeDiv {
+    border-bottom: solid #618264 5px;
+}
+
+.textDiv span {
+    font-size: 14px;
+}
+.aroundAllDiv {
+    height: 420px;
+}
+.noImg i {
+    color: white;
+    font-size: 3rem;
+    line-height: 300px;
 }

@@ -17,9 +17,9 @@
   <form th:action method="post" enctype="multipart/form-data" id="myForm">
     <div>
       <label>구분</label>
-      <input type="radio" id="offline" name="type" value="오프라인" checked onchange="showPlaceInput(0)">
+      <input type="radio" id="offline" name="type" value="offline" checked onchange="showPlaceInput(0)">
       <label for="offline">오프라인</label>
-      <input type="radio" id="online" name="type" value="온라인" onchange="showPlaceInput(1)">
+      <input type="radio" id="online" name="type" value="online" onchange="showPlaceInput(1)">
       <label for="online">온라인</label>
     </div>
     <div>
@@ -38,9 +38,9 @@
     <div>
       <label for="drop">신청대상</label>
       <select id="drop" name="target" onchange="showArea()">
-        <option value="제한없음" selected>제한없음</option>
-        <option id="area">지역</option>
-        <option>직접입력</option>
+        <option value="all" selected>제한없음</option>
+        <option id="area" value="area">지역</option>
+        <option value="etc">직접입력</option>
       </select>
       <div id="detail" style="display: inline;"></div>
     </div>

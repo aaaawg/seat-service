@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/**","/program/**", "/login", "/join/**", "/js/**", "/css/**", "/img/**").permitAll()
                 .antMatchers("/business/**").hasRole("BIZ")
-                .antMatchers("/myPage/**").hasRole("USER")
+                .antMatchers("/myPage/**", "/around/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                     .formLogin().loginPage("/login")

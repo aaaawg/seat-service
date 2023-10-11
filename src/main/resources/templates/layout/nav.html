@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<div th:fragment="nav">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav th:fragment="nav">
+  <div class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" th:onclick="|location.href='@{/}'|">좌석예약</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,6 +18,8 @@
                 <li><a class="dropdown-item" th:href="@{/}">전체</a></li>
                 <li><a class="dropdown-item" th:href="@{/online}">온라인</a></li>
                 <li><a class="dropdown-item" th:href="@{/offline}">오프라인</a></li>
+                <li><hr class="dropdown-divider" sec:authorize="hasRole('USER')"></li>
+                <li><a class="dropdown-item" th:href="@{/around/all(detail='01')}" sec:authorize="hasRole('USER')">내 주변</a></li>
               </ul>
             </div>
           </li>
@@ -25,33 +27,39 @@
             <a class="nav-link" th:onclick="|location.href='@{/business/program}'|">프로그램 관리</a>
           </li>
         </ul>
-        <ul class="navbar-nav">
-          <li sec:authorize="isAuthenticated()" class="nav-item navbar-text" style="margin-right: 10px">
-            <span class="badge rounded-pill bg-primary" sec:authorize="hasRole('BIZ')">기업</span>
-            <span th:text="${#authentication.name} + '님'"></span>
-          </li>
-
-          <li class="nav-item dropdown" sec:authorize="hasRole('USER')">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              마이페이지
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" th:href="@{/myPage}">신청내역</a></li>
-              <li><a class="dropdown-item" href="#">정보수정</a></li>
-            </ul>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
-            <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/join}">회원가입</a>
-          </li>
-        </ul>
       </div>
+      <ul class="navbar-nav">
+        <div class="nav-item input-group searchDiv" style="margin-right: 20px;">
+          <input class="form-control" type="text" placeholder="검색어 입력" id="enterKeyword">
+          <button type="button" id="searchBtn" th:style="|background-image: url(@{/img/icon-search.png})|" onclick="search()"></button>
+        </div>
+      </ul>
+      <ul class="navbar-nav">
+        <li sec:authorize="isAuthenticated()" class="nav-item navbar-text" style="margin-right: 10px">
+          <span class="badge rounded-pill bg-primary" sec:authorize="hasRole('BIZ')">기업</span>
+          <span th:text="${#authentication.name} + '님'"></span>
+        </li>
+
+        <li class="nav-item dropdown" sec:authorize="hasRole('USER')">
+          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            마이페이지
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" th:href="@{/myPage}">신청내역</a></li>
+            <li><a class="dropdown-item" href="#">정보수정</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
+          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/join}">회원가입</a>
+        </li>
+      </ul>
     </div>
-  </nav>
-</div>
+  </div>
+</nav>
 </html>
