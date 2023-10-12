@@ -1,0 +1,22 @@
+button {
+    border: none;
+    background-color: white;
+}
+.tableBtn {
+    color: #618264;
+    border: solid rgba(0, 0, 0, 0.12) 1px;
+    width: 70px;
+    font-weight: bold;
+}
+.btnDiv button {
+    float: right;
+    background-color: #618264;
+    color: white;
+    font-weight: bolder;
+    width: 80px;
+    height: 30px;
+}
+.btnDiv {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

@@ -10,22 +10,22 @@
         <button type="button" id="user" class="userBtn" onclick="changeText(id)">개인</button>
         <button type="button" id="biz" class="userBtn" onclick="changeText(id)">기업</button>
     </row>
-    <form th:action method="post" onsubmit="userEnterData()">
+    <form th:action method="post" th:object="${user}" onsubmit="userEnterData()">
         <div>
             <label for="userId" class="form-label">아이디</label>
             <div class="input-group" id="idDiv">
-                <input class="form-control" type="text" id="userId" name="userId">
+                <input class="form-control" type="text" id="userId" name="userId" th:field="*{userId}">
                 <a class="btn text-white" onclick="checkId()" id="checkIdBtn">중복확인</a>
             </div>
             <p id="idMessage" style="color: #c00000"></p>
         </div>
         <div>
             <label for="password" class="form-label">비밀번호</label>
-            <input type="password" class="form-control" id="password" name="password">
+            <input type="password" class="form-control" id="password" name="password" th:field="*{password}">
         </div>
         <div>
             <label id="n" for="name" class="form-label">이름</label>
-            <input class="form-control" type="text" id="name" name="name">
+            <input class="form-control" type="text" id="name" name="name" th:field="*{username}">
         </div>
         <div>
             <label id="a" for="address" class="form-label">주소</label>
@@ -34,7 +34,7 @@
                 <a class="btn text-white" id="searchAddr" onclick="findAddress()">주소찾기</a>
             </div>
             <input type="text" class="form-control" id="detailAddress" placeholder="상세주소">
-            <input type="hidden" id="fullAddress" name="address">
+            <input type="hidden" id="fullAddress" name="address" th:field="*{address}">
         </div>
         <div>
             <label id="p" for="phone1" class="form-label">휴대폰번호</label>
@@ -45,7 +45,7 @@
                 <span class="input-group-text">-</span>
                 <input class="form-control" type="text" id="phone3" oninput="checkNumber(id)">
             </div>
-            <input type="hidden" id="phone" name="phone">
+            <input type="hidden" id="phone" name="phone" th:field="*{phone}">
         </div>
         <div>
             <label for="email1" class="form-label">이메일</label>
@@ -53,7 +53,7 @@
                 <input class="form-control" type="text" id="email1">
                 <span class="input-group-text">@</span>
                 <input class="form-control" type="text" id="email2">
-                <input type="hidden" id="email" name="email">
+                <input type="hidden" id="email" name="email" th:field="*{email}">
                 <a class="btn text-white" id="check" onclick="sendEmail()">인증하기</a>
             </div>
             <p id="sendEmailMessage"></p>
@@ -62,6 +62,7 @@
         <button type="submit" class="btn text-white" style="width: 376px; height: 50px;">가입하기</button>
     </form>
 
+    <!--이메일 인증-->
     <div class="modal fade" id="enterNumberModal" tabindex="-1" aria-labelledby="enterNumberModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

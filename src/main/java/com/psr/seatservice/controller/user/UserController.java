@@ -1,6 +1,5 @@
 package com.psr.seatservice.controller.user;
 
-import com.psr.seatservice.SessionConst;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.user.request.AddUserRequest;
 import com.psr.seatservice.dto.user.request.IdCheckRequest;
@@ -33,7 +32,8 @@ public class UserController {
     }
 
     @GetMapping("/join")
-    public String join() {
+    public String join(Model model) {
+        model.addAttribute("user", new User());
         return "user/join";
     }
 

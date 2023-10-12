@@ -19,7 +19,7 @@ public class ProgramInfoResponse {
     private String type;
     private int peopleNum;
     private String contents; //상세정보
-    private String userPhone;
+    private String userPhone; //문의 번호
     private String userId;
 
     public ProgramInfoResponse(Program program) {

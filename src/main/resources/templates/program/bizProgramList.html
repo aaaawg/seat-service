@@ -2,10 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/head :: head(~{::link})">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link th:href="@{/css/bizPage.css}" href="../css/bizPage.css" rel="stylesheet">
 </head>
 <body>
 <div class="container" style="max-width: 800px">
-    <button th:onclick="|location.href='@{/business/program/add}'|" type="button">추가</button>
+    <div class="btnDiv">
+        <button class="rounded-2" th:onclick="|location.href='@{/business/program/add}'|" type="button">추가</button>
+    </div>
     <div>
         <table class="table">
             <thead>
@@ -18,14 +21,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${programs}">
-                <td th:text="${item.title}">프로그램명</td>
-                <td th:text="${#dates.format(item.createDate, 'yyyy-MM-dd HH:mm:ss')}">등록일</td>
-                <td th:if="${#dates.createToday().before(item.startDate)}">예정</td>
-                <td th:if="${#dates.createToday().after(item.endDate)}">마감</td>
-                <td th:if="${#dates.createToday().compareTo(item.startDate) >= 0} and ${item.endDate.compareTo(#dates.createToday()) >= 0}">진행</td>
-                <td><button th:onclick="|location.href='@{/program/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
-                <td><button th:onclick="|location.href='@{/business/program/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
+            <tr th:each="program : ${programs}">
+                <td th:text="${program.title}">프로그램명</td>
+                <td th:text="${#dates.format(program.createDate, 'yyyy-MM-dd HH:mm:ss')}">등록일</td>
+                <td th:if="${#dates.createToday().before(program.startDate)}">예정</td>
+                <td th:if="${#dates.createToday().after(program.endDate)}">마감</td>
+                <td th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</td>
+                <td><button class="rounded-pill tableBtn btn-sm" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|" type="button">보기</button></td>
+                <td><button class="rounded-pill tableBtn btn-sm" th:onclick="|location.href='@{/business/program/{programNum}(programNum=${program.programNum})}'|" type="button">보기</button></td>
             </tr>
             </tbody>
         </table>

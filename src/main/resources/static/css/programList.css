@@ -45,8 +45,9 @@ p {
 .menu h6:hover {
     color: #618264;
 }
-.rounded-pill {
-    border: solid rgba(0, 0, 0, 0.12) 1px !important;
+
+.activeMenu {
+    border: solid rgba(0, 0, 0, 0.12) 1px;
     color: #618264;
 }
 
