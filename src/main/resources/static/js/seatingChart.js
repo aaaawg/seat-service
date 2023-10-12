@@ -24,6 +24,7 @@ function createSeatingChart() {
     let c = document.querySelectorAll(".seatBtn");
     for (let i = 0; i < c.length; i++) {
         c[i].addEventListener("click",function (i) {
+        console.log("test");
             if(c[i].style.backgroundColor === "rgb(131, 167, 131)") {
                 c[i].style.backgroundColor = "rgb(215, 215, 215)";
             }
@@ -35,10 +36,12 @@ function createSeatingChart() {
 }
 function saveSeatingChart() {
     const s = document.querySelectorAll(".seatBtn");
+    sCol = document.getElementById("seat").value;
     let arr = new Array();
     for (let i = 0; i < s.length; i++) {
-        if(s[i].style.backgroundColor === "rgb(131, 167, 131)")
+        if(s[i].style.backgroundColor === "rgb(131, 167, 131)"){
             arr.push(1);
+        }
         else
             arr.push(0);
     }

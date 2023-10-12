@@ -56,9 +56,9 @@ public class ProgramService {
         Program program = programRepository.findById(programNum)
                 .orElseThrow(IllegalAccessError::new);
         program.updateInfo(request.getTitle(), request.getPlace(), request.getTarget(),
-                request.getStartDate(), request.getEndDate(), request.getPeopleNum(),
+                request.getStartDate(), request.getEndDate(), request.getType(), request.getPeopleNum(),
                 request.getSeatCol(), request.getSeatingChart());
-        //request.getType(),
+
     }
 
     public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
@@ -170,7 +170,7 @@ public class ProgramService {
                 .orElseThrow(IllegalAccessError::new);
         program.updateForm(request);
     }
-
+    @Transactional
     public void updateProgramFormTitle(Long programNum, String getTitleJsonString){
         Program program = programRepository.findById(programNum).orElse(null);
 

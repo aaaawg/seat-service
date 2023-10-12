@@ -2,34 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
+    <link th:href="@{/css/updateProgram.css}" href="../css/updateProgram.css?ver=1.1" rel="stylesheet">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
+<div th:replace="/layout/nav.html :: nav"></div>
 <div class="container">
-    <form th:action method="post" enctype="multipart/form-data">
+    <form th:action method="post" enctype="multipart/form-data" id="updateForm">
         <div>
             <label for="title">프로그램명</label>
             <input type="text" id="title" name="title" th:value="${programInfo.title}">
         </div>
         <div>
             <label>구분</label>
-            <input type="radio" id="offline" name="type" value="오프라인" onchange="showPlaceInput(0)">
-            <label for="offline">오프라인</label>
-            <input type="radio" id="online" name="type" value="온라인" onchange="showPlaceInput(1)">
-            <label for="online">온라인</label>
+            <input type="radio" id="offline" name="type" value="오프라인" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(0, this.getAttribute('bookCount'))">
+            <label id="offlineCheck" for="offline">오프라인</label>
+            <input type="radio" id="online" name="type" value="온라인" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(1, this.getAttribute('bookCount'))">
+            <label id="onlineCheck" for="online">온라인</label>
         </div>
         <div id="off">
             <label for="place">장소</label>
-            <input type="text" id="place" name="place" th:value="${programInfo.place}">
+            <input type="button" id="searchAddr" value="주소 검색" onclick="findAddress()">
+            <input type="text" id="address" readonly placeholder="주소">
+            <input type="text" id="detailAddress" onchange="placeValue()" placeholder="상세주소" value="">
+            <input type="hidden" id="place" name="place" th:value="${programInfo.place}">
         </div>
         <div id="on">
             <label for="place">장소</label>
             <input type="text" id="onPlace" name="place" value="온라인 관람" readonly disabled>
         </div>
         <div>
-            <label for="target">신청대상</label>
-            <input type="text" id="target" name="target" th:value="${programInfo.target}">
+            <label for="drop">신청대상</label>
+            <select id="drop" name="target" th:attr="bookCount=${bookingCount}" onchange="changeTargetSelect(this.getAttribute('bookCount'))">
+                <option value="제한없음" selected>제한없음</option>
+                <option id="area" value="지역">지역</option>
+            </select>
         </div>
         <div>
             <label for="startDate">신청 시작일</label>
@@ -41,63 +50,112 @@
         </div>
         <div>
             <label for="endDate">모집 인원</label>
-            <label th:if="${bookingCount <= 0}"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
-            <input  type="text" id="peopleNum" name="peopleNum" />
-            <button th:if="${programInfo.seatCol != null}" type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
-            <button th:unless="${programInfo.seatCol != null}" type="button" id="isNotSeatColSelect" onclick="openPopup()">좌석 추가</button>
-            <button th:if="${programInfo.seatCol != null}" id="deleteChart" onclick="deleteChart()">좌석 삭제</button>
+            <label th:if="${bookingCount <= 0}" id="peopleNumLabel"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
+            <input  type="text" id="peopleNum" name="peopleNum" th:value="${programInfo.peopleNum}" onchange="writeNum(-5)" />
+            <button type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
+            <button type="button" id="isNotSeatColSelect" onclick="openPopup()">좌석 추가</button>
+            <button type="button" id="deleteChart" th:attr="bookCount=${bookingCount}"onclick="deleteSeatChart(this.getAttribute('bookCount'))">좌석 삭제</button>
             <div id="popupChart" class="container"></div>
-            <input type="hidden" id="seatingChart" name="seatingChart" value=null>
-            <input type="hidden" id="seatCol" name="seatCol">
+            <input type="hidden" id="seatingChart" name="seatingChart" th:value="${programInfo.seatingChart}" />
+            <input type="hidden" id="seatCol" name="seatCol" th:value="${programInfo.seatCol}" />
 
         </div>
         <div>
-            <div>
-                <label for="inputFile"><strong>첨부 파일</strong></label>
-                <div>
+            <div id="fileAdd">
+                <label for="inputFile">첨부 파일</label>
+                <div style="display: inline;">
                     <div class="custom-file" id="inputFile">
                         <input multiple="multiple" name="file" type="file" class="custom-file-input" id="customFile" onchange="displaySelectedImage(event)"/>
                         <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
                     </div>
+                    <div>
+                        <button type="button" id="deleteAllFile" onclick="deleteAll()">파일 삭제</button>
+                    </div>
                 </div>
-                <div id="image_container"></div>
+                <div class="fileAddDiv">
+                <div class="album" style="display: none;">
+                    <div id="image_container"></div>
+                </div>
+                <button type="button" class="previous" style="display: none;" >←</button>
+                <button type="button" class="next" style="display: none;" >→</button>
+                </div>
             </div>
-            <div>
-                <button type="button" id="deleteAllFile" onclick="deleteAll()">파일 삭제</button>
-            </div>
+
             <div id="origImg">
-                <span th:if="${file.filename == 'NoInImage'}"><p>-</p></span>
+                <span th:if="${file.filename == 'NoInImage'}"></span>
                 <span th:unless="${file.filename == 'NoInImage'}">
-                <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" width="200" alt="Selected Image"/>
-                <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile" />
+                    <div class="album">
+                    <div id="origImage_container">
+                        <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" alt="Selected Image"/>
+                        <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile" />
+                    </div>
+                    </div>
+                    <button type="button" class="previousOrig">←</button>
+                    <button type="button" class="nextOrig">→</button>
                 </span>
             </div>
         </div>
         <div id="deleteFile2">
             <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile2" />
         </div>
-        <button type="submit" class="btn btn-success">수정하기</button>
+        <button type="submit" class="button button--shikoba button--text-medium button--round-l button--inverted"><span>수정하기</span></button>
     </form>
 </div>
 <script th:inline="javascript">
 var programInfo = /*[[${programInfo}]]*/ null;
+var fileList = /*[[${fileList}]]*/ null;
+var bookingCount = /*[[${bookingCount}]]*/ 0;
+if(fileList === null) {document.getElementById("deleteAllFile").style.display = "none";}
+
+//무제한 체크
+if(programInfo.peopleNum === -1){
+    document.getElementById("peopleChBox").checked = true;
+    document.getElementById("peopleNum").style.display = "none";
+}
+//disabled 변경
+if(bookingCount > 0){
+    document.getElementById("drop").disabled = true;
+    document.getElementById("offline").disabled = true;
+    document.getElementById("online").disabled = true;
+}
+
+var programPlace = programInfo.place;
+let words = programPlace.split(',');
+words = words.map(element => element.trim());
+var placeResult='';
+for(let i=0; i<words.length-1; i++){
+    placeResult += words[i];
+}
+document.getElementById("address").value = placeResult;
+document.getElementById("detailAddress").value = words[words.length-1];
+
 if (programInfo !== null) {
     const type = programInfo.type;
-    console.log("type: "+type);
     if(type === "오프라인"){
          document.getElementById("offline").checked = true;
          document.getElementById("on").style.display = "none";
+         if(programInfo.seatingChart.value === null){
+            document.getElementById("isNotSeatColSelect").style.display = "inline";
+            document.getElementById("isSeatColSelect").style.display = "none";
+            document.getElementById("deleteChart").style.display = "none";
+         }else{
+            document.getElementById("isNotSeatColSelect").style.display = "none";
+            document.getElementById("isSeatColSelect").style.display = "inline";
+            document.getElementById("deleteChart").style.display = "inline";
+         }
     }else{
         document.getElementById("online").checked = true;
         document.getElementById("off").style.display = "none";
+        document.getElementById("isNotSeatColSelect").style.display = "none";
+        document.getElementById("isSeatColSelect").style.display = "none";
+        document.getElementById("deleteChart").style.display = "none";
     }
 }
+
 var people = document.getElementById("peopleNum");
 if(programInfo.seatCol !== null){
     people.readOnly=true;
-    people.style.backgroundColor = "#f8f8f8";
-    people.style.color = "#545454";
-
+    people.disabled = true;
 }
 if(programInfo.peopleNum === -1){
     people.value = "무제한";
@@ -105,6 +163,13 @@ if(programInfo.peopleNum === -1){
     people.value = programInfo.peopleNum;
 }
 
+var selectElement = document.getElementById("drop");
+var optionElements = selectElement.getElementsByTagName("option");
+if (programInfo.target === "제한없음") {
+    optionElements[0].selected = true; // "제한없음" 옵션을 선택
+} else if (programInfo.target === "지역") {
+    optionElements[1].selected = true; // "지역" 옵션을 선택
+}
 
     function displaySelectedImage(event) {
         var changeImg = document.querySelector("div#image_container");
@@ -122,10 +187,22 @@ if(programInfo.peopleNum === -1){
             reader.onload = function(event) {
                 var img = document.createElement("img");
                 img.setAttribute("src", event.target.result);
-                img.setAttribute("width", "200");
                 document.querySelector("div#image_container").appendChild(img);
             };
             reader.readAsDataURL(event.target.files[i]);
+        }
+        var leftBtn = document.querySelector(".previous");
+        var rightBtn = document.querySelector(".next");
+        var album = document.querySelector(".album");
+        var choose = document.querySelector(".custom-file-label");
+
+        if(lengthImg > 0) {
+            document.getElementById("deleteAllFile").style.display = "block";
+            leftBtn.style.display = "inline";
+            rightBtn.style.display = "inline";
+            rightBtn.style.disabled = false;
+            album.style.display = "block";
+            choose.style.display = "none";
         }
     }
 
@@ -168,14 +245,15 @@ if(programInfo.peopleNum === -1){
 
                 for (let i = 0; i < seatArray.length; i++) {
                     if(num % sCol === 0) {
-                        ht += "<div class='row'>"
+                        ht += "<div class='row justify-content-center'>"
                     }
                     if(seatArray[i]){
-                        ht += "<button type='button' class='seatBtn' style='background-color: #83A783'>" + seatNum + "</button>";
+                        ht += "<button class='seatBtn' style='background-color: #83A783'>" + seatNum + "</button>";
                         seatNum++;
                     }
                     else {
-                        ht += "<div class='seatBtn' style='background-color: #ffffff'></div>"
+                        ht += "<button class='seatBtn' style='background-color: rgb(215, 215, 215);'>"+ seatNum +"</button>";
+                        seatNum++;
                     }
                     num++;
                     if(num % sCol === 0) {
@@ -185,11 +263,22 @@ if(programInfo.peopleNum === -1){
                 }
                 updateSeatRow.value = exNum;
                 scDiv.innerHTML = ht;
+
+                let c = popup.document.querySelectorAll(".seatBtn");
+                for (let i = 0; i < c.length; i++) {
+                    c[i].addEventListener("click",function (i) {
+                    if(c[i].style.backgroundColor === "rgb(131, 167, 131)") {
+                        c[i].style.backgroundColor = "rgb(215, 215, 215)";
+                     }
+                    else {
+                        c[i].style.backgroundColor = "rgb(131, 167, 131)";
+                    }
+                }.bind(this, i));
                 }
 
+                }
             }
     }
-
 
     popup.addEventListener("beforeunload", function () {
         let chart = JSON.stringify(popupSeatArr);
@@ -204,10 +293,14 @@ if(programInfo.peopleNum === -1){
         document.getElementById("seatCol").value = popupSeatCol;
 
         let result = (popupSeatArr.length - exSeatCount);
-        console.log("result: "+ result);
 
         document.getElementById("peopleNum").readOnly = true;
+        document.getElementById("peopleNum").disabled = true;
+        document.getElementById('peopleNum').style.display = "inline";
         document.getElementById("peopleNum").value = result;
+        document.getElementById("peopleChBox").checked = false;
+        document.getElementById('deleteChart').style.display = "inline";
+        writeNum(result);
     });
     }
     }
@@ -216,10 +309,21 @@ if(programInfo.peopleNum === -1){
         popupSeatCol = col;
     }
 
-    function deleteChart(){
-         //document.getElementById("peopleNum").value = result;
+    function writeNum(num){
+        if(num !== -5){
+            document.getElementById('peopleNum').value = num;
+        }else{
+        var bookingCount = /*[[${bookingCount}]]*/ 0;
+        let value = document.getElementById('peopleNum').value;
+
+        if(value < bookingCount){
+            alert(bookingCount+"이상의 숫자를 입력해주세요.");
+            document.getElementById('peopleNum').value = bookingCount;
+        }
+        }
     }
 </script>
-<script type="text/javascript" src="/js/updateProgram.js?ver=1.3"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="/js/updateProgram.js?ver=1.4"></script>
 </body>
 </html>

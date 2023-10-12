@@ -81,7 +81,7 @@ public class BizUserProgramController {
         FileDto fileDto;
         List<FileDto> list = fileService.getFileByProNum(program.getProgramNum());
         fileDto = new FileDto();
-        if(list != null) {
+        if(!list.isEmpty()) {
             fileDto.setFilename("InImage");
             model.addAttribute("fileList", list);
         } else {
@@ -101,8 +101,7 @@ public class BizUserProgramController {
     public String updateProgramInfo(@PathVariable Long programNum, BizUpdateProgramRequest request, @RequestParam("file") List<MultipartFile> files,
                                     @RequestParam(value ="deleteFile", required = false) List<String> deleteFiles,
                                     @RequestParam(value ="deleteFile2", required = false) List<String> deleteFiles2) throws IOException {
-        System.out.println("TEst: "+ request.getPeopleNum());
-
+        if(request.getSeatingChart().isEmpty()){request.setSeatingChart(null);}
         programService.updateProgramInfo(programNum, request);
         String savePath = System.getProperty("user.dir");
         //1. 변경 안하는 경우 - files files.get(0).getOriginalFilename().equals("")), deleteFiles O, 삭제X 추가X @
@@ -153,6 +152,7 @@ public class BizUserProgramController {
         //return "redirect:/business/program/info/{programNum}";
         return "redirect:/program/"+ programNum;
     }
+
 
     @GetMapping("/seat")
     public String createSeatingChart() {
