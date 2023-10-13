@@ -5,7 +5,7 @@ import com.psr.seatservice.dto.files.FileDto;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.BizProgramListResponse;
-import com.psr.seatservice.dto.program.response.ProgramInfoResponse;
+import com.psr.seatservice.dto.program.response.ProgramInfoUpdateResponse;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
 import org.springframework.stereotype.Controller;
@@ -85,7 +85,7 @@ public class BizUserProgramController {
 
         Long bookingCount = programService.getBookingNumCount(programNum);
 
-        model.addAttribute("programInfo", new ProgramInfoResponse(program));
+        model.addAttribute("programInfo", new ProgramInfoUpdateResponse(program));
         model.addAttribute("file", fileDto);
         model.addAttribute("bookingCount", bookingCount);
         return "program/bizUpdateProgramInfo";
