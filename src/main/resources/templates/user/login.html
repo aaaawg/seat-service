@@ -2,21 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <link th:href="@{/css/bootstrap.min.css}"
-        href="../css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/login.css}" href="../css/login.css" rel="stylesheet">
 </head>
 <body>
-<div class="container" style="max-width: 400px">
+<div class="container" style="max-width: 380px">
+  <div class="logo">
+    <img src="/img/logo.png" th:onclick="|location.href='@{/}'|">
+  </div>
   <form th:action method="post">
-    <div>
-      <input type="text" class="form-control" id="userId" name="username" placeholder="아이디">
-    </div>
-    <div>
-      <input type="password" class="form-control" name="password" placeholder="비밀번호">
-    </div>
-    <button type="submit" class="btn btn-success">로그인</button>
-    <button type="button" class="btn" th:onclick="|location.href='@{/join}'|">회원가입</button>
+    <input type="text" class="form-control" id="userId" name="username" placeholder="아이디">
+    <input type="password" class="form-control" name="password" placeholder="비밀번호">
+    <button class="rounded-2" type="submit">로그인</button>
   </form>
+  <button type="button" th:onclick="|location.href='@{/join}'|">회원가입</button>
 </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.psr.seatservice.controller.program;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
@@ -159,13 +160,10 @@ public class BizUserProgramController {
         return "program/bizCreateSeatingChart";
     }
 
-    //프로그램 진행 날짜, 시간별 신청인원수 목록
     @GetMapping("/{programNum}")
-    public String viewingAndPeopleNumList(@PathVariable Long programNum, Model model) {
+    public @ResponseBody ResponseEntity<Object> viewingAndPeopleNumList(@PathVariable Long programNum) {
         List<BizProgramViewingDateAndTimeAndPeopleNumResponse> list = programService.getProgramViewingDateAndTimeAndPeopleNum(programNum);
-        model.addAttribute("programs", list);
-        model.addAttribute("programNum", programNum);
-        return "program/bizProgramViewingList";
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
     @GetMapping("/{programNum}/booking")

@@ -67,7 +67,7 @@ public class ProgramController {
         boolean ch = programService.checkSeatingChart(programNum);
 
         List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
-        model.addAttribute("programInfo", new ProgramInfoUpdateResponse(program));
+        model.addAttribute("programInfo", new ProgramInfoResponse(program));
         model.addAttribute("file", fileDto);
         model.addAttribute("programViewing", viewing);
         model.addAttribute("chSC", ch);

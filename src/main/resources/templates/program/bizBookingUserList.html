@@ -4,16 +4,24 @@
     <title>예약 현황</title>
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/bizPage.css}" href="../css/bizPage.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <button type="button" onclick="showModal()">상태 변경</button>
-    <button type="button" th:if="${checkSC}" onclick="showSeatingChart()">좌석 현황</button>
-    <table class="table" id="tb">
-        <thead>
+    <div class="btnDiv">
+        <button class="rounded-2 mBtn" type="button" th:onclick="|location.href='@{/business/program}'|">목록</button>
+        <button class="rounded-2" type="button" onclick="showModal()" style="width: 110px;">상태 변경</button>
+        <button class="rounded-2" type="button" th:if="${checkSC}" onclick="showSeatingChart()" style="width: 110px;">좌석 현황</button>
+    </div>
+    <div>
+        <h4>신청자 목록</h4>
+        <span th:text="|총 ${userList.size()}건|"></span>
+    </div>
+    <table class="table table-striped" id="tb">
+        <thead style="border: none">
         <tr>
-            <th><input type="checkbox" onclick="checkAll(this)" id="allCheck"></th>
-            <th>예약번호</th>
+            <th><input type="checkbox" class="form-check" onclick="checkAll(this)" id="allCheck"></th>
+            <th>신청번호</th>
             <th>신청일</th>
             <th>수정일</th>
             <th>이름</th>
@@ -21,23 +29,23 @@
             <th>전화번호</th>
             <th>이메일</th>
             <th th:if="${checkSC}">좌석</th>
-            <th>신청서</th>
             <th>상태</th>
+            <th>신청서</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="booking: ${userList}">
-            <td><input name="listCheckbox" type="checkbox" th:disabled="${booking.status} == '취소'"></td>
-            <td th:text="${booking.bookingNum}"></td>
-            <td th:text="${#dates.format(booking.bookingDate, 'yyyy-MM-dd HH:mm')}"></td>
-            <td th:text="${#dates.format(booking.updateDate, 'yyyy-MM-dd HH:mm')}">수정일</td>
+            <td style="width: 2%"><input name="listCheckbox" type="checkbox" class="form-check" th:disabled="${booking.status} == '취소'"></td>
+            <td style="width: 8%" th:text="${booking.bookingNum}"></td>
+            <td style="width: 12%" th:text="${#dates.format(booking.bookingDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td style="width: 12%" th:text="(${booking.bookingDate} != ${booking.updateDate}) ? ${#dates.format(booking.updateDate, 'yyyy-MM-dd HH:mm')} : ''">수정일</td>
             <td th:text="${booking.name}"></td>
             <td th:text="${booking.birth}"></td>
             <td th:text="${booking.phone}"></td>
             <td th:text="${booking.email}"></td>
-            <td th:if="${checkSC}" th:text="${booking.seatNum}"></td>
-            <td><button>보기</button></td>
-            <td th:text="${booking.status}"></td>
+            <td style="width: 5%" th:if="${checkSC}" th:text="${booking.seatNum}"></td>
+            <td style="width: 5%" th:text="${booking.status}"></td>
+            <td style="width: 4%"><button class="rounded-pill tableBtn btn-sm">보기</button></td>
         </tr>
         </tbody>
     </table>
@@ -67,7 +75,7 @@
             </div>
             <div class="modal-footer">
                 <strong id="notification" style="color: #e10000"></strong>
-                <button type="button" onclick="updateStatus()">변경하기</button>
+                <button class="rounded-pill tableBtn btn-sm" type="button" onclick="updateStatus()" style="width: 110px">변경하기</button>
             </div>
         </div>
     </div>
@@ -75,6 +83,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <script th:inline="javascript">
     let params = new URLSearchParams(location.search);
     let programNum = [[${programNum}]];

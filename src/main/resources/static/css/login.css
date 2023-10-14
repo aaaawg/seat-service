@@ -1,0 +1,25 @@
+.logo {
+    text-align: center;
+    margin: 20px;
+}
+img {
+    width: 70px;
+}
+form input{
+    margin-bottom: 10px;
+    height: 40px;
+}
+form button {
+    width: 100%;
+    background-color: #617A55;
+    padding: 8px 12px;
+    font-weight: bolder;
+    color: white;
+}
+button {
+    float: right;
+    border: none;
+    background-color: white;
+    padding: 0;
+    margin-top: 3px;
+}
