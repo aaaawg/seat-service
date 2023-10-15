@@ -13,8 +13,8 @@
     <form th:action method="post" enctype="multipart/form-data" id="myFormEdit">
         <div id="formContent">
         </div>
-        <button type="submit" class="btn btn-success">수정하기</button>
         <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
+        <button type="submit" class="button button--shikoba button--text-medium button--round-l button--inverted"><span>수정완료</span></button>
     </form>
 </div>
 <script th:inline="javascript">
@@ -29,12 +29,28 @@
     }else{
         div.innerHTML = programInfo;
     }
+
+    const select = document.querySelectorAll("select");
+    let countSelect = document.querySelectorAll("select").length;
+
+    for(let i=0; i<countSelect; i++){
+        const selectP = document.getElementById('select'+i);
+        const divContent = selectP.innerHTML;
+        const match = divContent.match(/\d+/);
+        const selectPp = document.getElementsByName('content'+i)[0];
+        if(match===0){selectPp.selectedIndex = 0;}
+        else if(match===1){selectPp.selectedIndex = 1;}
+        else if(match===2){selectPp.selectedIndex = 2;}
+        else if(match===3){selectPp.selectedIndex = 3;}
+    }
+
     //Json 가져와보기
     var programJson = /*[[${ProgramJson}]]*/ {};
     if(programJson !== null){
         let reJson = JSON.parse(programJson);
         console.log(Object.keys(reJson).length);
     }
+
 </script>
 <script type="text/javascript" src="/js/addProgramContent.js?ver=4.3"></script>
 </body>

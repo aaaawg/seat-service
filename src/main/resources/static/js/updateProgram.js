@@ -321,7 +321,6 @@ console.log("n"+imagesLength);
 }
 
 function init(){
-console.log("init ");
     const btnPrevious = document.querySelector(".previous");
     const btnNext = document.querySelector(".next");
     btnPrevious.setAttribute('disabled','true');

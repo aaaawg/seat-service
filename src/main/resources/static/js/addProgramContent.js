@@ -111,6 +111,12 @@ function addContent(){
     addButtons(newContentDiv);
     origContent(newContentDiv);
     element.appendChild(newContentDiv);
+
+    //추가 답변 칸 없애기
+        let replyChangeResult = count -1;
+        const replyPreviousDiv = document.querySelector(".reDiv"+replyChangeResult);
+        const inputElements = replyPreviousDiv.querySelector('input[type="text"], textarea');
+        if(inputElements!==null){replyPreviousDiv.style.display = "none";}
 }
 
 function makeButton(className, idName, clickName){
@@ -263,6 +269,7 @@ function origContent(newContentDiv){
     count++;
 }
 function addSelect(e){
+console.log("test add");
         const divName = document.getElementById('plus'+e);
         const newDiv = document.createElement('div');
         newDiv.setAttribute("id","select"+e);
@@ -298,6 +305,37 @@ function addEditSelect(e){
     const divName = document.getElementById('plus'+e);
     const selectShow = document.getElementById('select'+e);
     selectShow.style.display = "";
+
+//추가 답변 칸 없애기
+    const replyPreviousDiv = document.querySelector(".reDiv"+e);
+    const inputElements = replyPreviousDiv.querySelector('input[type="text"], textarea');
+    if(inputElements!==null){replyPreviousDiv.style.display = "none";}
+
+// 수정시 셀렉트 전꺼로 변경 안됨
+    if(document.getElementById('myFormEdit')!==null){
+        let countSelect = document.querySelectorAll("select").length;
+    const selectP = document.getElementById('select'+e);
+                    const divContent = selectP.innerHTML;
+                    const match = divContent.match(/\d+/);
+                        const selectPp = document.getElementsByName('content'+e)[0];
+                 if(match[0]==='0'){selectPp.selectedIndex = 0;}
+                 else if(match[0]==='1'){selectPp.selectedIndex = 1;}
+                 else if(match[0]==='2'){selectPp.selectedIndex = 2;}
+                 else if(match[0]==='3'){selectPp.selectedIndex = 3;}
+            /*for(let i=0; i<countSelect; i++){
+                const selectP = document.getElementById('select'+i);
+                const divContent = selectP.innerHTML;
+                const match = divContent.match(/\d+/);
+
+                console.log(match[0]);
+
+                const selectPp = document.getElementsByName('content'+i)[0];
+                if(match[0]===0){selectPp.selectedIndex = 0;}
+                else if(match[0]===1){selectPp.selectedIndex = 1;}
+                else if(match[0]===2){selectPp.selectedIndex = 2;}
+                else if(match[0]===3){selectPp.selectedIndex = 3;}
+            }*/
+    }
 
     var newChBtn = makeButton("btn btn-success", "complete"+e, "complete("+e+")");
     newChBtn.innerText = "완료";
@@ -369,6 +407,10 @@ function handleOnChange(e, divNum) {
         break;
     case '단일 선택형':
         const store = document.querySelector(".changeSelectDiv"+divNum);
+        //다시 보이게 reDiv
+        const replyPreviousDiv = document.querySelector(".reDiv"+divNum);
+        replyPreviousDiv.style.display = "block";
+
         if(store === null){
            const wholeSelectDiv = document.createElement('div');
            wholeSelectDiv.setAttribute("class", "wholeSelectDiv"+divNum);
@@ -389,6 +431,9 @@ function handleOnChange(e, divNum) {
         break;
     case '복수 선택형':
         const storeCheck = document.querySelector(".changeCheckDiv"+divNum);
+           //다시 보이게 reDiv
+            const replyPreviousDiv2 = document.querySelector(".reDiv"+divNum);
+            replyPreviousDiv2.style.display = "block";
         if(storeCheck === null){
             const wholeCheckDiv = document.createElement('div');
             wholeCheckDiv.setAttribute("class", "wholeCheckDiv"+divNum);
@@ -439,6 +484,11 @@ function complete(e){
     if(contentType.length !== 0 || checkAfterType.length !== 0){
         checkResult(e);
     }
+
+    //추가 답변 칸 보이게
+        const replyPreviousDiv = document.querySelector(".reDiv"+e);
+        const inputElements = replyPreviousDiv.querySelector('input[type="text"], textarea');
+        if(inputElements!==null){replyPreviousDiv.style.display = "block";}
 }
 
 function titleInputLayoutShow(num){
