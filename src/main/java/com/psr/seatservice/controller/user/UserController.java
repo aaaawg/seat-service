@@ -12,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -32,14 +34,17 @@ public class UserController {
     }
 
     @GetMapping("/join")
-    public String join(Model model) {
-        model.addAttribute("user", new User());
-        return "user/join";
+    public String joinForm(Model model) {
+        model.addAttribute("user", new AddUserRequest());
+        return "user/addUser";
     }
 
-    //사용자 회원가입 처리
     @PostMapping("/join")
-    public String userJoin(AddUserRequest request) {
+    public String userJoin(@Valid @ModelAttribute("user") AddUserRequest request, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("userRole", request.getRole());
+            return "user/addUser";
+        }
         userService.join(request);
         return "redirect:/login";
     }

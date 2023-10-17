@@ -30,8 +30,10 @@ public class UserService {
         else
             role = Role.BIZ;
 
-        userRepository.save(new User(request.getUserId(), password, request.getName(),
-                request.getAddress(), request.getPhone(), request.getEmail(), role));
+        if(request.getBirth() != null)
+            userRepository.save(new User(request.getUserId(), password, request.getName(), request.getAddress(), request.getPhone(), request.getEmail(), role, request.getBirth()));
+        else
+            userRepository.save(new User(request.getUserId(), password, request.getName(), request.getAddress(), request.getPhone(), request.getEmail(), role));
     }
 
     public List<BookingListResponse> getBookingByUserId(User user){

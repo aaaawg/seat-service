@@ -11,7 +11,7 @@ import java.util.Date;
 public class BizProgramBookingUserListResponse {
     private String name;
     private String phone;
-    private Date birth;
+    private String birth;
     private String email;
     private String address;
     private Integer seatNum;
@@ -20,7 +20,7 @@ public class BizProgramBookingUserListResponse {
     private Date updateDate;
     private String status;
 
-    public BizProgramBookingUserListResponse(String name, String phone, Date birth, String email, String address, Integer seatNum, Long bookingNum, Date bookingDate, Date updateDate, String status) {
+    public BizProgramBookingUserListResponse(String name, String phone, String birth, String email, String address, Integer seatNum, Long bookingNum, Date bookingDate, Date updateDate, String status) {
         this.name = name;
         this.phone = phone;
         this.birth = birth;

@@ -27,7 +27,7 @@ public class User implements UserDetails {
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Date birth;
+    private String birth;
 
     public User(String userId, String password, String name, String address, String phone, String email, Role role) {
         this.userId = userId;
@@ -37,6 +37,17 @@ public class User implements UserDetails {
         this.phone = phone;
         this.email = email;
         this.role = role;
+    }
+
+    public User(String userId, String password, String name, String address, String phone, String email, Role role, String birth) {
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.role = role;
+        this.birth = birth;
     }
 
     @Override
