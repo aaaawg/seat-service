@@ -1,0 +1,124 @@
+.activeBtn {
+    background-color: #E4E4D0 !important;
+    border: solid rgba(0, 0, 0, 0.12) 1px !important;
+}
+#viewingDate {
+    width: 280px;
+    float: left;
+
+    height: 530px;
+    border-right: solid #dfe0e1 1px;
+}
+#selectSeat {
+    position: relative;
+    border-right: solid #dfe0e1 1px;
+    height: 530px;
+    float: left;
+    width: 480px;
+}
+.activeSeatBtn {
+    border: solid black 2px !important;
+    background-color: rgb(71, 91, 71) !important;
+    color: white !important;
+}
+#seatB div {
+    float: left;
+    margin-right: 5px;
+}
+#seatB span {
+    font-size: 12px;
+}
+#seatB .seatBtn {
+    width: 15px;
+    height: 15px;
+    margin-top: 6px;
+    margin-right: 3px;
+}
+#seatB {
+    position: absolute;
+    bottom: 10px;
+}
+thead {
+    border-bottom: solid black 3px;
+}
+tbody {
+    border-bottom: solid #dfe0e1 3px;
+}
+td {
+    padding: 5px !important;
+    text-align: center !important;
+}
+.timeBtn {
+    width: 80px;
+    height: 30px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+#selectSeat img {
+    width: 22px;
+    height: 22px;
+}
+#calText {
+    font-size: 17px;
+}
+#yearAndDate {
+    font-size: 17px;
+}
+#sMonth img {
+    width: 15px;
+}
+#sMonth {
+    text-align: center;
+    margin-bottom: 3px;
+}
+.btn-outline-secondary:hover {
+    background-color: #dfe0e1 !important;
+}
+#checkInfo tbody {
+    border-top: solid #dfe0e1 3px;
+}
+#checkInfo tr {
+    border-bottom: solid #dfe0e1 1px;
+}
+#checkInfo td {
+    border-left: solid #dfe0e1 1px;
+    height: 25px !important;
+    padding: 8px !important;
+    text-align: left !important;
+}
+#checkInfo {
+    min-width: 260px;
+    height: 530px;
+    float: left;
+}
+#checkInfo button {
+    width: 100%;
+}
+#scrollDiv {
+    overflow: scroll;
+}
+#chart .row {
+    flex-wrap: nowrap;
+}
+.bookingSe {
+    height: 45px;
+    background-color: rgb(121, 154, 121);
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
+    color: white;
+    font-weight: bolder;
+}
+.vDiv {
+    margin-left: 10px;
+    padding-right: 10px;
+}
+.sDiv {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.bDiv {
+    margin-left: 0;
+    margin-right: 10px;
+    padding-left: 10px;
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/seatingChart.css}" href="../css/seatingChart.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <p class="fs-4" th:text="${seats.title}"></p>
+    <span class="fs-6" th:text="${seats.date}"></span>
+    <span class="fs-6" th:text="${seats.time}"></span>
+    <div id="chart"></div>
+</div>
+
+<script th:inline="javascript">
+    addEventListener("load", createSeatingChart);
+    function createSeatingChart() {
+        const scDiv = document.getElementById("chart");
+        let seatNum = 1;
+        let ht = "";
+        let num = 0;
+        let sCol = [[${seats.seatCol}]];
+        let bookingSeatList = [[${seats.bookingSeatList}]];
+        let seatingChart = JSON.parse([[${seats.seatingChart}]]);
+
+        for (let i = 0; i < seatingChart.length; i++) {
+            if(num % sCol === 0) {
+                ht += "<div class='row'>"
+            }
+
+            if(seatingChart[i]) {
+                if(bookingSeatList.includes(seatNum))
+                    ht += "<div class='seatBtn' style='background-color: #e5e5e5'></div>"
+                else
+                    ht += "<div class='seatBtn' style='background-color: #83A783'>" + seatNum + "</div>";
+                seatNum++;
+            }
+            else {
+                ht += "<div class='seatBtn' style='background-color: #ffffff'></div>"
+            }
+
+            num++;
+            if(num % sCol === 0) {
+                ht += "</div>"
+            }
+        }
+        scDiv.innerHTML = ht;
+    }
+</script>
+</body>
+</html>

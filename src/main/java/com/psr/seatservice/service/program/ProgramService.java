@@ -5,20 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
+import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.user.request.BookingRequest;
-import com.psr.seatservice.dto.user.response.BookingListResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import com.psr.seatservice.SessionConst;
 
 @Service
 public class ProgramService {
@@ -33,8 +29,8 @@ public class ProgramService {
         this.programBookingRepository = programBookingRepository;
     }
 
-    public List<BizProgramListResponse> programs() {
-        List<Program> programs = programRepository.findAll();
+    public List<BizProgramListResponse> programs(Long user) {
+        List<Program> programs = programRepository.findAllByUserId(user);
         return programs.stream()
                 .map(BizProgramListResponse::new)
                 .collect(Collectors.toList());
@@ -45,9 +41,9 @@ public class ProgramService {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public Long addProgram(BizAddProgramRequest request, String result, String getTitleJsonString) {
-        Program program = new Program(request.getTitle(), request.getPlace(), request.getTarget(), request.getType(), request.getStartDate(), request.getEndDate(), request.getSeatingChart(),
-                request.getSeatCol(), request.getPeopleNum(), result, getTitleJsonString);
+    public Long addProgram(BizAddProgramRequest request, String result, String getTitleJsonString, User user) {
+        Program program = new Program(request.getTitle(), request.getPlace(), request.getWay(), request.getTarget(), request.getTargetDetail(), request.getType(), request.getStartDate(),
+                request.getEndDate(), request.getSeatingChart(), request.getSeatCol(), request.getPeopleNum(), request.getContents(), result, getTitleJsonString, user);
         programRepository.save(program);
         Long programNum = program.getProgramNum();
 
@@ -66,7 +62,7 @@ public class ProgramService {
     }
 
     public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
-        if(request.getViewingDateAndTime() != null) {
+        if (request.getViewingDateAndTime() != null) {
             int size = request.getViewingDateAndTime().size();
             String dateAndTime, date, time;
             List<ProgramViewing> list = new ArrayList<>();
@@ -81,11 +77,23 @@ public class ProgramService {
         }
     }
 
-    public List<ProgramListResponse> mainPrograms() {
-        List<Program> programs = programRepository.findAll();
-        return programs.stream()
-                .map(ProgramListResponse::new)
-                .collect(Collectors.toList());
+    public List<ProgramListResponse> getProgramList(String type, String target) {
+        List<ProgramListResponse> programs;
+
+        if(type.equals("online") || type.equals("offline")) {
+            if(target == null)
+                programs = programRepository.findAllByType(type);
+            else
+                programs = programRepository.findAllByTarget(type, target);
+        }
+        else {
+            if(target == null)
+                programs = programRepository.findAllProgramAndImg();
+            else
+                programs = programRepository.findAllProgramAndImgByTarget(target);
+        }
+
+        return programs;
     }
 
     public List<ProgramViewingDateAndTimeResponse> getProgramViewingDateAndTime(Long programNum) {
@@ -95,11 +103,11 @@ public class ProgramService {
                 .collect(Collectors.toList());
     }
 
-    public Long getProgramBookingCount(Long programNum, String date, String time) {
-        return programBookingRepository.countByBookingList(programNum, date, time);
+    public int getProgramBookingCount(Long programNum, String date, String time) {
+        return programBookingRepository.countByProgramBooking(programNum, date, time);
     }
 
-    public List<Integer> getBookingList(Long programNum, String viewingDate, String viewingTime) {
+    public List<Integer> getBookedSeats(Long programNum, String viewingDate, String viewingTime) {
         List<ProgramBooking> programBookings = programBookingRepository.findProgramBookingList(programNum, viewingDate, viewingTime);
         List<Integer> list = new ArrayList<>();
         for (ProgramBooking programBooking : programBookings) {
@@ -108,9 +116,56 @@ public class ProgramService {
         return list;
     }
 
-    public void addBooking(Long programNum, BookingRequest request, String userId) {
-        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), request.getProgramResponse(), userId);
-        programBookingRepository.save(programBooking);
+    @Transactional
+    public String addBooking(Long programNum, BookingRequest request, User user) {
+        int count = getProgramBookingCount(programNum, request.getViewingDate(), request.getViewingTime());
+        if(count < request.getPeopleNum() || request.getPeopleNum() == -1) {
+            int nonPCount = programBookingRepository.countByUser_IdAndStatus(user.getId(), "불참");
+            if(nonPCount < 3) {
+                if (!programBookingRepository.existsByProgramNumAndViewingDateAndViewingTimeAndUser_Id(programNum, request.getViewingDate(), request.getViewingTime(), user.getId())) { //해당 회차를 신청 했는지
+                    if (request.getSeatNum() != null && programBookingRepository.existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(programNum, request.getSeatNum(), request.getViewingDate(), request.getViewingTime())) {
+                        return "이미 신청된 좌석입니다.";
+                    } else {
+                        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), "예정", request.getProgramResponse(), user);
+                        programBookingRepository.save(programBooking);
+                        return null;
+                    }
+                } else
+                    return "이미 해당 회차를 신청했습니다.";
+            }
+            else
+                return "불참 횟수(3회)로 인해 신청할 수 없습니다.";
+        }
+        return "인원 마감으로 인해 신청할 수 없습니다.";
+    }
+
+    public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {
+        //프로그램 진행 날짜, 시간, 신청인원 목록
+        return programViewingRepository.findViewingDateAndTimeAndPeopleNumByProgramNum(programNum);
+    }
+
+    public List<BizProgramBookingUserListResponse> getBookingUserList(Long programNum, String date, String time) {
+        //프로그램을 예약한 사용자 목록
+        return programBookingRepository.findByProgramNumAndViewingDateAndViewingTime(programNum, date, time);
+    }
+
+    public boolean checkSeatingChart(Long num) {
+        if(programRepository.findById(num).get().getSeatingChart() == null)
+            return false;
+        return true;
+    }
+
+    @Transactional
+    public void updateBookingStatus(BizUpdateProgramBookingStatusRequest request) {
+        for (int i = 0; i < request.getBookingNumList().size(); i++) {
+            Long bookingNum = Long.valueOf(request.getBookingNumList().get(i));
+            ProgramBooking programBooking = programBookingRepository.findById(bookingNum).orElseThrow();
+            programBooking.updateStatus(request.getStatus());
+
+            if(request.getReason() != null) {
+                programBooking.updateCancelReason(request.getReason());
+            }
+        }
     }
 
     public String getProgramForm(Long programNum){
@@ -157,7 +212,39 @@ public class ProgramService {
         programBookingRepository.deleteByBookingNum(bookingNum);
     }
 
+    public List<ProgramListResponse> getProgramSearchResult(String keyword) {
+        String str = "%" + keyword + "%";
+        return programRepository.findAllByTitleLike(str);
+    }
+
     public Long getBookingNumCount(Long programNum){
         return programBookingRepository.countByProgramNum(programNum);
+    }
+
+    public List<ProgramListResponse> getUserAroundProgramList(String area, String target, String detail){
+        List<ProgramListResponse> programs;
+        String str;
+
+        if(target.equals("all")) {
+            //프로그램 target = 제한없음, 프로그램 진행 장소 기준 - 대면 프로그램만
+            str = (detail == null || detail.equals("01")) ? area.split(" ")[0] + "%" : area + "%";
+            programs = programRepository.findAllByTargetAndTypeAndPlaceStartsWith(target, str, "offline");
+        }
+        else {
+            //프로그램 target = 지역, 사용자 주소 = 지역
+            if(detail == null) {
+                str = area.split(" ")[0];
+                programs = programRepository.findAllByTargetAndTargetDetailAll(target, str, area);
+            }
+            else {
+                if(detail.equals("01") || detail.equals("02")) {
+                    str = (detail.equals("01")) ? area.split(" ")[0] : area;
+                    programs = programRepository.findAllByTargetAndTargetDetail(target, str);
+                }
+                else
+                    programs = null;
+            }
+        }
+        return programs;
     }
 }

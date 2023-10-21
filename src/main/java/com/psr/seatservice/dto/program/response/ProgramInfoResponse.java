@@ -1,6 +1,7 @@
 package com.psr.seatservice.dto.program.response;
 
 import com.psr.seatservice.domian.program.Program;
+import com.psr.seatservice.domian.user.User;
 import lombok.Getter;
 
 import java.util.Date;
@@ -12,23 +13,27 @@ public class ProgramInfoResponse {
     private String title; //프로그램 제목
     private String place; //장소
     private String target; //신청대상
+    private String targetDetail; //신청대상
     private Date startDate; //신청시작일
     private Date endDate; //신청마감일
     private String type;
     private int peopleNum;
-    private Integer seatCol;
-    private String seatingChart;
+    private String contents; //상세정보
+    private String userPhone; //문의 번호
+    private String userId;
 
     public ProgramInfoResponse(Program program) {
         this.programNum = program.getProgramNum();
         this.title = program.getTitle();
         this.place = program.getPlace();
         this.target = program.getTarget();
+        this.targetDetail = program.getTargetDetail();
         this.startDate = program.getStartDate();
         this.endDate = program.getEndDate();
         this.type = program.getType();
         this.peopleNum = program.getPeopleNum();
-        this.seatCol = program.getSeatCol();
-        this.seatingChart = program.getSeatingChart();
+        this.contents = program.getContents();
+        this.userPhone = program.getUser().getPhone();
+        this.userId = program.getUser().getUserId();
     }
 }

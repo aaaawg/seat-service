@@ -9,15 +9,14 @@ import java.util.Random;
 @Service
 public class EmailService {
     private final JavaMailSender mailSender;
-    private String randomNum;
 
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-    public void createRandomNum() {
+    public String createRandomNum() {
         Random random = new Random();
-        int num = 0;
+        int num;
         String ranNum = "";
         String result = "";
 
@@ -26,12 +25,11 @@ public class EmailService {
             ranNum = Integer.toString(num);
             result += ranNum;
         }
-
-        randomNum = result;
+        return result;
     }
 
     public String sendEmail(String toEmail) {
-        createRandomNum();
+        String randomNum = createRandomNum();
         String setFrom = ""; //메일입력
         String title = "[psr] 인증번호는 " + randomNum + "입니다.";
         String message = "안녕하세요.\n 아래 인증번호를 인증번호 입력칸에 입력해주세요.\n\n" + "인증번호: " + randomNum;
@@ -42,7 +40,13 @@ public class EmailService {
         simpleMailMessage.setSubject(title);
         simpleMailMessage.setText(message);
 
-        //mailSender.send(simpleMailMessage); //메일을 실제로 보냄
+/*        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mailSender.send(simpleMailMessage); //메일을 실제로 보냄
+            }
+        }).start();*/
+
         return randomNum;
     }
 }

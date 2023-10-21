@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>예약 현황</title>
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/bizPage.css}" href="../css/bizPage.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="btnDiv">
+        <button class="rounded-2 mBtn" type="button" th:onclick="|location.href='@{/business/program}'|">목록</button>
+        <button class="rounded-2" type="button" onclick="showModal()" style="width: 110px;">상태 변경</button>
+        <button class="rounded-2" type="button" th:if="${checkSC}" onclick="showSeatingChart()" style="width: 110px;">좌석 현황</button>
+    </div>
+    <div>
+        <h4>신청자 목록</h4>
+        <span th:text="|총 ${userList.size()}건|"></span>
+    </div>
+    <table class="table table-striped" id="tb">
+        <thead style="border: none">
+        <tr>
+            <th><input type="checkbox" class="form-check" onclick="checkAll(this)" id="allCheck"></th>
+            <th>신청번호</th>
+            <th>신청일</th>
+            <th>수정일</th>
+            <th>이름</th>
+            <th>생년월일</th>
+            <th>전화번호</th>
+            <th>이메일</th>
+            <th th:if="${checkSC}">좌석</th>
+            <th>상태</th>
+            <th>신청서</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="booking: ${userList}">
+            <td style="width: 2%"><input name="listCheckbox" type="checkbox" class="form-check" th:disabled="${booking.status} == '취소'"></td>
+            <td style="width: 8%" th:text="${booking.bookingNum}"></td>
+            <td style="width: 12%" th:text="${#dates.format(booking.bookingDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td style="width: 12%" th:text="(${booking.bookingDate} != ${booking.updateDate}) ? ${#dates.format(booking.updateDate, 'yyyy-MM-dd HH:mm')} : ''">수정일</td>
+            <td th:text="${booking.name}"></td>
+            <td th:text="${booking.birth}"></td>
+            <td th:text="${booking.phone}"></td>
+            <td th:text="${booking.email}"></td>
+            <td style="width: 5%" th:if="${checkSC}" th:text="${booking.seatNum}"></td>
+            <td style="width: 5%" th:text="${booking.status}"></td>
+            <td style="width: 4%"><button class="rounded-pill tableBtn btn-sm">보기</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" id="updateStatusModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>상태 변경</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <select class="form-select" id="status" onchange="setStatusValue(this)">
+                        <option selected disabled>예약 상태 변경</option>
+                        <option value="예정">예정</option>
+                        <option value="참가">참가</option>
+                        <option value="불참">불참</option>
+                        <option value="취소">취소</option>
+                    </select>
+                    <br>
+                    <div class="form-floating" style="display: none" id="enterReason">
+                        <textarea class="form-control" name="reason" id="reason" placeholder="취소 사유를 입력해주세요." style="height: 100px"></textarea>
+                        <label for="reason">취소 사유를 입력해주세요.</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <strong id="notification" style="color: #e10000"></strong>
+                <button class="rounded-pill tableBtn btn-sm" type="button" onclick="updateStatus()" style="width: 110px">변경하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script th:inline="javascript">
+    let params = new URLSearchParams(location.search);
+    let programNum = [[${programNum}]];
+    let viewingDate = params.get("date");
+    let viewingTime = params.get("time");
+
+    function showModal() {
+        const length = document.querySelectorAll('input[name=listCheckbox]:checked').length;
+        if(length > 0)
+            $('#updateStatusModal').modal('show');
+        else
+            alert("예약 정보를 선택하세요.");
+    }
+
+    function updateStatus() {
+        let c = document.getElementsByName("listCheckbox");
+        let row;
+        let bookingNumArr = new Array();
+        let url = `/business/program/${programNum}/booking?date=${viewingDate}&time=${viewingTime}`;
+        let data;
+        const selectedStatus = document.getElementById("status").value;
+
+        for (let i = 0; i < c.length; i++) {
+            row = c[i].parentNode.parentNode
+            if(c[i].checked) {
+                bookingNumArr.push(row.cells[1].innerText)
+            }
+        }
+
+        data = {
+            status: selectedStatus,
+            bookingNumList: bookingNumArr
+        }
+        if(document.getElementById("status").value === "취소")
+            data['reason'] = document.getElementById("reason").value;
+
+        if(selectedStatus === "예약 상태 변경")
+            document.getElementById("notification").innerText = "상태를 선택해주세요.";
+        else if(selectedStatus === "취소" && document.getElementById("reason").value.trim() === "")
+            document.getElementById("notification").innerText = "취소 사유를 입력해주세요";
+        else {
+            fetch(`/business/program/${programNum}/booking`, {
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).then((r) => {
+                alert("변경이 완료되었습니다.");
+                location.replace(url);
+            })
+        }
+    }
+
+    function checkAll(checkBox) {
+        let c = document.querySelectorAll('input[name=listCheckbox]:not(:disabled)')
+        for (let i = 0; i < c.length; i++)
+            c[i].checked = checkBox.checked;
+    }
+
+    function setStatusValue(t) {
+        if (t.value === "취소") {
+            document.getElementById("enterReason").style.display = "block";
+        }
+        else
+            document.getElementById("enterReason").style.display = "none";
+    }
+
+    function showSeatingChart() {
+        let url = `/business/program/${programNum}/seat?date=${viewingDate}&time=${viewingTime}`;
+        window.open(url, "좌석 현황", "width=800px, height=500px");
+    }
+</script>
+</body>
+</html>

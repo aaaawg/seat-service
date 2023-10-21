@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/head :: head(~{::link})">
+    <link th:href="@{/css/programList.css}" href="../css/programList.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+</head>
+<body>
+<div th:replace="/layout/nav.html :: nav"></div>
+<br>
+<div class="container" style="max-width: 1400px; clear: both">
+    <div>
+        <div class="ar">
+            <div class="arMenu">
+                <div class="arDiv" id="menuAll" th:onclick="|location.href='@{/around/all(detail='01')}'|"><h5>누구나</h5></div>
+                <div class="arDiv" id="menuArea" th:onclick="|location.href='@{/around/area}'|"><h5>지역</h5></div>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <select class="form-select" id="areaSelect" onchange="changeSelectValue(this.value)">
+                    <option value="all" th:if="${target} != 'all'">전체</option>
+                    <option th:text="${#strings.setSplit(userArea, ' ')[0]}" value="01"></option>
+                    <option th:text="${userArea}" value="02"></option>
+                </select>
+            </div>
+        </div>
+
+        <div id="allInfo" th:if="${target} == 'all'">
+            <span>대면 프로그램만 표시됩니다.</span>
+            <button class="btn btn-outline-dark btn-sm rounded-pill" th:onclick="|location.href='@{/online}'|">비대면<i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+    <th:block th:each="program: ${programs}">
+        <div class="p-3 mx-1 my-2 bg-light text-dark rounded-3 row pDiv" th:classappend="${target} == 'all'?'aroundAllDiv':''" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
+            <div class="imgDiv">
+                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 300px">
+                <div class="noImg" th:unless="${program.filename != null}"><i class="bi bi-image"></i></div>
+                <span class="badge bg-secondary imgBadge" th:text="(${program.type} == 'offline')?'대면':'비대면'"></span>
+                <div>
+                    <span class="badge bg-secondary" th:if="${#dates.createToday().before(program.startDate)}">예정</span>
+                    <span class="badge bg-secondary" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
+                    <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
+
+                    <span class="badge bg-secondary" th:if="${program.target} == 'etc' or ${program.target} == 'area'" th:text="${program.targetDetail}"></span>
+                    <span class="badge bg-secondary" th:unless="${program.target} == 'etc' or ${program.target} == 'area'">누구나</span>
+                </div>
+            </div>
+            <div class="textDiv">
+                <span th:if="${target} == 'all'" th:text="|${#strings.setSplit(program.place, ' ')[0]} ${#strings.setSplit(program.place, ' ')[1]}|"></span>
+                <p th:text="${program.title}"></p>
+                <p th:text="${#dates.format(program.startDate,'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(program.endDate, 'yyyy.MM.dd')}"></p>
+            </div>
+        </div>
+    </th:block>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script th:inline="javascript">
+    const target = [[${target}]];
+    const params = new URLSearchParams(location.search);
+    const keyword = params.get("detail");
+
+    $(document).ready(function() {
+        if(target === "all") {
+            $("#menuAll").addClass("activeDiv");
+        }
+        else {
+            $("#menuArea").addClass("activeDiv");
+        }
+
+        if(keyword != null)
+            $("#areaSelect").val(keyword).prop('selected', true);
+        else
+            $("#areaSelect").val("all").prop('selected', true);
+    });
+
+    function changeSelectValue(v) {
+        let u;
+        if(v === "all") {
+            u = "/around/area";
+        }
+        else {
+            u = (target === "all") ? `/around/all?detail=${v}` : `/around/area?detail=${v}`;
+        }
+        location.href = u;
+    }
+</script>
+<script type="text/javascript" src="/js/nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+.programInfoDiv {
+    margin-top: 10px;
+    margin-left: 0;
+    margin-right: 0;
+}
+.programImgDiv {
+    width: 350px;
+    height: 500px;
+    padding: 0;
+}
+.noImg {
+    width: 100%;
+    height: 100%;
+    background-color: #a2a2a2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.noImg i {
+    color: white;
+    font-size: 4rem;
+    text-align: center;
+    margin-right: 0;
+}
+.programImgDiv img {
+    width: 100%;
+    height: 100%;
+}
+.programTextDiv {
+    float: left;
+    padding: 10px 0 10px 30px;
+}
+.programTextDiv div{
+    border-bottom: solid #618264 2px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+.programInfoDiv h2 {
+    margin-top: 10px;
+}
+.infoMenu {
+    height: 50px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.infoMenu div {
+    width: 130px;
+    height: 100%;
+    float: left;
+    padding: 5px;
+    text-align: center;
+    margin-right: 10px;
+}
+.infoMenu h5 {
+    margin: 0;
+    padding-bottom: 10px;
+}
+.activeDiv {
+    border-bottom: solid #618264 5px;
+}
+.programDateDiv {
+    margin-top: 20px;
+    border: solid #c9c9c9 1px;
+    padding: 20px;
+}
+.programDateDiv .col {
+    margin-top: 10px;
+}
+.programDateDiv h5 {
+    margin: 0;
+}
+i {
+    float: left;
+    margin-right: 10px;
+}
+#peopleCount {
+    text-align: right;
+}
+#appDiv button {
+    height: 55px;
+    margin-top: 10px;
+    background-color: #618264;
+    color: white;
+    font-weight: bold;
+}
+.activeli {
+    background-color: #E4E4D0;
+}
+#peopleCount {
+    padding-top: 30px;
+}
+.hide {
+    display: none;
+}
+.card-body button {
+    width: 100px;
+    font-weight: bold;
+}
+.card-body button:hover {
+    background-color: #618264 !important;
+}
+.card {
+    margin-bottom: 10px;
+}
+
+.bi-trash-fill {
+    float: right;
+}
+.showEnterAnswerBtn {
+    margin-bottom: 5px;
+}
+.bg-success {
+    background-color: #618264 !important;
+}
+.answerDiv {
+    margin-top: 5px;
+    background-color: #f8f9fa;
+    padding: 5px;
+    border: solid #dee2e6 1px;
+}
+.showAnswerBtn {
+    margin-top: 5px;
+}
+#qnaList p {
+    margin-bottom: 0;
+}
+table td {
+    padding-left: 0 !important;
+}
+table th {
+    padding-left: 0 !important;
+}

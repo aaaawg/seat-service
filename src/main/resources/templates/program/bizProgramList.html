@@ -1,35 +1,84 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+<head th:replace="layout/head :: head(~{::link})">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link th:href="@{/css/bizPage.css}" href="../css/bizPage.css" rel="stylesheet">
 </head>
 <body>
-<div class="container" style="max-width: 800px">
-    <button th:onclick="|location.href='@{/business/program/add}'|" type="button">추가</button>
-    <div>
-        <table class="table">
+<div class="container" style="max-width: 1046px">
+    <div class="btnDiv">
+        <button class="rounded-2" th:onclick="|location.href='@{/business/program/add}'|" type="button">추가</button>
+    </div>
+    <div class="tb rounded-2 shadow" style="float:left; width: 650px">
+        <table class="table table-hover table-borderless" id="tList">
             <thead>
             <tr>
-                <th> </th>
                 <th>프로그램명</th>
-                <th>상태</th>
+                <th>등록일</th>
+                <th>신청</th>
                 <th>상세정보</th>
-                <th>예약현황</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${programs}">
-                <td><input type="checkbox"></td>
-                <td th:text="${item.title}">프로그램명</td>
-                <td>상태</td>
-                <td><button th:onclick="|location.href='@{/program/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
-                <td><button th:onclick="|location.href='@{/business/program/booking/{programNum}(programNum=${item.programNum})}'|" type="button">보기</button></td>
+             <tr th:each="program : ${programs}" th:num="${program.programNum}" th:onclick="showViewingList(this.getAttribute('num'), this)" >
+                <td style="width: 50%" th:text="${program.title}">프로그램명</td>
+                <td th:text="${#dates.format(program.createDate, 'yyyy-MM-dd HH:mm')}">등록일</td>
+                <td style="width: 10%" th:if="${#dates.createToday().before(program.startDate)}">예정</td>
+                <td style="width: 10%" th:if="${#dates.createToday().after(program.endDate)}">마감</td>
+                <td style="width: 10%" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</td>
+                <td style="width: 10%"><button class="rounded-pill tableBtn btn-sm" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|" type="button">보기</button></td>
             </tr>
             </tbody>
         </table>
     </div>
+    <div class="tb rounded-2 shadow" id="tbD">
+        <table class="table table-borderless">
+            <thead>
+            <tr>
+                <th>날짜</th>
+                <th>시간</th>
+                <th>인원</th>
+                <th style="text-align: center">신청자</th>
+            </tr>
+            </thead>
+            <tbody id="list">
+            </tbody>
+        </table>
+    </div>
 </div>
+<script>
+    function showViewingList(programNum, t) {
+        if(programNum !== null) {
+            const p = t.parentNode.querySelector(".table-active");
+            if(p)
+                p.classList.remove("table-active");
+            t.classList.add("table-active");
+
+            fetch(`/business/program/${programNum}`).then((r) => {
+                return r.json();
+            }).then((r) => {
+                let tbody = document.getElementById("list");
+                tbody.innerHTML = "";
+                let td = "";
+                r.map((r)  => {
+                    td += `<tr class="border-top"><td>${r.viewingDate}</td>`;
+                    td += `<td>${r.viewingTime}</td>`;
+                    td += `<td>${r.peopleNum}</td>`;
+                    td += `<td style="text-align: center"><button class="rounded-pill tableBtn btn-sm" value=${r.programNum} onclick="showBookingUser(this, this.value)">보기</button></td></tr>`;
+                })
+                tbody.innerHTML += td;
+            })
+            document.getElementById("tbD").style.display = "block";
+        }
+    }
+
+    function showBookingUser(e, num) {
+        let date = e.parentNode.parentNode.cells[0].innerText;
+        let time = e.parentNode.parentNode.cells[1].innerText;
+
+        location.href = `/business/program/${num}/booking?date=${date}&time=${time}`;
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </body>
 </html>

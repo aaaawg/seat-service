@@ -1,11 +1,14 @@
 package com.psr.seatservice.domian.program;
 
 import com.psr.seatservice.domian.files.Files;
+import com.psr.seatservice.domian.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,8 +23,10 @@ public class Program {
     private String title; //프로그램 제목
     @Column(length = 100)
     private String place; //장소
+    private String way;
     @Column(length = 10)
     private String target; //신청대상
+    private String targetDetail;
     @Temporal(value = TemporalType.DATE)
     private Date startDate; //신청시작일
     @Temporal(value = TemporalType.DATE)
@@ -32,31 +37,43 @@ public class Program {
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
     private List<ProgramViewing> programViewings = new ArrayList<>();
 
+    @Lob
+    private String contents; //프로그램 상세 내용
+
     @Column(columnDefinition = "LONGTEXT")
     private String programHtml; //html text
 
     @Column(columnDefinition = "json")
     private String programQuestion;
 
-    //private String contents; //프로그램 상세 내용
-    //프로그램 등록 작성자 아이디
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
+    @CreationTimestamp
+    private Timestamp createDate;
+
+    @Lob
     private String seatingChart;
     private Integer seatCol;
     private int peopleNum; //모집인원
 
-    public Program(String title, String place, String target, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String programHtml, String programQuestion) {
+    public Program(String title, String place, String way, String target, String targetDetail, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String contents, String programHtml, String programQuestion, User user) {
         this.title = title;
         this.place = place;
+        this.way = way;
         this.target = target;
+        this.targetDetail = targetDetail;
         this.type = type;
         this.startDate = startDate;
         this.endDate = endDate;
         this.seatingChart = seatingChart;
         this.seatCol = seatCol;
         this.peopleNum = peopleNum;
+        this.contents = contents;
         this.programHtml = programHtml;
         this.programQuestion = programQuestion;
+        this.user = user;
     }
     public void updateInfo(String title, String place, String target, Date startDate, Date endDate, String type, int peopleNum,
                            Integer seatCol, String seatingChart) {

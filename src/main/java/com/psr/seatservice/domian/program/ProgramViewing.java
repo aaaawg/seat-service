@@ -3,7 +3,6 @@ package com.psr.seatservice.domian.program;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;

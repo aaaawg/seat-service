@@ -1,6 +1,10 @@
 package com.psr.seatservice.controller.program;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.Program;
+import com.psr.seatservice.domian.user.User;
+import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
+import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.files.FileDto;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
@@ -8,6 +12,9 @@ import com.psr.seatservice.dto.program.response.BizProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoUpdateResponse;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,22 +37,22 @@ public class BizUserProgramController {
 
     //기업 사용자 - 해당 사용자가 등록한 프로그램 목록 표시
     @GetMapping
-    public String programs(Model model) {
-        List<BizProgramListResponse> programs = programService.programs();
+    public String programs(@AuthenticationPrincipal User user, Model model) {
+        List<BizProgramListResponse> programs = programService.programs(user.getId());
         model.addAttribute("programs", programs);
         return "program/bizProgramList";
     }
 
     @GetMapping("/add")
-    public String addProgram() {
+    public String addProgram(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("userAddr", user.getAddress());
         return "program/bizAddProgram";
     }
 
     @PostMapping( "/add")
     public String addProgram(BizAddProgramRequest request, @RequestParam("file") List<MultipartFile> files
-    , @RequestParam(value="formHtml", required = false) String formHtml, @RequestParam(value="getTitleJson", required = false) String getTitleJsonString) throws IOException {
-        System.out.println("FormHtml: "+formHtml);
-        Long proNum = programService.addProgram(request, formHtml, getTitleJsonString);
+    , @RequestParam(value="formHtml") String formHtml, @RequestParam(value = "getTitleJson", required = false) String getTitleJsonString, @AuthenticationPrincipal User user) throws IOException {
+        Long proNum = programService.addProgram(request, formHtml, getTitleJsonString, user);
 
         //programService.addProgramFormTitle(proNum, getTitleJsonString);
 
@@ -74,7 +81,6 @@ public class BizUserProgramController {
 
         FileDto fileDto;
         List<FileDto> list = fileService.getFileByProNum(program.getProgramNum());
-
         fileDto = new FileDto();
         if(!list.isEmpty()) {
             fileDto.setFilename("InImage");
@@ -154,10 +160,37 @@ public class BizUserProgramController {
         return "program/bizCreateSeatingChart";
     }
 
-    //해당 프로그램을 예약한 개인 사용자 목록 조회
-    @GetMapping("/booking/{programNum}")
-    public String bookingUserList(@PathVariable Long programNum) {
-        return "user/bizBookingUserList";
+    @GetMapping("/{programNum}")
+    public @ResponseBody ResponseEntity<Object> viewingAndPeopleNumList(@PathVariable Long programNum) {
+        List<BizProgramViewingDateAndTimeAndPeopleNumResponse> list = programService.getProgramViewingDateAndTimeAndPeopleNum(programNum);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
+
+    @GetMapping("/{programNum}/booking")
+    public String showBookingUserListPage(@PathVariable Long programNum, @RequestParam String date, @RequestParam String time, Model model){
+        List<BizProgramBookingUserListResponse> list = programService.getBookingUserList(programNum, date, time);
+        boolean checkSC = programService.checkSeatingChart(programNum);
+
+        model.addAttribute("userList", list);
+        model.addAttribute("checkSC", checkSC);
+        model.addAttribute("programNum", programNum);
+        return "program/bizBookingUserList";
+    }
+
+    @PutMapping("/{programNum}/booking")
+    public @ResponseBody ResponseEntity<Object> updateBookingStatus(@PathVariable Long programNum, @RequestBody BizUpdateProgramBookingStatusRequest request){
+        programService.updateBookingStatus(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/{programNum}/seat")
+    public String showSeatingChart(@PathVariable Long programNum, @RequestParam String date, @RequestParam String time, Model model) {
+        Program program = programService.getProgramInfo(programNum);
+        List<Integer> list = programService.getBookedSeats(programNum, date, time);
+
+        BizProgramBookingInfoResponse bookingInfoResponse = new BizProgramBookingInfoResponse(program.getSeatingChart(), list, program.getSeatCol(), program.getTitle(), date, time);
+        model.addAttribute("seats", bookingInfoResponse);
+        return "program/bizSeatingChart";
     }
 
     @GetMapping("/updateSeat")

@@ -4,6 +4,7 @@ let popupSeatCol;
 
 window.addEventListener("load", function() {
     showCreatSeatingChart(0);
+    enterPlace("오프라인");
 });
 
 function placeValue() {
@@ -12,7 +13,7 @@ function placeValue() {
 
     val += (detailAddr !== ''? addr + ', ' + detailAddr : addr)
 
-    document.getElementById("offPlace").value = val;
+    document.getElementById("place").value = val;
 }
 function checkNumber(id) {
     let id1 = document.getElementById(id);
@@ -63,66 +64,19 @@ function showPlaceInput(type) {
     document.getElementById("enterPeopleNum").style.display = "inline";
 
     if(type) {
-        document.getElementById("off").style.display = "none";
-        document.getElementById("on").style.display = "block";
-        document.getElementById("onPlace").disabled = false;
-        document.getElementById("offPlace").disabled = true;
+        enterPlace("온라인");
+        document.getElementById("onlineWay").style.display = "block";
 
         document.getElementById("offSeatingChart").style.display = "none";
         showCreatSeatingChart(0);
     }
     else {
-        document.getElementById("off").style.display = "block";
-        document.getElementById("on").style.display = "none";
-        document.getElementById("onPlace").disabled = true;
-        document.getElementById("offPlace").disabled = false;
+        enterPlace("오프라인");
+        document.getElementById("onlineWay").style.display = "none";
 
         document.getElementById("nsc").checked = true;
         document.getElementById("offSeatingChart").style.display = "block"
         document.getElementById("csc").style.display = "none";
-    }
-}
-function showArea() {
-    let getAddr = document.getElementById("address").value;
-    let drop = document.getElementById("drop");
-    let addr = '';
-    let addr1 = '';
-    let addr2 = '';
-    let targetDrop = document.getElementById("targetDrop");
-
-    targetDrop.innerHTML = '';
-    targetDrop.style.display = "none";
-
-    if(getAddr !== '') {
-        if (drop.options[drop.selectedIndex].value !== "제한없음") {
-            targetDrop.style.display = "block";
-
-            let areaDrop = document.createElement("select");
-            areaDrop.id = "areaDrop";
-            targetDrop.appendChild(areaDrop);
-
-            addr = getAddr.split(' ', 2);
-            addr1 = addr[0];
-            addr2 = addr[1];
-
-            let op1 = document.createElement("option");
-            op1.value = addr1;
-            op1.text = addr1;
-            op1.name = "target";
-            areaDrop.appendChild(op1);
-
-            if(addr2 !== '') {
-                let op2 = document.createElement("option");
-                op2.value = addr1 + addr2;
-                op2.text = addr2;
-                op2.name = "target";
-                areaDrop.options.add(op2);
-            }
-        }
-    }
-    else {
-        alert("주소를 입력해주세요");
-        drop.options[0].selected = true;
     }
 }
 function openPopup() {
@@ -151,12 +105,11 @@ function openPopup() {
         document.getElementById("seatingChart").value = chart;
         document.getElementById("seatCol").value = popupSeatCol;
 
-       // document.getElementById("peopleNum").value = popupSeatArr.length;
-        document.getElementById("peopleNum").value = (popupSeatArr.length - exSeatCount).toString();
+        document.getElementById("peopleNum").value = popupSeatArr.length - exSeatCount;
         document.getElementById("peopleNum").readOnly = true;
 
         document.getElementById("enterPeopleNum").style.display = "none";
-        document.getElementById("seatLength").innerText = (popupSeatArr.length - exSeatCount).toString();
+        document.getElementById("seatLength").innerText = document.getElementById("peopleNum").value;
     });
 }
 function showCreatSeatingChart(v) {
@@ -184,6 +137,7 @@ function valueClear() {
     document.getElementById("seatCol").value = null;
     document.getElementById("peopleNum").value = null;
     document.getElementById("seatLength").innerText = null;
+    document.getElementById("way").value = null;
 }
 function peopleNumValue() {
     const ch = document.getElementById("peopleChBox");
@@ -201,7 +155,23 @@ function peopleNumValue() {
 
         if(document.getElementById("offline").checked) {
             document.getElementById("offSeatingChart").style.display = "block";
-            showCreatSeatingChart(1);
+            showCreatSeatingChart(0);
         }
     }
+}
+function enterPlace(type) {
+    const placeDiv = document.getElementById("placeDiv");
+    let html;
+
+    if(type === "오프라인") {
+        html = "<input type='button' id='searchAddr' value='주소 검색' onclick='findAddress()'>";
+        html += "<input type='text' id='address' readonly placeholder='주소'>";
+        html += "<input type='text' id='detailAddress' onchange='placeValue()' placeholder='상세주소'>";
+        html += "<input type='hidden' id='place' name='place'>";
+    }
+    else {
+        html = "<input type='text' id='place' name='place'>";
+    }
+
+    placeDiv.innerHTML = html;
 }

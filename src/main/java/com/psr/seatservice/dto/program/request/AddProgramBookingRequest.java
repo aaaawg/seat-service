@@ -10,5 +10,4 @@ public class AddProgramBookingRequest {
     private Integer seatNum;
     private String viewingDate;
     private String viewingTime;
-    //private String userId;
 }
