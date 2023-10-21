@@ -269,7 +269,6 @@ function origContent(newContentDiv){
     count++;
 }
 function addSelect(e){
-console.log("test add");
         const divName = document.getElementById('plus'+e);
         const newDiv = document.createElement('div');
         newDiv.setAttribute("id","select"+e);
@@ -311,32 +310,6 @@ function addEditSelect(e){
     const inputElements = replyPreviousDiv.querySelector('input[type="text"], textarea');
     if(inputElements!==null){replyPreviousDiv.style.display = "none";}
 
-// 수정시 셀렉트 전꺼로 변경 안됨
-    if(document.getElementById('myFormEdit')!==null){
-        let countSelect = document.querySelectorAll("select").length;
-    const selectP = document.getElementById('select'+e);
-                    const divContent = selectP.innerHTML;
-                    const match = divContent.match(/\d+/);
-                        const selectPp = document.getElementsByName('content'+e)[0];
-                 if(match[0]==='0'){selectPp.selectedIndex = 0;}
-                 else if(match[0]==='1'){selectPp.selectedIndex = 1;}
-                 else if(match[0]==='2'){selectPp.selectedIndex = 2;}
-                 else if(match[0]==='3'){selectPp.selectedIndex = 3;}
-            /*for(let i=0; i<countSelect; i++){
-                const selectP = document.getElementById('select'+i);
-                const divContent = selectP.innerHTML;
-                const match = divContent.match(/\d+/);
-
-                console.log(match[0]);
-
-                const selectPp = document.getElementsByName('content'+i)[0];
-                if(match[0]===0){selectPp.selectedIndex = 0;}
-                else if(match[0]===1){selectPp.selectedIndex = 1;}
-                else if(match[0]===2){selectPp.selectedIndex = 2;}
-                else if(match[0]===3){selectPp.selectedIndex = 3;}
-            }*/
-    }
-
     var newChBtn = makeButton("btn btn-success", "complete"+e, "complete("+e+")");
     newChBtn.innerText = "완료";
     divName.appendChild(newChBtn);
@@ -359,6 +332,10 @@ function addEditSelect(e){
         radioPlusBtn.innerText = "옵션 추가";
         selectBtnDiv.appendChild(radioPlusBtn);
         changeSelectDiv.appendChild(selectBtnDiv);
+
+        //css
+        const changeCssSelectDiv = document.getElementsByClassName("selectDiv"+e)[0];
+        changeCssSelectDiv.style.marginLeft = '6.3rem';
     }
     var checkContent = reToInput(e, 'check');
     if(Array.isArray(checkContent) && checkContent.length !== 0){
@@ -378,6 +355,10 @@ function addEditSelect(e){
         checkPlusBtn.innerText = "옵션 추가";
         checkBoxBtnDiv.appendChild(checkPlusBtn);
         changeSelectDiv.appendChild(checkBoxBtnDiv);
+
+        //CSS
+        const changeCssCheckDiv = document.getElementsByClassName("checkBoxDiv"+e)[0];
+        if(changeCssCheckDiv){changeCssCheckDiv.style.marginLeft = '6.3rem';}
     }
     //const target = document.getElementById(e);
     const target = document.getElementsByClassName("btn btn-change"+e)[0];
@@ -489,6 +470,12 @@ function complete(e){
         const replyPreviousDiv = document.querySelector(".reDiv"+e);
         const inputElements = replyPreviousDiv.querySelector('input[type="text"], textarea');
         if(inputElements!==null){replyPreviousDiv.style.display = "block";}
+
+    //css
+        const changeCssSelectDiv = document.getElementsByClassName("selectDiv"+e)[0];
+        if(changeCssSelectDiv){changeCssSelectDiv.style.marginLeft = '0';}
+        const changeCssCheckDiv = document.getElementsByClassName("checkBoxDiv"+e)[0];
+        if(changeCssCheckDiv){changeCssCheckDiv.style.marginLeft = '0';}
 }
 
 function titleInputLayoutShow(num){

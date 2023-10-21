@@ -72,7 +72,7 @@ select {
 }
 
 div[class*='class'] > input{
-width: 83%;
+    width: 83%;
 }
 div[id*='plus'] > div{
     margin-top: 10px;
@@ -81,6 +81,7 @@ input:focus {outline: none;}
 
 div[class*='select'] > label, label[id*='check']{
     margin-right: 1rem;
+    margin-top: 0.6rem;
 }
 input[type=radio], input[type=checkbox]{
 margin-right: 0.5rem;
@@ -88,6 +89,31 @@ margin-right: 0.5rem;
 
 div[class*='reDiv'] > input[class*='reply'], div[class*='reDiv'] > textarea{
     width: 100%;
+}
+
+button[class*='reply']{
+    background-color: #157347;
+    color: white;
+    border: solid 2.13px #157347;
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+div[class*='selectBtnDiv'], div[class*='checkBoxBtnDiv']{
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 1rem;
+}
+button[id*='radioP'], button[id*='checkP']{
+    border-radius: 50px;
+    background-color: white;
+    color: #157347;
+    border: 1px solid #157347;
+    margin-top: 1.5rem;
+    width: 7rem;
+    height: 2rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 0.3rem 0.9rem;
 }
 
 .btn.btn-plus{
