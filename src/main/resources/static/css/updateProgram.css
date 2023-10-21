@@ -2,7 +2,7 @@ body{
     background-color: rgb(249 249 249) !important;
 }
 .container div{
-    margin-top: 1.4rem;
+    margin-top: 1.8rem;
 }
 form{
     max-width: 770px;
@@ -106,7 +106,20 @@ input[type=file]:hover::file-selector-button {
     background-color: #157347;
     background-position: 99% 50%;
 }
-
+.normalLabel{
+font-weight: 550;
+}
+#searchBtn {
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    border: solid 1px #c9c9c9;
+    background-color: #ffffff;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-position: 2px 2px;
+    background-size: 90%;
+}
 input[type=radio]{
     cursor: pointer;
     accent-color:#157347;

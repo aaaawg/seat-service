@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="layout/head :: head(~{::link})">
     <meta charset="UTF-8">
-    <title>Title</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/updateForm.css}" href="../css/updateForm.css?ver=1.1" rel="stylesheet">
 </head>
 <body>
+<div th:replace="/layout/nav.html :: nav"></div>
 <div>
     <form th:action method="post" enctype="multipart/form-data" id="myFormEdit">
         <div id="formContent">
         </div>
-        <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
+        <div id="contentAdd">
+            <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
+        </div>
         <button type="submit" class="button button--shikoba button--text-medium button--round-l button--inverted"><span>수정완료</span></button>
     </form>
 </div>

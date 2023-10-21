@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="layout/head :: head(~{::link})">
     <meta charset="utf-8">
     <link th:href="@{/css/updateProgram.css}" href="../css/updateProgram.css?ver=1.1" rel="stylesheet">
     <link th:href="@{/css/bootstrap.min.css}"
@@ -12,44 +12,44 @@
 <div class="container">
     <form th:action method="post" enctype="multipart/form-data" id="updateForm">
         <div>
-            <label for="title">프로그램명</label>
+            <label class="normalLabel" for="title">프로그램명</label>
             <input type="text" id="title" name="title" th:value="${programInfo.title}">
         </div>
         <div>
-            <label>구분</label>
+            <label class="normalLabel">구분</label>
             <input type="radio" id="offline" name="type" value="오프라인" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(0, this.getAttribute('bookCount'))">
             <label id="offlineCheck" for="offline">오프라인</label>
             <input type="radio" id="online" name="type" value="온라인" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(1, this.getAttribute('bookCount'))">
             <label id="onlineCheck" for="online">온라인</label>
         </div>
         <div id="off">
-            <label for="place">장소</label>
+            <label for="place" class="normalLabel">장소</label>
             <input type="button" id="searchAddr" value="주소 검색" onclick="findAddress()">
             <input type="text" id="address" readonly placeholder="주소">
             <input type="text" id="detailAddress" onchange="placeValue()" placeholder="상세주소" value="">
             <input type="hidden" id="place" name="place" th:value="${programInfo.place}">
         </div>
         <div id="on">
-            <label for="place">장소</label>
+            <label for="place" class="normalLabel">장소</label>
             <input type="text" id="onPlace" name="place" value="온라인 관람" readonly disabled>
         </div>
         <div>
-            <label for="drop">신청대상</label>
+            <label for="drop" class="normalLabel">신청대상</label>
             <select id="drop" name="target" th:attr="bookCount=${bookingCount}" onchange="changeTargetSelect(this.getAttribute('bookCount'))">
                 <option value="제한없음" selected>제한없음</option>
                 <option id="area" value="지역">지역</option>
             </select>
         </div>
         <div>
-            <label for="startDate">신청 시작일</label>
+            <label for="startDate" class="normalLabel">신청 시작일</label>
             <input type="date" id="startDate" name="startDate" th:value="${programInfo.startDate}">
         </div>
         <div>
-            <label for="endDate">신청 종료일</label>
+            <label for="endDate" class="normalLabel">신청 종료일</label>
             <input type="date" id="endDate" name="endDate" th:value="${programInfo.endDate}">
         </div>
         <div>
-            <label for="endDate">모집 인원</label>
+            <label for="endDate" class="normalLabel">모집 인원</label>
             <label th:if="${bookingCount <= 0}" id="peopleNumLabel"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
             <input  type="text" id="peopleNum" name="peopleNum" th:value="${programInfo.peopleNum}" onchange="writeNum(-5)" />
             <button type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
@@ -62,7 +62,7 @@
         </div>
         <div>
             <div id="fileAdd">
-                <label for="inputFile">첨부 파일</label>
+                <label for="inputFile" class="normalLabel">첨부 파일</label>
                 <div style="display: inline;">
                     <div class="custom-file" id="inputFile">
                         <input multiple="multiple" name="file" type="file" class="custom-file-input" id="customFile" onchange="displaySelectedImage(event)"/>

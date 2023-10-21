@@ -409,12 +409,17 @@ function handleOnChange(e, divNum) {
            wholeSelectDiv.appendChild(selectBtnDiv);
            changeContent[0].appendChild(wholeSelectDiv);
         }
+        //css
+        const changeCssSelectDiv = document.getElementsByClassName("selectDiv"+divNum)[0];
+        changeCssSelectDiv.style.marginLeft = '6.3rem';
+
         break;
     case '복수 선택형':
         const storeCheck = document.querySelector(".changeCheckDiv"+divNum);
            //다시 보이게 reDiv
             const replyPreviousDiv2 = document.querySelector(".reDiv"+divNum);
             replyPreviousDiv2.style.display = "block";
+
         if(storeCheck === null){
             const wholeCheckDiv = document.createElement('div');
             wholeCheckDiv.setAttribute("class", "wholeCheckDiv"+divNum);
@@ -434,6 +439,9 @@ function handleOnChange(e, divNum) {
             wholeCheckDiv.appendChild(checkBoxBtnDiv);
             changeContent[0].appendChild(wholeCheckDiv);
         }
+            //CSS
+            const changeCssCheckDiv = document.getElementsByClassName("checkBoxDiv"+divNum)[0];
+            if(changeCssCheckDiv){changeCssCheckDiv.style.marginLeft = '6.3rem';}
         break;
   }
 }
