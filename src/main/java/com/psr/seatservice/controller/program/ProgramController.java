@@ -106,16 +106,11 @@ public class ProgramController {
     @PostMapping("/booking/{programNum}")
     public @ResponseBody ResponseEntity<Object> addBooking(@PathVariable Long programNum, @RequestBody BookingRequest request, @AuthenticationPrincipal User user) {
         //programBooking 테이블에 예약 데이터 추가
-        if (user != null) {
-            int result = programService.addBooking(programNum, request, user);
-            if (result == 2)
-                return ResponseEntity.status(HttpStatus.OK).build();
-            else if (result == 1)
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("이미 예약된 좌석 입니다."));
-            else
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("인원이 마감되었습니다."));
-        } else
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("로그인 후 이용할 수 있습니다.")); //로그인 상태가 아닐 경우
+        String result = programService.addBooking(programNum, request, user);
+        if (result == null)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(result));
     }
 
     //관리자 폼
@@ -162,7 +157,6 @@ public class ProgramController {
             model.addAttribute("target", target);
             model.addAttribute("userArea", area);
         }
-
         return "program/userAroundProgramList";
     }
 }

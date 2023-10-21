@@ -116,19 +116,27 @@ public class ProgramService {
         return list;
     }
 
-    public int addBooking(Long programNum, BookingRequest request, User user) {
+    @Transactional
+    public String addBooking(Long programNum, BookingRequest request, User user) {
         int count = getProgramBookingCount(programNum, request.getViewingDate(), request.getViewingTime());
         if(count < request.getPeopleNum() || request.getPeopleNum() == -1) {
-            if (programBookingRepository.existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(programNum, request.getSeatNum(), request.getViewingDate(), request.getViewingTime())) {
-                return 1;
+            int nonPCount = programBookingRepository.countByUser_IdAndStatus(user.getId(), "불참");
+            if(nonPCount < 3) {
+                if (!programBookingRepository.existsByProgramNumAndViewingDateAndViewingTimeAndUser_Id(programNum, request.getViewingDate(), request.getViewingTime(), user.getId())) { //해당 회차를 신청 했는지
+                    if (request.getSeatNum() != null && programBookingRepository.existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(programNum, request.getSeatNum(), request.getViewingDate(), request.getViewingTime())) {
+                        return "이미 신청된 좌석입니다.";
+                    } else {
+                        ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), "예정", request.getProgramResponse(), user);
+                        programBookingRepository.save(programBooking);
+                        return null;
+                    }
+                } else
+                    return "이미 해당 회차를 신청했습니다.";
             }
-            else {
-                ProgramBooking programBooking = new ProgramBooking(programNum, request.getViewingDate(), request.getViewingTime(), request.getSeatNum(), "예정", request.getProgramResponse(), user);
-                programBookingRepository.save(programBooking);
-                return 2;
-            }
+            else
+                return "불참 횟수(3회)로 인해 신청할 수 없습니다.";
         }
-        return 0;
+        return "인원 마감으로 인해 신청할 수 없습니다.";
     }
 
     public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {

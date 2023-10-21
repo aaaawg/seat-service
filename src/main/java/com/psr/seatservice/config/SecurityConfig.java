@@ -1,5 +1,6 @@
 package com.psr.seatservice.config;
 
+import com.psr.seatservice.handler.UserLoginFailHandler;
 import com.psr.seatservice.service.user.UserDetailService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +34,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/**","/program/**", "/login", "/join/**", "/js/**", "/css/**", "/img/**").permitAll()
                 .antMatchers("/business/**").hasRole("BIZ")
-                .antMatchers("/myPage/**", "/around/**").hasRole("USER")
+                .antMatchers("/myPage/**", "/around/**", "/booking/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                     .formLogin().loginPage("/login")
