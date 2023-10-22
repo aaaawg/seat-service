@@ -109,8 +109,9 @@ public class BizUserProgramController {
         //2. 사진 없다가 새로 추가 - files O, deleteFiles X, 삭제X 추가O @
         //3. 사진 있었고 새로 변경 - files O, deleteFiles O, 삭제O 추가O @
         //4. 사진 없애기 - files X, deleteFiles X, deleteFiles2 O, 삭제O 추가X @
+
         if (files.get(0).getOriginalFilename().equals("")){
-            if (deleteFiles==null && deleteFiles2==null) {
+            if (deleteFiles!=null && deleteFiles2!=null) {
 
             }else if(deleteFiles==null){
                 fileService.deleteFile(programNum);
@@ -124,7 +125,7 @@ public class BizUserProgramController {
                 }
             }
         }else {
-            if (deleteFiles!=null){
+            if (deleteFiles != null) {
                 //삭제
                 fileService.deleteFile(programNum);
                 //실제로 파일 삭제
@@ -149,7 +150,6 @@ public class BizUserProgramController {
                 fileService.saveFiles(multipartFile, programNum);
             }
         }
-
         //return "redirect:/business/program/info/{programNum}";
         return "redirect:/program/"+ programNum;
     }

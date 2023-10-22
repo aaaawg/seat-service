@@ -1,7 +1,7 @@
 body{
     background-color: rgb(249 249 249) !important;
 }
-.container div{
+.container div:not(.seatBtn){
     margin-top: 1.4rem;
 }
 form{
@@ -35,7 +35,7 @@ form{
           border: 1px solid #6B9B7E;
       }
 }
-.btn:not(.btn.btn-success, .btn.btn-plus){
+.btn:not(.btn.btn-success, .btn.btn-plus, .btn.btn-outline-secondary){
     color: white;
     background-color: #6B9B7E;
     margin-right: .5rem;
@@ -47,10 +47,14 @@ form{
                 border: 1px solid #157347;
           }
 }
-span{
+div[id*='title'] > span {
     line-height: 2.3rem;
      margin-left: 0.23rem;
 }
+span[id*='ContentSpan']{
+  font-size:1rem;
+}
+
 div[id*='plus']{
     border: 1px solid #adb5bd;
     border-radius: 0.25rem;
@@ -62,7 +66,7 @@ div[class*='class'] > span, div[id*='select'] > span{
     display: inline-block;
     width: 6rem;
 }
-div[class*='class'], div[id*='select']{
+div[class*='class'], div[id*='select']:not(#selectSeat){
     margin-top: 0.5rem !important;
 }
 select {
@@ -190,4 +194,46 @@ button[id*='radioP'], button[id*='checkP']{
     border-bottom-right-radius: 5px;
     background-position: 2px 2px;
     background-size: 90%;
+}
+
+#startTitle{
+    color: rgb(121, 154, 121);
+    font-size: 1.5rem;
+    font-weight: bold;
+    max-width: 760px;
+    min-width: 760px;
+    margin: 1rem auto;
+}
+
+textarea:focus {
+    outline-color: rgb(121, 154, 121);
+}
+input:focus {
+    border-radius: 0.25rem;
+    border: solid 2px rgb(121, 154, 121);
+}
+
+input[type='radio'], input[type='checkbox']{
+accent-color: rgb(121, 154, 121);
+}
+#formPage{
+    max-width: 770px;
+    min-width: 770px;
+    margin: 1rem auto;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    height: 4rem;
+    background-color: rgb(121, 154, 121);
+    color: white;
+    border-radius: 0.25rem;
+    font-size: 1.5rem;
+     &:hover{
+            transition: 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+            color: white;
+            background-color: #157347;
+            background-position: 99% 50%;
+            opacity: 1;
+       }
 }
