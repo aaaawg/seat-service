@@ -18,14 +18,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
     private final UserDetailService userService;
+    private final UserLoginFailHandler userLoginFailHandler;
 
-    public SecurityConfig(UserDetailService userService) {
+    public SecurityConfig(UserDetailService userService, UserLoginFailHandler userLoginFailHandler) {
         this.userService = userService;
-    }
-
-    @Bean
-    public WebSecurityCustomizer customizer() {
-        return (web) -> web.ignoring().requestMatchers(PathRequest.toH2Console());
+        this.userLoginFailHandler = userLoginFailHandler;
     }
 
     @Bean
