@@ -7,6 +7,29 @@ window.addEventListener("load", function() {
     enterPlace("오프라인");
 });
 
+$(document).ready(function() {
+    $('.summernote').summernote({
+        tabsize: 2,
+        placeholder: '프로그램 상세정보를 입력해 주세요',
+        lang: "ko-KR",
+        height: 500,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+            ['view', ['help']],
+        ]
+    });
+
+    $("[data-bs-toggle='tooltip']").tooltip({
+        trigger: "click hover"
+    });
+});
+
 function placeValue() {
     let detailAddr= document.getElementById("detailAddress").value;
     let val = '';
@@ -39,23 +62,11 @@ function findAddress() {
     }).open();
 }
 function addViewing() {
-    let viewing = document.getElementById("viewing").value;
+    const viewing = document.getElementById("viewing").value;
 
-    let check = document.createElement("input");
-    check.className = "form-check-input"
-    check.type = "checkbox";
-    check.value = viewing;
-    check.name = "viewingDateAndTime"
-    check.checked = true;
-
-    let label = document.createElement("label");
-    label.className = "form-check-label";
-    label.textContent = check.value;
-
-    let viewingList = document.getElementById("viewingList");
-    viewingList.appendChild(check);
-    viewingList.appendChild(label);
-    viewingList.appendChild(document.createElement("br"));
+    const html = `<div class="form-check"><input class='form-check-input' type='checkbox' name='viewingDateAndTime' value="${viewing}" checked>
+                  <label class="form-check-label">${viewing}</label></div>`
+    document.getElementById("viewingList").innerHTML += html;
 }
 function showPlaceInput(type) {
     valueClear();
@@ -84,7 +95,8 @@ function openPopup() {
 
     popup.addEventListener("beforeunload", function () {
         const c = document.getElementById("popupChart");
-        c.innerHTML = "";
+        c.classList.add("chartPreview");
+        c.innerHTML = "<div><i class='bi bi-eye'></i> 좌석표 미리보기</div><hr>";
         let num = 1;
         let seatNum = 1;
         let exSeatCount = 0;
@@ -97,10 +109,13 @@ function openPopup() {
                 exSeatCount++;
                 c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(215, 215, 215);'></div>";
             }
+
             if(num % popupSeatCol === 0 )
                 c.innerHTML += "<br>";
+
             num++;
         }
+
         let chart = JSON.stringify(popupSeatArr);
         document.getElementById("seatingChart").value = chart;
         document.getElementById("seatCol").value = popupSeatCol;
@@ -115,7 +130,7 @@ function openPopup() {
 function showCreatSeatingChart(v) {
     valueClear();
     if(v) {
-        document.getElementById("csc").style.display = "block";
+        document.getElementById("csc").style.display = "inline";
         document.getElementById("cb").disabled = false;
         document.getElementById("seatingChart").disabled = false;
     } else {
@@ -138,6 +153,7 @@ function valueClear() {
     document.getElementById("peopleNum").value = null;
     document.getElementById("seatLength").innerText = null;
     document.getElementById("way").value = null;
+    document.getElementById("popupChart").classList.remove("chartPreview");
 }
 function peopleNumValue() {
     const ch = document.getElementById("peopleChBox");
@@ -164,14 +180,32 @@ function enterPlace(type) {
     let html;
 
     if(type === "오프라인") {
-        html = "<input type='button' id='searchAddr' value='주소 검색' onclick='findAddress()'>";
-        html += "<input type='text' id='address' readonly placeholder='주소'>";
-        html += "<input type='text' id='detailAddress' onchange='placeValue()' placeholder='상세주소'>";
+        html = "<div class='input-group'><input type='text' class='form-control' id='address' readonly placeholder='주소'>";
+        html += "<a class='btn text-white' id='searchAddr' onclick='findAddress()'>검색</a></div>";
+        html += "<input type='text' class='form-control' id='detailAddress' onchange='placeValue()' placeholder='상세주소'>";
         html += "<input type='hidden' id='place' name='place'>";
     }
     else {
-        html = "<input type='text' id='place' name='place'>";
+        html = "<input type='text' class='form-control' id='place' name='place'>";
     }
 
     placeDiv.innerHTML = html;
+}
+function showArea() {
+    const drop = document.getElementById("drop");
+    const detailDiv = document.getElementById("detail");
+    let html;
+
+    if (drop.selectedIndex === 1) {
+        let addr = userAddr.split(' ', 2);
+        let addr1 = addr[0];
+        let addr2 = addr[1];
+
+        html = `<select class="form-select" name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
+    } else if (drop.selectedIndex === 2) {
+        html = '<input class="form-control" type=text name="targetDetail" placeholder="신청대상을 입력해 주세요.">';
+    } else
+        html = "";
+
+    detailDiv.innerHTML = html;
 }
