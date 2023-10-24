@@ -23,3 +23,10 @@ button {
     padding: 0;
     margin-top: 3px;
 }
+.errorInput {
+    border-color: #c00000 !important;
+}
+#eDiv {
+    color: #c00000;
+    margin-bottom: 3px;
+}

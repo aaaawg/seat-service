@@ -29,7 +29,10 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(name = "error", required = false) Boolean error, Model model) {
+        if(error != null && error) {
+            model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
+        }
         return "user/login";
     }
 
