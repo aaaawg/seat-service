@@ -57,10 +57,28 @@ public class ProgramService {
                 .orElseThrow(IllegalAccessError::new);
         program.updateInfo(request.getTitle(), request.getPlace(), request.getTarget(),
                 request.getStartDate(), request.getEndDate(), request.getType(), request.getPeopleNum(),
-                request.getSeatCol(), request.getSeatingChart());
+                request.getSeatCol(), request.getSeatingChart(), request.getWay());
 
+        updateProgramViewingDateAndTime(request, programNum);
     }
 
+    public void updateProgramViewingDateAndTime(BizUpdateProgramRequest request, Long programNum){
+        if (request.getViewingDateAndTime() != null) {
+            programViewingRepository.deleteByProgramNo(programNum);
+
+            int size = request.getViewingDateAndTime().size();
+            String dateAndTime, date, time;
+            List<ProgramViewing> list = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                dateAndTime = request.getViewingDateAndTime().get(i);
+                date = dateAndTime.substring(0, 10);
+                time = dateAndTime.substring(11);
+                ProgramViewing pk = new ProgramViewing(programNum, date, time);
+                list.add(pk);
+            }
+            programViewingRepository.saveAll(list);
+        }
+    }
     public void addProgramViewingDateAndTime(BizAddProgramRequest request, Long programNum) {
         if (request.getViewingDateAndTime() != null) {
             int size = request.getViewingDateAndTime().size();
@@ -76,6 +94,7 @@ public class ProgramService {
             programViewingRepository.saveAll(list);
         }
     }
+
 
     public List<ProgramListResponse> getProgramList(String type, String target) {
         List<ProgramListResponse> programs;
@@ -206,6 +225,7 @@ public class ProgramService {
         }
         return jsonData;
     }
+
 
     @Transactional
     public void BookingDelete(Long bookingNum){

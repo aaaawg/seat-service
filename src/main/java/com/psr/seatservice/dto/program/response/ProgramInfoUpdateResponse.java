@@ -15,6 +15,7 @@ public class ProgramInfoUpdateResponse {
     private Date startDate; //신청시작일
     private Date endDate; //신청마감일
     private String type;
+    private String way;
     private int peopleNum;
     private Integer seatCol;
     private String seatingChart;
@@ -30,5 +31,6 @@ public class ProgramInfoUpdateResponse {
         this.peopleNum = program.getPeopleNum();
         this.seatCol = program.getSeatCol();
         this.seatingChart = program.getSeatingChart();
+        this.way = program.getWay();
     }
 }

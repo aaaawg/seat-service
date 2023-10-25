@@ -76,7 +76,7 @@ public class Program {
         this.user = user;
     }
     public void updateInfo(String title, String place, String target, Date startDate, Date endDate, String type, int peopleNum,
-                           Integer seatCol, String seatingChart) {
+                           Integer seatCol, String seatingChart, String way) {
         this.title = title;
         this.place = place;
         this.target = target;
@@ -86,6 +86,7 @@ public class Program {
         this.peopleNum = peopleNum;
         this.seatCol = seatCol;
         this.seatingChart = seatingChart;
+        this.way = way;
     }
 
     public void updateForm(String programHtml){

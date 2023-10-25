@@ -78,6 +78,7 @@ public class BizUserProgramController {
     @GetMapping("/update/{programNum}")
     public String updateProgramInfo(@PathVariable Long programNum, Model model) {
         Program program = programService.getProgramInfo(programNum);
+        List<ProgramViewingDateAndTimeResponse> viewTime = programService.getProgramViewingDateAndTime(programNum);
 
         FileDto fileDto;
         List<FileDto> list = fileService.getFileByProNum(program.getProgramNum());
@@ -92,6 +93,7 @@ public class BizUserProgramController {
         Long bookingCount = programService.getBookingNumCount(programNum);
 
         model.addAttribute("programInfo", new ProgramInfoUpdateResponse(program));
+        model.addAttribute("viewTime",viewTime);
         model.addAttribute("file", fileDto);
         model.addAttribute("bookingCount", bookingCount);
         return "program/bizUpdateProgramInfo";
@@ -116,11 +118,13 @@ public class BizUserProgramController {
             }else if(deleteFiles==null){
                 fileService.deleteFile(programNum);
                 //실제로 파일 삭제
-                int num = deleteFiles2.size();
-                for (int i = 0; i < num; i++) {
-                    File fileToDelete = new File(savePath + deleteFiles2.get(i));
-                    if (fileToDelete.exists()) {
-                        fileToDelete.delete();
+                if (deleteFiles2 != null) {
+                    int num = deleteFiles2.size();
+                    for (int i = 0; i < num; i++) {
+                        File fileToDelete = new File(savePath + deleteFiles2.get(i));
+                        if (fileToDelete.exists()) {
+                            fileToDelete.delete();
+                        }
                     }
                 }
             }

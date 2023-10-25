@@ -13,4 +13,6 @@ public interface ProgramViewingRepository extends JpaRepository<ProgramViewing, 
             "left outer join ProgramBooking b on v.programNo = b.programNum and v.viewingDate = b.viewingDate and v.viewingTime = b.viewingTime where v.programNo = ?1 " +
             "group by v.viewingDate, v.viewingTime") //count에 case 지원X(조건 설정 불가) -> sum 사용
     List<BizProgramViewingDateAndTimeAndPeopleNumResponse> findViewingDateAndTimeAndPeopleNumByProgramNum(Long programNo);
+
+    void deleteByProgramNo(Long programNum);
 }

@@ -33,6 +33,10 @@
             <label for="place" class="normalLabel">장소</label>
             <input type="text" id="onPlace" name="place" value="온라인 관람" readonly disabled>
         </div>
+        <div id="way">
+            <label for="way" class="normalLabel">접속링크</label>
+            <input type="text" name="way" th:value="${programInfo.way}">
+        </div>
         <div>
             <label for="drop" class="normalLabel">신청대상</label>
             <select id="drop" name="target" th:attr="bookCount=${bookingCount}" onchange="changeTargetSelect(this.getAttribute('bookCount'))">
@@ -47,6 +51,17 @@
         <div>
             <label for="endDate" class="normalLabel">신청 종료일</label>
             <input type="date" id="endDate" name="endDate" th:value="${programInfo.endDate}">
+        </div>
+        <div>
+            <label for="viewing" class="normalLabel">진행 일시</label>
+            <input type="datetime-local" id="viewing">
+            <button type="button" id="viewTime" onclick="addViewing()">추가</button>
+            <div id="viewDateTime">
+                <div class="viewingList" th:each="im, iterStat : ${viewTime}">
+                    <input type="text" th:value="@{${im.viewingDate} +'T'+ ${im.viewingTime}}" name="viewingDateAndTime" th:id="'input_' + ${iterStat.index}">
+                    <button type="button" th:id="'button_' + ${iterStat.index}" th:class="${iterStat.index}" onclick="deleteViewing(this)">X</button>
+                </div>
+            </div>
         </div>
         <div>
             <label for="endDate" class="normalLabel">모집 인원</label>
@@ -134,6 +149,7 @@ if (programInfo !== null) {
     if(type === "오프라인"){
          document.getElementById("offline").checked = true;
          document.getElementById("on").style.display = "none";
+         document.getElementById("way").style.display = "none";
          if(programInfo.seatingChart.value === null){
             document.getElementById("isNotSeatColSelect").style.display = "inline";
             document.getElementById("isSeatColSelect").style.display = "none";
