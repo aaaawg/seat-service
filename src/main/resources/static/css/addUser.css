@@ -69,3 +69,6 @@ input:read-only {
 img {
     width: 70px;
 }
+.container {
+    margin-bottom: 20px;
+}

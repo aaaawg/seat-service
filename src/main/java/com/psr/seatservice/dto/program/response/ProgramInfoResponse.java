@@ -1,7 +1,6 @@
 package com.psr.seatservice.dto.program.response;
 
 import com.psr.seatservice.domian.program.Program;
-import com.psr.seatservice.domian.user.User;
 import lombok.Getter;
 
 import java.util.Date;

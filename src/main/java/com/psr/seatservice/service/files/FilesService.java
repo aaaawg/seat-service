@@ -57,7 +57,7 @@ public class FilesService {
     }
 
     public FileDto getFile(Long id) {
-        Files files = filesRepository.findById(id).get();
+        Files files = filesRepository.findByPostId(id);
         if(files==null) return null;
         FileDto fileDto = new FileDto(files.getOrigfilename(), files.getFilename(), files.getFilepath());
         return fileDto;

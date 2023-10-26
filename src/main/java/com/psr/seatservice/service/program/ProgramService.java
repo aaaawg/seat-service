@@ -12,7 +12,6 @@ import com.psr.seatservice.dto.user.request.BookingRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -124,7 +123,7 @@ public class ProgramService {
         if(count < request.getPeopleNum() || request.getPeopleNum() == -1) {
             if(program.getTarget().equals("area")) {
                 //신청대상이 지역일 경우 주소 확인
-                boolean add = checkProgramTargetAndUSerAddress(program.getTargetDetail(), user.getAddress());
+                boolean add = checkProgramTargetDetailAndUserAddress(program.getTargetDetail(), user.getAddress());
                 if(!add)
                     return "신청대상에 해당하지 않습니다.";
             }
@@ -148,7 +147,7 @@ public class ProgramService {
         return "인원 마감으로 인해 신청할 수 없습니다.";
     }
 
-    private boolean checkProgramTargetAndUSerAddress(String targetDetail, String address) {
+    private boolean checkProgramTargetDetailAndUserAddress(String targetDetail, String address) {
         String addr = address.split(",")[0];
         String[] addr2 = addr.split(" ", 3);
 

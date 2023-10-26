@@ -1,0 +1,36 @@
+.iDiv {
+    border: solid #617A55 1px;
+    border-radius: 10px;
+    padding: 20px;
+}
+.imgDiv {
+    width: 200px;
+    padding: 0;
+}
+.imgDiv img {
+    width: 100%;
+    height: 100%;
+}
+.noImg {
+    width: 100%;
+    height: 100%;
+    background-color: #a2a2a2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.noImg i {
+    color: white;
+    font-size: 3rem;
+    text-align: center;
+    margin-right: 0;
+}
+.pInfoDiv {
+    height: 320px;
+}
+.pInfoDiv .sDiv {
+    float: left;
+}
+.sDiv {
+    height: 100%;
+}

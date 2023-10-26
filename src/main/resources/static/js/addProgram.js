@@ -4,7 +4,7 @@ let popupSeatCol;
 
 window.addEventListener("load", function() {
     showCreatSeatingChart(0);
-    enterPlace("오프라인");
+    showPlaceInput(0);
 });
 
 $(document).ready(function() {
@@ -77,6 +77,7 @@ function showPlaceInput(type) {
     if(type) {
         enterPlace("온라인");
         document.getElementById("onlineWay").style.display = "block";
+        document.getElementById("way").disabled = false;
 
         document.getElementById("offSeatingChart").style.display = "none";
         showCreatSeatingChart(0);
@@ -84,6 +85,7 @@ function showPlaceInput(type) {
     else {
         enterPlace("오프라인");
         document.getElementById("onlineWay").style.display = "none";
+        document.getElementById("way").disabled = true;
 
         document.getElementById("nsc").checked = true;
         document.getElementById("offSeatingChart").style.display = "block"

@@ -1,10 +1,12 @@
 package com.psr.seatservice.controller.user;
 
 import com.psr.seatservice.domian.user.User;
+import com.psr.seatservice.dto.files.FileDto;
 import com.psr.seatservice.dto.user.request.AddUserRequest;
 import com.psr.seatservice.dto.user.request.IdCheckRequest;
 import com.psr.seatservice.dto.user.response.BookingDetailResponse;
 import com.psr.seatservice.dto.user.response.BookingListResponse;
+import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
 import com.psr.seatservice.service.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -22,10 +24,12 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final ProgramService programService;
+    private final FilesService filesService;
 
-    public UserController(UserService userService, ProgramService programService) {
+    public UserController(UserService userService, ProgramService programService, FilesService filesService) {
         this.userService = userService;
         this.programService = programService;
+        this.filesService = filesService;
     }
 
     @GetMapping("/login")
@@ -62,8 +66,12 @@ public class UserController {
     @GetMapping("/myPage/{bookingNum}")
     public String userBookingDetail(@PathVariable Long bookingNum, @AuthenticationPrincipal User user, Model model){
         BookingDetailResponse detailResponse = userService.getBookingDetailByUserId(user, bookingNum);
+        FileDto file = filesService.getFile(detailResponse.getProgramNum());
+
+        if(file != null)
+            detailResponse.setFilename(file.getFilename());
         model.addAttribute("detail", detailResponse);
-        System.out.println("test: "+detailResponse.getProgramName()+", "+ detailResponse.getBookingNum());
+        System.out.println(detailResponse.getFilename());
         return "user/bookingDetail";
     }
     @PostMapping("/myPage/{bookingNum}")

@@ -1,10 +1,8 @@
 package com.psr.seatservice.domian.program;
 
-import com.psr.seatservice.domian.files.Files;
 import com.psr.seatservice.domian.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
