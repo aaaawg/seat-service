@@ -12,6 +12,7 @@ import com.psr.seatservice.dto.user.request.BookingRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -119,9 +120,17 @@ public class ProgramService {
     @Transactional
     public String addBooking(Long programNum, BookingRequest request, User user) {
         int count = getProgramBookingCount(programNum, request.getViewingDate(), request.getViewingTime());
+        Program program = getProgramInfo(programNum);
         if(count < request.getPeopleNum() || request.getPeopleNum() == -1) {
+            if(program.getTarget().equals("area")) {
+                //신청대상이 지역일 경우 주소 확인
+                boolean add = checkProgramTargetAndUSerAddress(program.getTargetDetail(), user.getAddress());
+                if(!add)
+                    return "신청대상에 해당하지 않습니다.";
+            }
+
             int nonPCount = programBookingRepository.countByUser_IdAndStatus(user.getId(), "불참");
-            if(nonPCount < 3) {
+            if(nonPCount < 3) { //불참 횟수 확인
                 if (!programBookingRepository.existsByProgramNumAndViewingDateAndViewingTimeAndUser_Id(programNum, request.getViewingDate(), request.getViewingTime(), user.getId())) { //해당 회차를 신청 했는지
                     if (request.getSeatNum() != null && programBookingRepository.existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(programNum, request.getSeatNum(), request.getViewingDate(), request.getViewingTime())) {
                         return "이미 신청된 좌석입니다.";
@@ -137,6 +146,17 @@ public class ProgramService {
                 return "불참 횟수(3회)로 인해 신청할 수 없습니다.";
         }
         return "인원 마감으로 인해 신청할 수 없습니다.";
+    }
+
+    private boolean checkProgramTargetAndUSerAddress(String targetDetail, String address) {
+        String addr = address.split(",")[0];
+        String[] addr2 = addr.split(" ", 3);
+
+        if(targetDetail.indexOf(" ") > 0) {
+            return targetDetail.equals(addr2[0] + " " + addr2[1]);
+        }
+        else
+            return targetDetail.equals(addr2[0]);
     }
 
     public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {
