@@ -65,6 +65,12 @@ function check(){
         alert("타이틀을 입력해주세요.");
         return false;
     }
+
+    if(document.getElementById("way").value === ''){
+        alert("접속 링크를 입력해주세요.");
+        return false;
+    }
+
     document.getElementById("peopleNum").readOnly = false;
     document.getElementById("peopleNum").disabled = false;
     document.getElementById("drop").disabled = false;
@@ -87,6 +93,7 @@ function showPlaceInput(type, result) {
     //온라인
         document.getElementById("off").style.display = "none";
         document.getElementById("on").style.display = "block";
+        document.getElementById("way").style.display = "block";
         document.getElementById("peopleNum").readOnly=false;
         document.getElementById("peopleNum").disabled = false;
         document.getElementById("seatingChart").value = '';
@@ -119,6 +126,7 @@ function showPlaceInput(type, result) {
     }
         document.getElementById("off").style.display = "block";
         document.getElementById("on").style.display = "none";
+        document.getElementById("way").style.display = "none";
         document.getElementById("searchAddr").style.display = "inline";
         document.getElementById("detailAddress").style.display = "inline";
 
@@ -240,6 +248,51 @@ function changeTargetSelect(bookingCnt) {
     }
 }
 
+function addViewing(){
+    let viewing = document.getElementById("viewing").value;
+
+    let check = document.createElement("input");
+    let elementsWithInputId = document.querySelectorAll('[id*="button_"]');
+    let checkCount = elementsWithInputId.length;
+    for(let i=0; i<elementsWithInputId.length; i++){
+        if(elementsWithInputId[i].className === checkCount.toString()){
+               checkCount++;
+               i=0;
+        }
+    }
+    check.id = 'input_'+checkCount;
+    check.type = "text";
+    check.value = viewing;
+    check.name = "viewingDateAndTime"
+
+    let label = document.createElement("button");
+    label.type = 'button';
+    label.className = checkCount;
+    label.id = 'button_'+checkCount;
+    label.textContent = "X";
+    label.onclick = function() {
+        deleteViewing(this);
+    };
+
+    let viewingList = document.getElementById("viewDateTime");
+
+    let viewDiv = document.createElement("div");
+    viewDiv.className = "viewingList";
+    viewDiv.appendChild(check);
+    viewDiv.appendChild(label);
+
+    viewingList.appendChild(viewDiv);
+}
+
+function deleteViewing(e){
+    console.log("test:" + e.id + e.className);
+    let num = e.className;
+    let delInput = document.getElementById('input_'+num);
+    delInput.remove();
+    e.remove();
+}
+
+
 let imageIndex = 0;
 let position = 0;
 
@@ -321,7 +374,6 @@ console.log("n"+imagesLength);
 }
 
 function init(){
-console.log("init ");
     const btnPrevious = document.querySelector(".previous");
     const btnNext = document.querySelector(".next");
     btnPrevious.setAttribute('disabled','true');

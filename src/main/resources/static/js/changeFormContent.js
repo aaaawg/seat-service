@@ -25,11 +25,9 @@ function getResponse(){
     var questionNum = wholeQuestion.length;
     var responseJson = {};
     if(questionNum === 0){
-        alert("count 0");
         responseJson = null;
     }else{
     for(let i=0; i<questionNum; i++){
-    alert("count not 0");
         var re = getType(wholeQuestion[i].querySelector('.reDiv'+i), i);
         if(re === ''){ return 0;}
         responseJson[i] = re;

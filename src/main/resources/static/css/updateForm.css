@@ -1,7 +1,7 @@
 body{
     background-color: rgb(249 249 249) !important;
 }
-.container div{
+.container div:not(.seatBtn){
     margin-top: 1.4rem;
 }
 form{
@@ -14,8 +14,8 @@ form{
     border-radius: 0.25rem;
     min-height: 820px;
 }
-.btn.btn-success, .btn.btn-plus{
-    padding: 0.3rem 0.9rem;
+.btn.btn-success{
+    padding: 0.45rem 0.9rem;
         border-radius: 0.3rem;
         color: white;
         font-weight: bold;
@@ -25,16 +25,17 @@ form{
       background-color : #157347;
       border: 1px solid #157347;
       transition: 700ms cubic-bezier(0.165, 0.84, 0.44, 1);
-
+    width: 6rem;
+    margin-top: 2rem;
       &:hover{
         transition: 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
-          color: #157347;
-          background-color: white;
+          color: white;
+          background-color: #6B9B7E;
           background-position: 99% 50%;
-            border: 1px solid #157347;
+          border: 1px solid #6B9B7E;
       }
 }
-.btn:not(.btn.btn-success, .btn.btn-plus){
+.btn:not(.btn.btn-success, .btn.btn-plus, .btn.btn-outline-secondary){
     color: white;
     background-color: #6B9B7E;
     margin-right: .5rem;
@@ -46,24 +47,193 @@ form{
                 border: 1px solid #157347;
           }
 }
-span{
+div[id*='title'] > span {
     line-height: 2.3rem;
+     margin-left: 0.23rem;
 }
+span[id*='ContentSpan']{
+  font-size:1rem;
+}
+
 div[id*='plus']{
     border: 1px solid #adb5bd;
     border-radius: 0.25rem;
     margin-bottom: 1.5rem;
     padding: 1.5rem 2rem !important;
 }
-div[class*='class'] > span{
-padding-right: 0.5rem;
+div[class*='class'] > span, div[id*='select'] > span{
+    padding-right: 0.5rem;
     display: inline-block;
     width: 6rem;
 }
+div[class*='class'], div[id*='select']:not(#selectSeat){
+    margin-top: 0.5rem !important;
+}
+select {
+    word-wrap: normal;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.4rem;
+}
+
 div[class*='class'] > input{
-width: 510px;
+    width: 83%;
 }
 div[id*='plus'] > div{
     margin-top: 10px;
 }
 input:focus {outline: none;}
+
+div[class*='select'] > label, label[id*='check']{
+    margin-right: 1rem;
+    margin-top: 0.6rem;
+}
+input[type=radio], input[type=checkbox]{
+margin-right: 0.5rem;
+}
+
+div[class*='reDiv'] > input[class*='reply'], div[class*='reDiv'] > textarea{
+    width: 100%;
+}
+
+button[class*='reply']{
+    background-color: #157347;
+    color: white;
+    border: solid 2.13px #157347;
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+div[class*='selectBtnDiv'], div[class*='checkBoxBtnDiv']{
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 1rem;
+}
+button[id*='radioP'], button[id*='checkP']{
+    border-radius: 50px;
+    background-color: white;
+    color: #157347;
+    border: 1px solid #157347;
+    margin-top: 1.5rem;
+    width: 7rem;
+    height: 2rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 0.3rem 0.9rem;
+}
+
+.btn.btn-plus{
+    border-radius: 50px;
+    background-color: white;
+    color: #157347;
+    margin-bottom: 1rem;
+    width: 10rem;
+    height: 2.5rem;
+    padding: 0.3rem 0.9rem;
+    font-weight: bold;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-decoration: none;
+    border: 1px solid #157347;
+    transition: 700ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    &:hover{
+            transition: 400ms cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+            color: white;
+            background-color: #157347 !important;
+            background-position: 99% 50% !important;
+            border: 1px solid #157347;
+    }
+}
+#contentAdd{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+}
+
+/* Shikoba */
+.button.button--shikoba {
+  position: relative;
+  margin: 2rem 0 1rem 0;
+  padding: 1em 30px 1em 50px;
+  overflow: hidden;
+  color: white;
+  border: solid 1px;
+  border-radius: 0.4rem;
+  width: 674px;
+  height: 5rem;
+  background-image: linear-gradient(to right, #6B9B7E, #4E937D, #008363, #006333);
+  background-size: 300% 100%;
+  -webkit-transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+.button--shikoba > span {
+  display: inline-block;
+  -webkit-transform: translate3d(-10px, 0, 0);
+  transform: translate3d(-10px, 0, 0);
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: transform 0.7s;
+  -webkit-transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+  transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+}
+.button--shikoba:hover {
+  background-position: 100% 0 !important;
+  moz-transition: all 0.5s ease-in-out !important;
+  -o-transition: all 0.5s ease-in-out !important;
+  -webkit-transition: all 0.5s ease-in-out !important;
+  transition: all 0.5s ease-in-out !important;
+ }
+ .button--shikoba:hover > span {
+   transition: transform 1.2s;
+   transform: translateX(17rem);
+ }
+#searchBtn {
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    border: solid 1px #c9c9c9;
+    background-color: #ffffff;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-position: 2px 2px;
+    background-size: 90%;
+}
+
+#startTitle{
+    color: rgb(121, 154, 121);
+    font-size: 1.5rem;
+    font-weight: bold;
+    max-width: 760px;
+    min-width: 760px;
+    margin: 1rem auto;
+}
+
+textarea:focus {
+    outline-color: rgb(121, 154, 121);
+}
+input:focus {
+    border-radius: 0.25rem;
+    border: solid 2px rgb(121, 154, 121);
+}
+
+input[type='radio'], input[type='checkbox']{
+accent-color: rgb(121, 154, 121);
+}
+#formPage{
+    max-width: 770px;
+    min-width: 770px;
+    margin: 1rem auto;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    height: 4rem;
+    background-color: rgb(121, 154, 121);
+    color: white;
+    border-radius: 0.25rem;
+    font-size: 1.5rem;
+     &:hover{
+            transition: 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+            color: white;
+            background-color: #157347;
+            background-position: 99% 50%;
+            opacity: 1;
+       }
+}

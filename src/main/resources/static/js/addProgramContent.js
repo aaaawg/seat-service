@@ -111,6 +111,12 @@ function addContent(){
     addButtons(newContentDiv);
     origContent(newContentDiv);
     element.appendChild(newContentDiv);
+
+    //추가 답변 칸 없애기
+        let replyChangeResult = count -1;
+        const replyPreviousDiv = document.querySelector(".reDiv"+replyChangeResult);
+        const inputElements = replyPreviousDiv.querySelector('input[type="text"], textarea');
+        if(inputElements!==null){replyPreviousDiv.style.display = "none";}
 }
 
 function makeButton(className, idName, clickName){
@@ -299,6 +305,11 @@ function addEditSelect(e){
     const selectShow = document.getElementById('select'+e);
     selectShow.style.display = "";
 
+//추가 답변 칸 없애기
+    const replyPreviousDiv = document.querySelector(".reDiv"+e);
+    const inputElements = replyPreviousDiv.querySelector('input[type="text"], textarea');
+    if(inputElements!==null){replyPreviousDiv.style.display = "none";}
+
     var newChBtn = makeButton("btn btn-success", "complete"+e, "complete("+e+")");
     newChBtn.innerText = "완료";
     divName.appendChild(newChBtn);
@@ -321,6 +332,10 @@ function addEditSelect(e){
         radioPlusBtn.innerText = "옵션 추가";
         selectBtnDiv.appendChild(radioPlusBtn);
         changeSelectDiv.appendChild(selectBtnDiv);
+
+        //css
+        const changeCssSelectDiv = document.getElementsByClassName("selectDiv"+e)[0];
+        changeCssSelectDiv.style.marginLeft = '6.3rem';
     }
     var checkContent = reToInput(e, 'check');
     if(Array.isArray(checkContent) && checkContent.length !== 0){
@@ -340,6 +355,10 @@ function addEditSelect(e){
         checkPlusBtn.innerText = "옵션 추가";
         checkBoxBtnDiv.appendChild(checkPlusBtn);
         changeSelectDiv.appendChild(checkBoxBtnDiv);
+
+        //CSS
+        const changeCssCheckDiv = document.getElementsByClassName("checkBoxDiv"+e)[0];
+        if(changeCssCheckDiv){changeCssCheckDiv.style.marginLeft = '6.3rem';}
     }
     //const target = document.getElementById(e);
     const target = document.getElementsByClassName("btn btn-change"+e)[0];
@@ -369,6 +388,10 @@ function handleOnChange(e, divNum) {
         break;
     case '단일 선택형':
         const store = document.querySelector(".changeSelectDiv"+divNum);
+        //다시 보이게 reDiv
+        const replyPreviousDiv = document.querySelector(".reDiv"+divNum);
+        replyPreviousDiv.style.display = "block";
+
         if(store === null){
            const wholeSelectDiv = document.createElement('div');
            wholeSelectDiv.setAttribute("class", "wholeSelectDiv"+divNum);
@@ -386,9 +409,17 @@ function handleOnChange(e, divNum) {
            wholeSelectDiv.appendChild(selectBtnDiv);
            changeContent[0].appendChild(wholeSelectDiv);
         }
+        //css
+        const changeCssSelectDiv = document.getElementsByClassName("selectDiv"+divNum)[0];
+        changeCssSelectDiv.style.marginLeft = '6.3rem';
+
         break;
     case '복수 선택형':
         const storeCheck = document.querySelector(".changeCheckDiv"+divNum);
+           //다시 보이게 reDiv
+            const replyPreviousDiv2 = document.querySelector(".reDiv"+divNum);
+            replyPreviousDiv2.style.display = "block";
+
         if(storeCheck === null){
             const wholeCheckDiv = document.createElement('div');
             wholeCheckDiv.setAttribute("class", "wholeCheckDiv"+divNum);
@@ -408,6 +439,9 @@ function handleOnChange(e, divNum) {
             wholeCheckDiv.appendChild(checkBoxBtnDiv);
             changeContent[0].appendChild(wholeCheckDiv);
         }
+            //CSS
+            const changeCssCheckDiv = document.getElementsByClassName("checkBoxDiv"+divNum)[0];
+            if(changeCssCheckDiv){changeCssCheckDiv.style.marginLeft = '6.3rem';}
         break;
   }
 }
@@ -439,6 +473,17 @@ function complete(e){
     if(contentType.length !== 0 || checkAfterType.length !== 0){
         checkResult(e);
     }
+
+    //추가 답변 칸 보이게
+        const replyPreviousDiv = document.querySelector(".reDiv"+e);
+        const inputElements = replyPreviousDiv.querySelector('input[type="text"], textarea');
+        if(inputElements!==null){replyPreviousDiv.style.display = "block";}
+
+    //css
+        const changeCssSelectDiv = document.getElementsByClassName("selectDiv"+e)[0];
+        if(changeCssSelectDiv){changeCssSelectDiv.style.marginLeft = '0';}
+        const changeCssCheckDiv = document.getElementsByClassName("checkBoxDiv"+e)[0];
+        if(changeCssCheckDiv){changeCssCheckDiv.style.marginLeft = '0';}
 }
 
 function titleInputLayoutShow(num){

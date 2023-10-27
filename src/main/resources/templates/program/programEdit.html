@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="layout/head :: head(~{::link})">
     <meta charset="UTF-8">
-    <title>Title</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/updateForm.css}" href="../css/updateForm.css?ver=1.1" rel="stylesheet">
 </head>
 <body>
+<div th:replace="/layout/nav.html :: nav"></div>
 <div>
     <form th:action method="post" enctype="multipart/form-data" id="myFormEdit">
         <div id="formContent">
         </div>
-        <button type="submit" class="btn btn-success">수정하기</button>
-        <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
+        <div id="contentAdd">
+            <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
+        </div>
+        <button type="submit" class="button button--shikoba button--text-medium button--round-l button--inverted"><span>수정완료</span></button>
     </form>
 </div>
 <script th:inline="javascript">
@@ -29,12 +31,37 @@
     }else{
         div.innerHTML = programInfo;
     }
+
+    let countSelect = document.querySelectorAll("select").length;
+    for(let i=0; i<countSelect; i++){
+        const selectPtest = document.getElementsByClassName('reDiv'+i);
+        for (let j = 0; j < selectPtest.length; j++) {
+            const selectPp = document.getElementsByName('content'+i)[0];
+            const inputRadio = selectPtest[j].querySelector('input[type="radio"]');
+            if (inputRadio) {
+                selectPp.value = '단일 선택형';
+            } else {
+                const textArea = selectPtest[j].querySelector('textarea');
+                if (textArea) {
+                    selectPp.value = '주관식 서술형';
+                }else{
+                    const inputText = selectPtest[j].querySelector('input[type="text"]');
+                    if (inputText) {
+                         selectPp.value = '주관식 단답형';
+                    }else{
+                        selectPp.value = '복수 선택형';
+                    }
+                }
+            }
+}}
+
     //Json 가져와보기
     var programJson = /*[[${ProgramJson}]]*/ {};
     if(programJson !== null){
         let reJson = JSON.parse(programJson);
         console.log(Object.keys(reJson).length);
     }
+
 </script>
 <script type="text/javascript" src="/js/addProgramContent.js?ver=4.3"></script>
 </body>
