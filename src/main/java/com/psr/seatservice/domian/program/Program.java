@@ -1,10 +1,8 @@
 package com.psr.seatservice.domian.program;
 
-import com.psr.seatservice.domian.files.Files;
 import com.psr.seatservice.domian.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -76,7 +74,7 @@ public class Program {
         this.user = user;
     }
     public void updateInfo(String title, String place, String target, Date startDate, Date endDate, String type, int peopleNum,
-                           Integer seatCol, String seatingChart, String way) {
+                           Integer seatCol, String seatingChart, String way, String contents, String targetDetail) {
         this.title = title;
         this.place = place;
         this.target = target;
@@ -87,6 +85,8 @@ public class Program {
         this.seatCol = seatCol;
         this.seatingChart = seatingChart;
         this.way = way;
+        this.contents = contents;
+        this.targetDetail = targetDetail;
     }
 
     public void updateForm(String programHtml){

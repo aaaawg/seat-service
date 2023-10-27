@@ -5,7 +5,10 @@
     <link th:href="@{/css/updateProgram.css}" href="../css/updateProgram.css?ver=1.1" rel="stylesheet">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/js/summernote/summernote-lite.js"></script>
+    <script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+    <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
@@ -17,9 +20,9 @@
         </div>
         <div>
             <label class="normalLabel">구분</label>
-            <input type="radio" id="offline" name="type" value="오프라인" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(0, this.getAttribute('bookCount'))">
+            <input type="radio" id="offline" name="type" value="offline" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(0, this.getAttribute('bookCount'))">
             <label id="offlineCheck" for="offline">오프라인</label>
-            <input type="radio" id="online" name="type" value="온라인" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(1, this.getAttribute('bookCount'))">
+            <input type="radio" id="online" name="type" value="online" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(1, this.getAttribute('bookCount'))">
             <label id="onlineCheck" for="online">온라인</label>
         </div>
         <div id="off">
@@ -39,10 +42,15 @@
         </div>
         <div>
             <label for="drop" class="normalLabel">신청대상</label>
-            <select id="drop" name="target" th:attr="bookCount=${bookingCount}" onchange="changeTargetSelect(this.getAttribute('bookCount'))">
-                <option value="제한없음" selected>제한없음</option>
-                <option id="area" value="지역">지역</option>
+            <select id="drop" name="target" th:attr="bookCount=${bookingCount}" onchange="showArea()">
+                <option value="all" selected>제한없음</option>
+                <option id="area" value="area">지역</option>
+                <option value="etc">직접입력</option>
             </select>
+            <div id="detail" style="display: inline;">
+
+            </div>
+
         </div>
         <div>
             <label for="startDate" class="normalLabel">신청 시작일</label>
@@ -65,7 +73,7 @@
         </div>
         <div>
             <label for="endDate" class="normalLabel">모집 인원</label>
-            <label th:if="${bookingCount <= 0}" id="peopleNumLabel"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
+            <label id="peopleNumLabel"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
             <input  type="text" id="peopleNum" name="peopleNum" th:value="${programInfo.peopleNum}" onchange="writeNum(-5)" />
             <button type="button" id="isSeatColSelect" onclick="openPopup()">좌석 수정</button>
             <button type="button" id="isNotSeatColSelect" onclick="openPopup()">좌석 추가</button>
@@ -113,6 +121,11 @@
         <div id="deleteFile2">
             <input type="hidden" th:each="im : ${fileList}" th:value="@{'/files/' + ${im.filename}}" name="deleteFile2" />
         </div>
+        <div>
+            <div id="contentsLine" th:utext="${programInfo.contents}" style="display:none"/>
+            <textarea class="summernote" rows="5" id="contents" name="contents">
+            </textarea>
+        </div>
         <button type="submit" class="button button--shikoba button--text-medium button--round-l button--inverted"><span>수정하기</span></button>
     </form>
 </div>
@@ -120,18 +133,49 @@
 var programInfo = /*[[${programInfo}]]*/ null;
 var fileList = /*[[${fileList}]]*/ null;
 var bookingCount = /*[[${bookingCount}]]*/ 0;
+var dateTime = /*[[${dateTime}]]*/ null;
+var viewTime = /*[[${viewTime}]]*/ null;
+const userAddr = /*[[${userAddr}]]*/ null;
 if(fileList === null) {document.getElementById("deleteAllFile").style.display = "none";}
+
+let conLine = document.getElementById("contentsLine");
+let con = document.getElementById("contents");
+con.textContent = conLine.innerText;
 
 //무제한 체크
 if(programInfo.peopleNum === -1){
     document.getElementById("peopleChBox").checked = true;
     document.getElementById("peopleNum").style.display = "none";
 }
+
 //disabled 변경
 if(bookingCount > 0){
     document.getElementById("drop").disabled = true;
     document.getElementById("offline").disabled = true;
     document.getElementById("online").disabled = true;
+    document.getElementById("startDate").disabled = true;
+
+    var inputDateTime = document.querySelectorAll('input[id*="input_"]');
+
+    for(let i=0; i<viewTime.length; i++){
+        for(let j=0; j<dateTime.length; j++){
+            if(viewTime[i].viewingDate === dateTime[j].viewingDate && viewTime[i].viewingTime === dateTime[j].viewingTime){
+                let resultDate = dateTime[j].viewingDate + 'T' + dateTime[j].viewingTime;
+                console.log("same: "+resultDate);
+                for(let k=0; k<inputDateTime.length; k++){
+                    if(resultDate === inputDateTime[k].value){
+                        let reId = inputDateTime[k].id;
+                        let parts = reId.split('_');
+                        let resultNum = parts[1];
+                        console.log("re: "+resultNum);
+                        document.getElementById("button_"+resultNum).disabled = true;
+                        document.getElementById("input_"+resultNum).disabled = true;
+                    }
+                }
+            }
+        }
+
+    }
 }
 
 var programPlace = programInfo.place;
@@ -146,11 +190,11 @@ document.getElementById("detailAddress").value = words[words.length-1];
 
 if (programInfo !== null) {
     const type = programInfo.type;
-    if(type === "오프라인"){
+    if(type === "offline"){
          document.getElementById("offline").checked = true;
          document.getElementById("on").style.display = "none";
          document.getElementById("way").style.display = "none";
-         if(programInfo.seatingChart.value === null){
+         if(programInfo.seatingChart === null){
             document.getElementById("isNotSeatColSelect").style.display = "inline";
             document.getElementById("isSeatColSelect").style.display = "none";
             document.getElementById("deleteChart").style.display = "none";
@@ -181,10 +225,58 @@ if(programInfo.peopleNum === -1){
 
 var selectElement = document.getElementById("drop");
 var optionElements = selectElement.getElementsByTagName("option");
-if (programInfo.target === "제한없음") {
+let html;
+
+if (programInfo.target === "all") {
     optionElements[0].selected = true; // "제한없음" 옵션을 선택
-} else if (programInfo.target === "지역") {
+} else if (programInfo.target === "area") {
     optionElements[1].selected = true; // "지역" 옵션을 선택
+    if(programInfo.targetDetail!==null){
+        let addr = userAddr.split(' ', 2);
+        let addr1 = addr[0];
+        let addr2 = addr[1];
+
+        html = `<select id="targetDetail" name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
+
+        const detailDiv = document.getElementById("detail");
+        detailDiv.innerHTML = html;
+
+        const selectedValue = programInfo.targetDetail;
+
+        // select 요소를 찾아옵니다.
+        const targetDetailSelect = document.getElementsByName('targetDetail')[0];
+
+        // select 요소의 option들을 반복하여 원하는 option을 선택합니다.
+        for (let i = 0; i < targetDetailSelect.options.length; i++) {
+            if (targetDetailSelect.options[i].value === selectedValue) {
+                targetDetailSelect.selectedIndex = i;
+                break;
+            }
+        }
+        const detailTarget = document.getElementById("targetDetail");
+         detailTarget.style.height = '1.7rem';
+         detailTarget.style.width = '4.75rem';
+    }
+} else if(programInfo.target === "etc") {
+    optionElements[2].selected = true; // "지역" 옵션을 선택
+    if(programInfo.targetDetail!==null){
+         html = '<input type=text id="targetDetail" name="targetDetail">';
+         const detailDiv = document.getElementById("detail");
+         detailDiv.innerHTML = html;
+
+        const detailTarget = document.getElementById("targetDetail");
+         detailTarget.value = programInfo.targetDetail;
+         detailTarget.style.display="block";
+         detailTarget.style.marginLeft = '9.34rem';
+         detailTarget.style.marginTop = '0.5rem';
+    }
+}
+
+if(bookingCount > 0){
+    const detailTarget = document.getElementById("targetDetail");
+    if(detailTarget!==null){
+        detailTarget.disabled = true;
+    }
 }
 
     function displaySelectedImage(event) {
@@ -239,7 +331,7 @@ if (programInfo.target === "제한없음") {
             alert("수정이 불가합니다.");
         }
         else{
-        const popup = window.open("/business/program/updateSeat", "좌석배치도", "width=1000px, height=1000px");
+        const popup = window.open("/business/program/updateSeat", "좌석배치도", "width=700px, height=900px");
 
         popup.onload = function() {
             // 자식 창의 요소에 접근
@@ -340,6 +432,52 @@ if (programInfo.target === "제한없음") {
         }
         }
     }
+
+  function showArea() {
+    if(bookingCount > 0){
+        alert("신청자가 존재하므로 변경이 불가능합니다.");
+        var selectElement = document.getElementById("drop");
+        var selectValue = selectElement.options[selectElement.selectedIndex].value;
+        var optionElements = selectElement.getElementsByTagName("option");
+        if (selectValue === "제한없음") {
+            optionElements[1].selected = true; // "제한없음" 옵션을 선택
+        } else if (selectValue === "지역") {
+            optionElements[0].selected = true; // "지역" 옵션을 선택
+        }
+    }
+
+    const drop = document.getElementById("drop");
+    const detailDiv = document.getElementById("detail");
+    let html;
+
+    if(drop.selectedIndex === 1) {
+      let addr = userAddr.split(' ', 2);
+      let addr1 = addr[0];
+      let addr2 = addr[1];
+
+      html = `<select id="targetDetail" name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
+    }
+    else if(drop.selectedIndex === 2) {
+      html = '<input type=text id="targetDetail" name="targetDetail">';
+    }
+    else
+      html = "";
+
+    detailDiv.innerHTML = html;
+
+const targetDetail = document.getElementById("targetDetail");
+    if(drop.selectedIndex === 1){
+         targetDetail.style.height = '1.7rem';
+         targetDetail.style.width = '4.75rem';
+    } else if(drop.selectedIndex === 2){
+        if(targetDetail !== null){
+        targetDetail.style.display="block";
+        targetDetail.style.marginLeft = '9.34rem';
+        targetDetail.style.marginTop = '0.5rem';
+    }
+    }
+
+  }
 </script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="/js/updateProgram.js?ver=1.4"></script>

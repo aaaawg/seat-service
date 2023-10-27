@@ -1,6 +1,5 @@
 package com.psr.seatservice.controller.program;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
@@ -10,8 +9,10 @@ import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.BizProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoUpdateResponse;
+import com.psr.seatservice.dto.user.response.BookingListResponse;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
+import com.psr.seatservice.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -29,10 +31,12 @@ import java.util.List;
 public class BizUserProgramController {
     private final ProgramService programService;
     private final FilesService fileService;
+    private final UserService UserService;
 
-    public BizUserProgramController(ProgramService programService, FilesService fileService) {
+    public BizUserProgramController(ProgramService programService, FilesService fileService, com.psr.seatservice.service.user.UserService userService) {
         this.programService = programService;
         this.fileService = fileService;
+        UserService = userService;
     }
 
     //기업 사용자 - 해당 사용자가 등록한 프로그램 목록 표시
@@ -76,7 +80,7 @@ public class BizUserProgramController {
     }
 
     @GetMapping("/update/{programNum}")
-    public String updateProgramInfo(@PathVariable Long programNum, Model model) {
+    public String updateProgramInfo(@AuthenticationPrincipal User user, @PathVariable Long programNum, Model model) {
         Program program = programService.getProgramInfo(programNum);
         List<ProgramViewingDateAndTimeResponse> viewTime = programService.getProgramViewingDateAndTime(programNum);
 
@@ -91,11 +95,14 @@ public class BizUserProgramController {
         }
 
         Long bookingCount = programService.getBookingNumCount(programNum);
+        List<ProgramBookingDateTimeResponse> dateTime =programService.getDateTime(programNum);
 
+        model.addAttribute("userAddr", user.getAddress());
         model.addAttribute("programInfo", new ProgramInfoUpdateResponse(program));
         model.addAttribute("viewTime",viewTime);
         model.addAttribute("file", fileDto);
         model.addAttribute("bookingCount", bookingCount);
+        model.addAttribute("dateTime",dateTime);
         return "program/bizUpdateProgramInfo";
     }
 
@@ -105,7 +112,52 @@ public class BizUserProgramController {
                                     @RequestParam(value ="deleteFile", required = false) List<String> deleteFiles,
                                     @RequestParam(value ="deleteFile2", required = false) List<String> deleteFiles2) throws IOException {
         if(request.getSeatingChart().isEmpty()){request.setSeatingChart(null);}
+
+        List<ProgramViewingDateAndTimeResponse> viewTime = programService.getProgramViewingDateAndTime(programNum);
+        List<String> viewingDateAndTime = new ArrayList<>();
+        List<String> viewingDateAndTimeDel = new ArrayList<>();
+        List<String> viewingDateAndTimeAll = new ArrayList<>();
+
+        for(int i=0;i<request.getViewingDateAndTime().size();i++){
+            String re = request.getViewingDateAndTime().get(i);
+            boolean notInRequest = true;
+            for (ProgramViewingDateAndTimeResponse view : viewTime) {
+                String result = view.getViewingDate()+'T'+view.getViewingTime();
+                if (re.equals(result)) {
+                    notInRequest = false;
+                    viewingDateAndTimeAll.add(re);
+                    break; // request.getViewingDateAndTime()에 있는 경우 루프를 종료
+                }
+            }
+            if (notInRequest) {
+                // request.getViewingDateAndTime()에 없는 경우
+                if(re != null) {
+                    viewingDateAndTime.add(re);
+                    viewingDateAndTimeAll.add(re);
+                }
+            }
+        }
+
+        for(int i=0;i< viewTime.size();i++){
+            String re = viewTime.get(i).getViewingDate()+'T'+viewTime.get(i).getViewingTime();
+            boolean notInRequest = false;
+            for(int j=0;j< viewingDateAndTimeAll.size(); j++){
+                if(re.equals(viewingDateAndTimeAll.get(j))){
+                    notInRequest = true;
+                    break;
+                }
+            }
+            if(notInRequest == false){
+                System.out.println("Del: " + re);
+                viewingDateAndTimeDel.add(re);
+            }
+        }
+        request.setViewingDateAndTime(viewingDateAndTime);
+
         programService.updateProgramInfo(programNum, request);
+        //삭제
+        programService.deleteViewing(programNum, viewingDateAndTimeDel);
+
         String savePath = System.getProperty("user.dir");
         //1. 변경 안하는 경우 - files files.get(0).getOriginalFilename().equals("")), deleteFiles O, 삭제X 추가X @
         //2. 사진 없다가 새로 추가 - files O, deleteFiles X, 삭제X 추가O @
