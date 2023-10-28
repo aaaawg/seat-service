@@ -15,8 +15,8 @@
             </span>
             <div class="noImg" th:unless="${file.filename != 'NoInImage'}"><i class="bi bi-image"></i></div>
         </div>
-        <div class="programTextDiv col">
-            <div>
+        <div class="programTextDiv col" style="position: relative;">
+            <div id="tDiv">
                 <span class="badge bg-secondary imgBadge" th:text="(${programInfo.type} == 'offline')?'대면':'비대면'"></span>
                 <h2 th:text="${programInfo.title}"></h2>
             </div>
@@ -43,6 +43,10 @@
                     <td th:text="${programInfo.userPhone}"></td>
                 </tr>
             </table>
+            <div th:if="${programInfo.userId} == ${#authentication.name}" id="bizBtn">
+                <button class="btn btn-outline-secondary btn-sm" th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button" sec:authorize="hasRole('BIZ')">내용 수정</button>
+                <button class="btn btn-outline-dark btn-sm" th:onclick="|location.href='@{/program/{programNum}(programNum=${programInfo.programNum})}/formEdit'|" type="button" sec:authorize="hasRole('BIZ')">신청폼 수정</button>
+            </div>
         </div>
     </div>
 
@@ -84,7 +88,7 @@
                 <div th:utext="${programInfo.contents}"></div>
             </div>
             <hr>
-            <div th:if="${programInfo.type == 'offline'}">
+            <div th:if="${programInfo.type == 'offline'}" id="mapDiv">
                 <h5>장소</h5>
                 <div id="map" style="width:400px; height:300px;"></div>
             </div>
@@ -151,13 +155,9 @@
             </div>
         </div>
     </div>
-    <div th:if="${programInfo.userId} == ${#authentication.name}">
-        <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button" sec:authorize="hasRole('BIZ')">수정</button>
-        <button th:onclick="|location.href='@{/program/{programNum}(programNum=${programInfo.programNum})}/formEdit'|" type="button" sec:authorize="hasRole('BIZ')">신청폼 수정</button>
-    </div>
 </div>
-<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=@&libraries=services"></script>
-<script th:inline="javascript">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=##&libraries=services"></script>
+<!--<script th:inline="javascript">
     const p = [[${programInfo.place}]];
     let place = p.split(',', 1);
 
@@ -192,7 +192,7 @@
             map.setCenter(coords);
         }
     });
-</script> -->
+</script>-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script th:inline="javascript">
 
@@ -227,7 +227,6 @@
             $(".enterAnswerDiv").hide();
             $(this).next(".enterAnswerDiv").toggle();
         });
-
     });
 
     let sDate;
