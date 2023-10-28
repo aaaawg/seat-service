@@ -1,0 +1,18 @@
+h3 {
+    margin: 25px 0;
+}
+.tbBorder {
+    border-bottom: solid #617A55 2px;
+}
+th {
+    color: #617A55;
+    padding: 15px 12px !important;
+}
+td {
+    padding: 15px 12px !important;
+}
+td button {
+    border: solid #617A55 2px;
+    background-color: white;
+    width: 65px;
+}

@@ -46,8 +46,11 @@
 .textDiv {
     margin-left: 10px;
 }
-h4 {
+h3 {
     margin: 25px 0;
+}
+.sDiv h4 {
+    margin: 10px 0;
 }
 .tb {
     margin: 0 !important;
@@ -64,16 +67,24 @@ h4 {
     color: #44563c;
 }
 #lBtn {
-    width: 160px;
+    width: 150px;
     height: 60px;
     border-radius: 10px;
-    border: solid #617A55 1px;
-    background-color: white;
+    background-color: #617A55;
     float: right;
+    color: white;
+    font-weight: bolder;
+    border: none;
 }
 #lBtn:hover {
-    border: solid #44563c 1px;
+    background-color: #44563c;
 }
 h5 {
     margin-bottom: 12px;
+}
+.tb td {
+    padding: 15px !important;
+}
+.textDiv table {
+    width: 530px;
 }
