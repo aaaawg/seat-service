@@ -166,7 +166,7 @@ public class ProgramService {
         return "인원 마감으로 인해 신청할 수 없습니다.";
     }
 
-    private boolean checkProgramTargetDetailAndUserAddress(String targetDetail, String address) {
+    public boolean checkProgramTargetDetailAndUserAddress(String targetDetail, String address) {
         String addr = address.split(",")[0];
         String[] addr2 = addr.split(" ", 3);
 

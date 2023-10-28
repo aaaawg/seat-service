@@ -15,8 +15,11 @@ public class UserDetailService implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String userId) throws UsernameNotFoundException {
+    public User loadUserByUsername(String userId) {
         //userId를 사용하여 사용자 정보를 가져옴
-        return userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId);
+        if(user == null)
+            throw new UsernameNotFoundException(userId);
+        return user;
     }
 }

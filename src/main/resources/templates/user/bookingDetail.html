@@ -7,48 +7,96 @@
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
 <div class="container" style="max-width: 800px">
-  <h3>세부 정보</h3>
+  <h4>신청 확인<i class="bi bi-dot"></i>취소</h4>
   <div>
-    <p>프로그램 정보</p>
     <div class="iDiv pInfoDiv">
-      <div class="imgDiv sDiv">
+      <div class="imgDiv sDiv" th:onclick="|location.href='@{/program/{programNum}(programNum=${detail.programNum})}'|">
         <img th:if="${detail.filename != null}" th:src="@{'/files/' + ${detail.filename}}">
         <div class="noImg" th:unless="${detail.filename != null}"><i class="bi bi-image"></i></div>
       </div>
       <div class="textDiv sDiv">
-        <h5 th:text="${detail.title}"></h5>
-        <span th:text="${detail.place}"></span>
+        <table class="table table-borderless">
+          <tr>
+            <td colspan="2" style="padding-top: 0"><h4 id="tText" th:text="${detail.title}"></h4></td>
+          </tr>
+          <tr>
+            <th style="width: 25%;">구분</th>
+            <td th:text="${detail.type}=='offline' ? '대면':'비대면'"></td>
+          </tr>
+          <tr>
+            <th>장소</th>
+            <td th:text="${detail.place}"></td>
+          </tr>
+          <tr>
+            <th>참여일시</th>
+            <td th:with="toD=${#temporals.createDateTime(detail.viewingDate + detail.viewingTime, 'yyyy-MM-ddHH:mm')}"> <!-- 지역변수로 사용 -->
+              <span th:text="${#temporals.format(toD, 'yyyy년 MM월 dd일')}"></span>
+              <span th:text="|(${#temporals.dayOfWeekNameShort(toD)})|"></span>
+              <span th:text="${#temporals.format(toD, 'HH시 mm분')}"></span>
+            </td>
+          </tr>
+          <tr th:if="${detail.seatNum != null}">
+            <td>좌석</td>
+            <td th:text="|${detail.seatNum}번|"></td>
+          </tr>
+        </table>
       </div>
     </div>
   </div>
+
   <div>
-    <p>신청 정보</p>
+    <h5><b>신청 정보</b></h5>
     <div class="iDiv">
-      <span>신청번호</span>
-      <span>신청일</span>
-      <span></span>
-      <div th:if="${detail.reason != null}">취소사유</div>
+      <table class="table table-bordered tb">
+        <tr>
+          <td style="width: 25%; background-color: #f5f5f5; border-top: none">신청번호</td>
+          <td style="width: 25%;" th:text="${detail.bookingNum}"></td>
+          <td style="width: 25%; background-color: #f5f5f5">신청일</td>
+          <td th:text="${#dates.format(detail.bookingDate, 'yyyy.MM.dd HH:mm')}"></td>
+        </tr>
+        <tr>
+          <td style="background-color: #f5f5f5">상태</td>
+          <td th:text="${detail.status}"></td>
+          <td style="background-color: #f5f5f5">상태변경일</td>
+          <td th:text="${detail.bookingDate != detail.updateDate} ? ${#dates.format(detail.updateDate, 'yyyy.MM.dd HH:mm')} : ''"></td>
+        </tr>
+        <tr th:if="${detail.status != '취소'}">
+          <td style="background-color: #f5f5f5">취소가능일</td>
+          <td colspan="3">
+            <span th:text="|${#dates.format(detail.endDate, 'yyyy.MM.dd 24:00')}까지|"></span>
+            <span>
+              <span class="badge bg-danger" th:if="${#dates.createToday().after(detail.endDate)}">취소 불가</span>
+              <button th:unless="${#dates.createToday().after(detail.endDate)}" class="btn cBtn rounded-pill btn-sm text-white" id="deleteProgram">신청취소</button>
+            </span>
+          </td>
+        </tr>
+        <tr th:if="${detail.reason != null}">
+          <td style="background-color: #f5f5f5">취소사유</td>
+          <td colspan="3" th:text="${detail.reason}"></td>
+        </tr>
+      </table>
     </div>
   </div>
 
   <div th:if="${detail.way != null}">
-    <p>참여 방법</p>
+    <h5><b>참여 안내</b></h5>
     <div class="iDiv">
-      <div th:if="${detail.viewingDate} == ${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}">
+      <div th:if="${detail.viewingDate} == ${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}" th:text="${detail.way}" style="white-space: pre">
+      </div>
+      <div id="wDiv" class="wayDiv" th:unless="${detail.viewingDate} == ${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}">
+        <span><i class="bi bi-exclamation-triangle"></i> 참여 당일에 확인할 수 있습니다.</span>
       </div>
     </div>
   </div>
+  <div style="padding-bottom: 20px; height: 80px;">
+    <button id="lBtn" th:onclick="|location.href='@{/myPage}'|">신청목록</button>
+  </div>
 </div>
-<script>
-
-
-
-</script>
 <script>
   document.getElementById('deleteProgram').addEventListener('click', function() {
   var jbResult = confirm('취소하시겠습니까?');
   if (jbResult) {
-    var bookingNum = this.getAttribute('data-bookingNum');
+    var bookingNum = [[${detail.bookingNum}]];
     var url = '/myPage/' + bookingNum;  // 변경되어야 할 경로
 
     // 서버에 HTTP 요청 보내기
