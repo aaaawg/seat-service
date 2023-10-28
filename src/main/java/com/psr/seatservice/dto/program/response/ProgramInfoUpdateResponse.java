@@ -19,6 +19,8 @@ public class ProgramInfoUpdateResponse {
     private int peopleNum;
     private Integer seatCol;
     private String seatingChart;
+    private String contents;
+    private String targetDetail;
 
     public ProgramInfoUpdateResponse(Program program) {
         this.programNum = program.getProgramNum();
@@ -32,5 +34,7 @@ public class ProgramInfoUpdateResponse {
         this.seatCol = program.getSeatCol();
         this.seatingChart = program.getSeatingChart();
         this.way = program.getWay();
+        this.contents = program.getContents();
+        this.targetDetail = program.getTargetDetail();
     }
 }

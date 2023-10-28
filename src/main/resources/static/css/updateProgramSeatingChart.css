@@ -1,0 +1,26 @@
+body{
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+div:not(#btn){
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+#stage{
+    margin: 1.3rem 0!important;;
+}
+
+#btn{
+    margin: 2rem 112px;
+}
+#btn>button[type="button"]{
+    padding: 0.2rem 0.6rem;
+}
+
+p{
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}

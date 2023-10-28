@@ -1,6 +1,7 @@
 package com.psr.seatservice.domian.program;
 
 import com.psr.seatservice.dto.program.response.BizProgramBookingUserListResponse;
+import com.psr.seatservice.dto.program.response.ProgramBookingDateTimeResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -22,6 +23,8 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
     @Query("SELECT count(*) FROM ProgramBooking WHERE programNum = ?1")
     Long countByProgramNum(Long programNum);
 
+    @Query("SELECT DISTINCT new com.psr.seatservice.dto.program.response.ProgramBookingDateTimeResponse(pb.viewingDate, pb.viewingTime) FROM ProgramBooking pb WHERE pb.programNum = ?1")
+    List<ProgramBookingDateTimeResponse> findProgramBookingByProgramNum(Long programNum);
 
     boolean existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(Long programNum, Integer seatNum, String viewingDate, String viewingTime);
 

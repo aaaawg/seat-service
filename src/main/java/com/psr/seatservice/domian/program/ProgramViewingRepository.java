@@ -15,4 +15,7 @@ public interface ProgramViewingRepository extends JpaRepository<ProgramViewing, 
     List<BizProgramViewingDateAndTimeAndPeopleNumResponse> findViewingDateAndTimeAndPeopleNumByProgramNum(Long programNo);
 
     void deleteByProgramNo(Long programNum);
+
+
+    void deleteByProgramNoAndViewingDateAndViewingTime(Long programNum, String viewingDate, String viewingTime);
 }

@@ -25,4 +25,6 @@ public class BizUpdateProgramRequest {
     private int peopleNum;
     private Integer seatCol;
     private String seatingChart;
+    private String contents;
+    private String targetDetail;
 }

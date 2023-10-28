@@ -19,7 +19,7 @@ window.addEventListener("load", (event) => {
 document.getElementById('updateForm').addEventListener('submit', function(event) {
    event.preventDefault();
    if (!check()) {
-   console.log("not");
+        console.log("not");
      return; //실행하지 않음
    }
    var currentUrl = window.location.href;
@@ -50,6 +50,11 @@ function check(){
             alert("장소를 입력해주세요.");
                     return false;
         }
+
+        if(document.getElementById("peopleChBox").checked === true){
+            document.getElementById("peopleNum").value = -1;
+        }
+
         if (document.getElementById("peopleNum").value === '0' || document.getElementById("peopleNum").value === '') {
             alert("모집 인원은 0명 이상이어야 합니다.");
             return false;
@@ -71,11 +76,26 @@ function check(){
         return false;
     }
 
+   let viewInput =  document.querySelectorAll('[id*="input_"]');
+    for(let i=0; i< viewInput.length; i++){
+        viewInput[i].disabled = false;
+    }
     document.getElementById("peopleNum").readOnly = false;
     document.getElementById("peopleNum").disabled = false;
     document.getElementById("drop").disabled = false;
     document.getElementById("offline").disabled = false;
     document.getElementById("online").disabled = false;
+    document.getElementById("startDate").disabled = false;
+
+    const detailTarget = document.getElementById("targetDetail");
+    if(detailTarget !== null){
+        detailTarget.disabled = false;
+    }
+
+    if(document.getElementById("onPlace").value!=='온라인 관람'){
+        document.getElementById("onPlace").disabled = false;
+        document.getElementById("onPlace").readOnly = false;
+    }
     return true;
 }
 
@@ -156,6 +176,7 @@ function peopleNumValue() {
     if(ch.checked) {
         document.getElementById("peopleNum").style.display = "none";
         document.getElementById("peopleNum").disabled = true;
+        document.getElementById("peopleNum").readOnly = true;
         //document.getElementById("peopleNum").value = '';
 
         valueClear();
@@ -170,9 +191,12 @@ function peopleNumValue() {
             document.getElementById("peopleNum").value = peopleNum;
             document.getElementById("seatingChart").value = seatingChart;
             document.getElementById("seatCol").value = seatCol;
+        }else{
+            document.getElementById("peopleNum").disabled = false;
+            document.getElementById("peopleNum").readOnly = false;
         }
         document.getElementById("peopleNum").style.display = "inline";
-        document.getElementById("peopleNum").disabled = false;
+        //document.getElementById("peopleNum").disabled = false;
 
         const checkSeat = document.getElementById("seatingChart");
         if(document.getElementById("offline").checked === true){
@@ -234,7 +258,7 @@ function placeValue() {
     val += (detailAddr !== ''? addr + ', ' + detailAddr : addr)
     document.getElementById("place").value = val;
 }
-function changeTargetSelect(bookingCnt) {
+/*function changeTargetSelect(bookingCnt) {
     if(bookingCnt > 0){
         alert("신청자가 존재하므로 변경이 불가능합니다.");
         var selectElement = document.getElementById("drop");
@@ -246,7 +270,7 @@ function changeTargetSelect(bookingCnt) {
             optionElements[0].selected = true; // "지역" 옵션을 선택
         }
     }
-}
+}*/
 
 function addViewing(){
     let viewing = document.getElementById("viewing").value;
@@ -273,6 +297,7 @@ function addViewing(){
     label.onclick = function() {
         deleteViewing(this);
     };
+    label.style.marginLeft = '0.35rem';
 
     let viewingList = document.getElementById("viewDateTime");
 

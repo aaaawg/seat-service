@@ -57,14 +57,16 @@ public class ProgramService {
                 .orElseThrow(IllegalAccessError::new);
         program.updateInfo(request.getTitle(), request.getPlace(), request.getTarget(),
                 request.getStartDate(), request.getEndDate(), request.getType(), request.getPeopleNum(),
-                request.getSeatCol(), request.getSeatingChart(), request.getWay());
+                request.getSeatCol(), request.getSeatingChart(), request.getWay(), request.getContents(),
+                request.getTargetDetail());
 
         updateProgramViewingDateAndTime(request, programNum);
     }
 
     public void updateProgramViewingDateAndTime(BizUpdateProgramRequest request, Long programNum){
         if (request.getViewingDateAndTime() != null) {
-            programViewingRepository.deleteByProgramNo(programNum);
+
+            //programViewingRepository.deleteByProgramNo(programNum);
 
             int size = request.getViewingDateAndTime().size();
             String dateAndTime, date, time;
@@ -260,6 +262,10 @@ public class ProgramService {
         return programBookingRepository.countByProgramNum(programNum);
     }
 
+    public List<ProgramBookingDateTimeResponse> getDateTime(Long programNum){
+        return programBookingRepository.findProgramBookingByProgramNum(programNum);
+    }
+
     public List<ProgramListResponse> getUserAroundProgramList(String area, String target, String detail){
         List<ProgramListResponse> programs;
         String str;
@@ -285,5 +291,17 @@ public class ProgramService {
             }
         }
         return programs;
+    }
+
+    @Transactional
+    public void deleteViewing(Long programNum, List<String> viewingDateAndTime) {
+        int size = viewingDateAndTime.size();
+        String dateAndTime, date, time;
+        for (int i = 0; i < size; i++) {
+            dateAndTime = viewingDateAndTime.get(i);
+            date = dateAndTime.substring(0, 10);
+            time = dateAndTime.substring(11);
+            programViewingRepository.deleteByProgramNoAndViewingDateAndViewingTime(programNum, date, time);
+        }
     }
 }

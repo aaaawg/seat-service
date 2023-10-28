@@ -4,7 +4,8 @@ body{
 .container div:not(.seatBtn){
     margin-top: 1.4rem;
 }
-form{
+
+#userResponse, #myFormEdit{
     max-width: 770px;
     min-width: 770px;
     margin: 1rem auto;
@@ -12,7 +13,10 @@ form{
     padding:3rem;
     border: solid 1px #d9d9d9;
     border-radius: 0.25rem;
-    min-height: 820px;
+    min-height: 700px;
+}
+#userResponse{
+    min-height: 350px;
 }
 .btn.btn-success{
     padding: 0.45rem 0.9rem;

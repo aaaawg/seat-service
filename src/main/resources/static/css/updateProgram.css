@@ -26,7 +26,7 @@ margin-top: 0.9rem;
 margin-top: 0.5rem;
 }
 input[type=text]:not(#enterKeyword){
-    width: 12.5rem
+    width: 13.1rem;
 }
 
 input[id*='input']{
@@ -65,15 +65,33 @@ input[id*='input']{
     height: 1.7rem;
     line-height: 1.7rem;
 }
+#drop:focus-visible{
+    outline: none;
+}
 #viewing{
-    width: 12.5rem;
+    width: 13.1rem;
     height: 1.7rem;
     line-height: 1.7rem;
 }
+#contents{
+    margin-left: 9.3rem;
+    width: 25rem;
+    padding: 1rem;
+}
+#contents:focus {outline: none;}
 #peopleNum{
   max-width: 3.4rem;
   padding: 0 0.3rem;
+  border: 1px solid;
+  border-radius: 0.15rem;
 }
+#peopleNum:disabled {
+              cursor: default;
+              background-color: -internal-light-dark(rgba(239, 239, 239, 0.3), rgba(59, 59, 59, 0.3));
+              color: -internal-light-dark(rgb(84, 84, 84), rgb(170, 170, 170));
+              border-color: rgba(118, 118, 118, 0.3);
+}
+
 #isSeatColSelect, #isNotSeatColSelect, #deleteChart{
     margin-left: 2rem;
     width: 6.8rem;
@@ -104,6 +122,35 @@ input[type=button], button[type=button]:not(.navbar-toggler){
         background-position: 99% 50%;
         opacity: 1;
    }
+}
+#viewTime{
+    margin-left: 0.2rem;
+    background-color: #6B9B7E;
+    color: white;
+    border: solid 1px #6B9B7E;
+    border-radius: 0.25rem;
+}
+input[id*='input_']{
+    width: 10.3rem!important;
+    margin-right: .5rem!important;
+    &:disabled{
+        background-color: white!important;
+    }
+}
+button[id*='button_']{
+    width: 2rem!important;
+    pointer: cursor;
+    padding: 0.1rem 0.2rem!important;
+    font-weight: 400!important;
+&:hover{
+        color: black!important;
+        background-color: #f2f2f2!important;
+   }
+&:disabled{
+    background-color: #f2f2f2;
+    pointer-events: none;
+    color: #d1d1d1;
+}
 }
 input[type=file]{
     width: 250px;
