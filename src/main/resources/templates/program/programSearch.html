@@ -23,7 +23,7 @@
                     <span class="badge bg-secondary" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
                 </div>
-                <p th:text="${program.title}"></p>
+                <h4 th:text="${program.title}"></h4>
                 <p th:text="${#dates.format(program.startDate,'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(program.endDate, 'yyyy.MM.dd')}"></p>
                 <p th:text="${program.place}"></p>
             </div>

@@ -64,9 +64,13 @@ function findAddress() {
 function addViewing() {
     const viewing = document.getElementById("viewing").value;
 
-    const html = `<div class="form-check"><input class='form-check-input' type='checkbox' name='viewingDateAndTime' value="${viewing}" checked>
+    if(viewing.trim().length > 0) {
+        const html = `<div class="form-check"><input class='form-check-input' type='checkbox' name='viewingDateAndTime' value="${viewing}" checked>
                   <label class="form-check-label">${viewing}</label></div>`
-    document.getElementById("viewingList").innerHTML += html;
+        document.getElementById("viewingList").innerHTML += html;
+    }
+    else
+        alert("날짜가 선택되지 않았습니다.")
 }
 function showPlaceInput(type) {
     valueClear();
@@ -93,7 +97,7 @@ function showPlaceInput(type) {
     }
 }
 function openPopup() {
-    const popup = window.open("/business/program/seat", "좌석배치도", "width=1000px, height=1000px");
+    const popup = window.open("/business/program/seat", "좌석배치도", "width=500px, height=520px");
 
     popup.addEventListener("beforeunload", function () {
         const c = document.getElementById("popupChart");
