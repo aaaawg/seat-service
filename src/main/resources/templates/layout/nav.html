@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <nav th:fragment="nav">
   <div class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid navDiv" style="max-width: 1700px">
+    <div class="container-fluid navDiv" style="max-width: 1470px">
       <a class="navbar-brand" th:href="@{/}">
         <img src="/img/logo.png">
       </a>
@@ -32,12 +32,9 @@
       </ul>
 
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <span class="badge rounded-pill bg-primary navBadge" sec:authorize="hasRole('BIZ')">기업</span>
+        <li class="nav-item navbar" sec:authorize="hasRole('BIZ')">
+          <span class="badge rounded-pill bg-primary navBadge">기업</span>
         </li>
-      </ul>
-
-      <ul class="navbar-nav">
         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <span style="font-size: 21px"><i class="bi bi-person-fill"></i></span>
