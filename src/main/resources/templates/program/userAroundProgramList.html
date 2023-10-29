@@ -37,7 +37,6 @@
                 <span class="badge bg-secondary imgBadge" th:text="(${program.type} == 'offline')?'대면':'비대면'"></span>
                 <div>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().before(program.startDate)}">예정</span>
-                    <span class="badge bg-secondary" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
 
                     <span class="badge bg-secondary" th:if="${program.target} == 'etc' or ${program.target} == 'area'" th:text="${program.targetDetail}"></span>

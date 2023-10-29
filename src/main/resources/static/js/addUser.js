@@ -79,8 +79,9 @@ function checkAuthNum() {
     if (num == en.value) {
         document.getElementById("email1").readOnly = true;
         document.getElementById("email2").readOnly = true;
-        document.getElementById("check").style.display = "none";
+        document.getElementById("check").remove();
         $('#enterNumberModal').modal('hide');
+
     } else {
         re.innerText = "인증번호가 올바르지 않습니다.";
         en.value = "";

@@ -16,7 +16,7 @@
             <div id="etc" th:onclick="|location.href='@{/{type}(type=${pType}, target=etc)}'|"><h6>기타</h6></div>
         </div>
     </div>
-    <th:block th:each="program: ${programs}" th:if="!${#dates.createToday().after(program.endDate)}">
+    <th:block th:each="program: ${programs}">
         <div class="p-3 mx-1 my-2 bg-light text-dark rounded-3 row pDiv" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
             <div class="imgDiv">
                 <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 300px">
@@ -24,7 +24,6 @@
                 <span class="badge bg-secondary imgBadge" th:text="(${program.type} == 'offline')?'대면':'비대면'"></span>
                 <div>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().before(program.startDate)}">예정</span>
-                    <span class="badge bg-secondary" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
 
                     <span class="badge bg-secondary" th:if="${program.target} == 'etc' or ${program.target} == 'area'" th:text="${program.targetDetail}"></span>

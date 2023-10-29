@@ -1,13 +1,12 @@
 .searchDiv {
-    width: 280px;
-    height: 35px;
+    height: 30px;
 }
 #enterKeyword {
     height: 100%;
 }
 #searchBtn {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     background-size: cover;
     border: solid 1px #c9c9c9;
     background-color: #ffffff;
