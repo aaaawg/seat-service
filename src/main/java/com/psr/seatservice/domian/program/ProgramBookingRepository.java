@@ -32,4 +32,5 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
     boolean existsByProgramNumAndViewingDateAndViewingTimeAndUser_Id(Long programNum, String viewingDate, String viewingTime, Long userId);
 
     int countByUser_IdAndStatus(Long id, String status);
+    List<ProgramBooking> findAllByBookingNum(Long bookingNum);
 }

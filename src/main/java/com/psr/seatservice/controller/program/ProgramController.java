@@ -118,7 +118,7 @@ public class ProgramController {
     public String programFormEdit(@PathVariable Long programNum, Model model) {
         model.addAttribute("ProgramForm", programService.getProgramForm(programNum));
         //Json 넘겨보기
-        model.addAttribute("ProgramJson", programService.getJson(programNum));
+        model.addAttribute("ProgramJson", programService.getQuestionJson(programNum));
         return "program/programEdit";
     }
 

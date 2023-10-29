@@ -1,5 +1,6 @@
 package com.psr.seatservice.controller.program;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
@@ -9,9 +10,9 @@ import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
 import com.psr.seatservice.dto.program.response.BizProgramListResponse;
 import com.psr.seatservice.dto.program.response.ProgramInfoUpdateResponse;
-import com.psr.seatservice.dto.user.response.BookingListResponse;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
+import com.psr.seatservice.service.user.UserDetailService;
 import com.psr.seatservice.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +32,12 @@ import java.util.List;
 public class BizUserProgramController {
     private final ProgramService programService;
     private final FilesService fileService;
-    private final UserService UserService;
+    private final UserDetailService userDetailService;
 
-    public BizUserProgramController(ProgramService programService, FilesService fileService, com.psr.seatservice.service.user.UserService userService) {
+    public BizUserProgramController(ProgramService programService, FilesService fileService, UserDetailService userDetailService) {
         this.programService = programService;
         this.fileService = fileService;
-        UserService = userService;
+        this.userDetailService = userDetailService;
     }
 
     //기업 사용자 - 해당 사용자가 등록한 프로그램 목록 표시
@@ -252,5 +253,17 @@ public class BizUserProgramController {
     @GetMapping("/updateSeat")
     public String updateSeatingChart() {
         return "program/bizUpdateSeatingChart";
+    }
+
+    @GetMapping("/{programNum}/{bookingNum}/userResponse")
+    public String bookingUserResponse(@PathVariable Long programNum, @PathVariable Long bookingNum, Model model){
+        JsonNode programQuestion = programService.getQuestionJson(programNum);
+        JsonNode programResponse = programService.getResponseJson(bookingNum);
+        String name = programService.getBookingUserName(bookingNum);
+
+        model.addAttribute("question",programQuestion);
+        model.addAttribute("response",programResponse);
+        model.addAttribute("userName",name);
+        return "program/bizBookingUserFormResult";
     }
 }

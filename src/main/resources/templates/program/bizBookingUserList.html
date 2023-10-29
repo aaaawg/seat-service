@@ -45,7 +45,7 @@
             <td th:text="${booking.email}"></td>
             <td style="width: 5%" th:if="${checkSC}" th:text="${booking.seatNum}"></td>
             <td style="width: 5%" th:text="${booking.status}"></td>
-            <td style="width: 4%"><button class="rounded-pill tableBtn btn-sm">보기</button></td>
+            <td style="width: 4%"><button class="rounded-pill tableBtn btn-sm" th:onclick="|location.href='@{/business/program/{programNum}/{bookingNum}/userResponse(programNum=${programNum}, bookingNum=${booking.bookingNum})}'|">보기</button></td>
         </tr>
         </tbody>
     </table>
@@ -156,6 +156,7 @@
         let url = `/business/program/${programNum}/seat?date=${viewingDate}&time=${viewingTime}`;
         window.open(url, "좌석 현황", "width=800px, height=500px");
     }
+
 </script>
 </body>
 </html>
