@@ -12,17 +12,17 @@ button {
     border: solid #618264 2px;
 }
 .btnDiv button {
-    float: right;
+    float: left;
     background-color: #618264;
     color: white;
     font-weight: bolder;
     width: 80px;
     height: 30px;
-    margin-left: 7px;
+    margin-right: 7px;
 }
 .btnDiv {
     height: 40px;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 10px;
 }
 .tb {
@@ -47,7 +47,7 @@ td p {
     border: solid rgba(0, 0, 0, 0.12) 3px;
     background-color: white !important;
     color: black !important;
-    float: left !important;
+    float: right !important;
     margin: 0 !important;
     font-weight: normal !important;
 }

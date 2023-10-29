@@ -2,7 +2,7 @@
     width: 280px;
     height: 35px;
 }
-input[type=text] {
+#enterKeyword {
     height: 100%;
 }
 #searchBtn {

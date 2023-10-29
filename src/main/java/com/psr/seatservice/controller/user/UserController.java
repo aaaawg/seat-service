@@ -71,7 +71,6 @@ public class UserController {
         if(file != null)
             detailResponse.setFilename(file.getFilename());
         model.addAttribute("detail", detailResponse);
-        System.out.println(detailResponse.getFilename());
         return "user/bookingDetail";
     }
     @PostMapping("/myPage/{bookingNum}")
