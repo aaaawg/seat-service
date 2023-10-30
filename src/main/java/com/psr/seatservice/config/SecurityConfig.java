@@ -24,12 +24,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/**","/program/**", "/login", "/join/**", "/js/**", "/css/**", "/img/**").permitAll()
+                .antMatchers("/**","/program/**", "/login", "/join/**", "/js/**", "/css/**", "/img/**").permitAll() //접근 전부 허용
                 .antMatchers("/business/**").hasRole("BIZ")
                 .antMatchers("/myPage/**", "/around/**", "/booking/**").hasRole("USER")
-                .anyRequest().authenticated()
+                .anyRequest().authenticated() //나머지는 인증 후 접근 가능
                 .and()
-                    .formLogin().loginPage("/login")
+                    .formLogin()
+                    .loginPage("/login")
                     .failureUrl("/login?error=true")
                     .defaultSuccessUrl("/")
                 .and()
@@ -48,7 +49,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class)
+        return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class) //AuthenticationManagerBuilder에서 AuthenticationManager 객체를 가져옴
                 .userDetailsService(userService)
                 .passwordEncoder(bCryptPasswordEncoder())
                 .and().build();

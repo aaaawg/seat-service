@@ -19,7 +19,7 @@ public class Qna {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long qnaNum;
-    private String content;
+    private String question;
     private String answer;
     private boolean secret;
     @CreatedDate
@@ -33,8 +33,8 @@ public class Qna {
     @JoinColumn(name = "writer")
     private User user;
 
-    public Qna(String content, boolean secret, Program program, User user) {
-        this.content = content;
+    public Qna(String question, boolean secret, Program program, User user) {
+        this.question = question;
         this.secret = secret;
         this.program = program;
         this.user = user;

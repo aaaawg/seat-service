@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserDetailService implements UserDetailsService {
+    //스프링 시큐리티에서 사용
     private final UserRepository userRepository;
 
     public UserDetailService(UserRepository userRepository) {

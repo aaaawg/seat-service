@@ -1,7 +1,5 @@
 package com.psr.seatservice.controller.program;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.ErrorResponse;
@@ -85,12 +83,10 @@ public class ProgramController {
     }
 
     @PostMapping("/booking/seat")
-    public @ResponseBody String getSeatingChart(@RequestBody ProgramSeatingChartRequest request) throws JsonProcessingException {
+    public @ResponseBody ProgramBookingInfoResponse getSeatingChart(@RequestBody ProgramSeatingChartRequest request) {
         Program program = programService.getProgramInfo(request.getProgramNum());
         int bookingCount = programService.getProgramBookingCount(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
         ProgramBookingInfoResponse bookingInfoResponse;
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json;
 
         if (program.getSeatingChart() != null) {
             List<Integer> list = programService.getBookedSeats(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
@@ -99,8 +95,7 @@ public class ProgramController {
             bookingInfoResponse = new ProgramBookingInfoResponse(bookingCount);
         }
 
-        json = objectMapper.writeValueAsString(bookingInfoResponse);
-        return json;
+        return bookingInfoResponse;
     }
 
     @PostMapping("/booking/{programNum}")

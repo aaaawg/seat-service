@@ -233,7 +233,7 @@ public class BizUserProgramController {
     }
 
     @PutMapping("/{programNum}/booking")
-    public @ResponseBody ResponseEntity<Object> updateBookingStatus(@PathVariable Long programNum, @RequestBody BizUpdateProgramBookingStatusRequest request){
+    public @ResponseBody ResponseEntity<Void> updateBookingStatus(@PathVariable Long programNum, @RequestBody BizUpdateProgramBookingStatusRequest request){
         programService.updateBookingStatus(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

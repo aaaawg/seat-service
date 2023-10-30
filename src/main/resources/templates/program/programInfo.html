@@ -122,7 +122,7 @@
                             <div th:if="${programInfo.bizUserId} == ${#authentication.name} or ${qna.writer} == ${#authentication.name}">
                                 <input type="hidden" class="qnaNum" th:value="${qna.qnaNum}">
                                 <i class="bi bi-lock-fill"></i>
-                                <p th:utext="${qna.content}"></p>
+                                <p th:utext="${qna.question}"></p>
                                 <span th:text="${#dates.format(qna.createDate,'yyyy.MM.dd HH:mm')}"></span><i th:if="${qna.writer} == ${#authentication.name}" class="bi bi-trash-fill" onclick="deleteQna(this)"></i>
                                 <br>
                                 <button class="showAnswerBtn btn btn-outline-secondary btn-sm" th:if="${qna.answer} != null">답변</button>
@@ -136,7 +136,7 @@
                         </div>
                         <div th:unless="${qna.secret}">
                             <input type="hidden" class="qnaNum" th:value="${qna.qnaNum}">
-                            <p th:utext="${qna.content}"></p>
+                            <p th:utext="${qna.question}"></p>
                             <span th:text="${#dates.format(qna.createDate,'yyyy.MM.dd HH:mm')}"></span><i th:if="${qna.writer} == ${#authentication.name}" class="bi bi-trash-fill" onclick="deleteQna(this)"></i>
                             <br>
                             <button class="showAnswerBtn btn btn-sm btn-outline-secondary" th:if="${qna.answer} != null">답변</button>
@@ -336,7 +336,7 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "content": rContent,
+                    "question": rContent,
                     "secret": chValue
                 })
             }).then((r) => {

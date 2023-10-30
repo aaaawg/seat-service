@@ -26,7 +26,7 @@ public class QnaService {
     @Transactional
     public Qna addQna(Long programNum, AddQnaRequest request, User user) {
         Program program = programRepository.findById(programNum).orElseThrow();
-        Qna qna = new Qna(request.getContent(), request.isSecret(), program, user);
+        Qna qna = new Qna(request.getQuestion(), request.isSecret(), program, user);
         return qnaRepository.save(qna);
     }
 

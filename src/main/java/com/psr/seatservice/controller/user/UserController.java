@@ -73,15 +73,14 @@ public class UserController {
         model.addAttribute("detail", detailResponse);
         return "user/bookingDetail";
     }
-    @PostMapping("/myPage/{bookingNum}")
-    public String userBookingDelete(@PathVariable Long bookingNum){
-        System.out.println("test num: "+bookingNum);
-        programService.BookingDelete(bookingNum);
-        return "user/bookingList";
+    @DeleteMapping("/myPage/{bookingNum}")
+    public @ResponseBody ResponseEntity<Void> userBookingDelete(@PathVariable Long bookingNum){
+        programService.bookingDelete(bookingNum);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/join/id")
-    public @ResponseBody ResponseEntity<Object> checkId(@RequestBody IdCheckRequest request) {
+    public @ResponseBody ResponseEntity<Void> checkId(@RequestBody IdCheckRequest request) {
         //아이디 중복 검사
         if(userService.checkUserId(request.getUserId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); //409 이미 존재하는 아이디

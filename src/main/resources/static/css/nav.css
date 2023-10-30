@@ -5,8 +5,8 @@
     height: 100%;
 }
 #searchBtn {
-    width: 30px;
-    height: 30px;
+    width: 30px !important;
+    height: 30px !important;
     background-size: cover;
     border: solid 1px #c9c9c9;
     background-color: #ffffff;

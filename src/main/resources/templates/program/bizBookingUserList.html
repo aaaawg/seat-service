@@ -60,7 +60,7 @@
             <div class="modal-body">
                 <form>
                     <select class="form-select" id="status" onchange="setStatusValue(this)">
-                        <option selected disabled>예약 상태 변경</option>
+                        <option selected disabled>참여 상태 변경</option>
                         <option value="예정">예정</option>
                         <option value="참가">참가</option>
                         <option value="불참">불참</option>
@@ -120,7 +120,7 @@
         if(document.getElementById("status").value === "취소")
             data['reason'] = document.getElementById("reason").value;
 
-        if(selectedStatus === "예약 상태 변경")
+        if(selectedStatus === "참여 상태 변경")
             document.getElementById("notification").innerText = "상태를 선택해주세요.";
         else if(selectedStatus === "취소" && document.getElementById("reason").value.trim() === "")
             document.getElementById("notification").innerText = "취소 사유를 입력해주세요";

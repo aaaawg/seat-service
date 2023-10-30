@@ -98,23 +98,16 @@
 </div>
 <script>
   document.getElementById('deleteProgram').addEventListener('click', function() {
-  var jbResult = confirm('취소하시겠습니까?');
-  if (jbResult) {
-    var bookingNum = [[${detail.bookingNum}]];
-    var url = '/myPage/' + bookingNum;  // 변경되어야 할 경로
-
-    // 서버에 HTTP 요청 보내기
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', url);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
+    var jbResult = confirm('취소하시겠습니까?');
+    if (jbResult) {
+      var bookingNum = [[${detail.bookingNum}]];
+      fetch(`/myPage/${bookingNum}`, {
+        method: "delete"
+      }).then(() => {
         alert('신청이 취소되었습니다.');
         location.replace('/myPage');
-      }
-    };
-    xhr.send();
-  }
+      })
+    }
 });
 </script>
 <script type="text/javascript" src="/js/nav.js"></script>

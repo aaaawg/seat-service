@@ -249,8 +249,8 @@ public class ProgramService {
 
 
     @Transactional
-    public void BookingDelete(Long bookingNum){
-        programBookingRepository.deleteByBookingNum(bookingNum);
+    public void bookingDelete(Long bookingNum){
+        programBookingRepository.deleteById(bookingNum);
     }
 
     public List<ProgramListResponse> getProgramSearchResult(String keyword) {
