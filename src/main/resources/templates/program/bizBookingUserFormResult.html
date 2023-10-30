@@ -11,13 +11,26 @@
   <div id="formContent">
     <p id="userName" th:text="'USER: '+${userName}" />
   </div>
-  <button id="backList">목록으로 이동</button>
+  <div id="backBtnDiv">
+    <button id="backList" onclick="back()">목록으로 이동</button>
+  </div>
 </div>
 <script th:inline="javascript">
   var programQues = /*[[${question}]]*/ "";
   var programRes = /*[[${response}]]*/ "";
 
-  let questionCount = Object.keys(programQues).length;
+  let questionCount = 0;
+  if(programQues !== null){
+    questionCount = Object.keys(programQues).length;
+  }
+
+   window.addEventListener("load", function() {
+    if (questionCount === 0 ) {
+      alert("신청서가 존재하지 않아 이전 페이지로 돌아갑니다.");
+      history.go(-1);
+    }
+  });
+
   const content = document.getElementById("formContent");
 
   for (let i = 0; i < questionCount; i++) {
@@ -46,7 +59,11 @@
         var findContent = document.getElementById("subAnswer"+i);
         findContent.innerText = reJson[i];
     }
-}
+  }
+
+  function back(){
+    history.back();
+  }
 </script>
 </body>
 </html>

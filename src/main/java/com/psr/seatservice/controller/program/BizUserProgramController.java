@@ -56,7 +56,8 @@ public class BizUserProgramController {
 
     @PostMapping( "/add")
     public String addProgram(BizAddProgramRequest request, @RequestParam("file") List<MultipartFile> files
-    , @RequestParam(value="formHtml") String formHtml, @RequestParam(value = "getTitleJson", required = false) String getTitleJsonString, @AuthenticationPrincipal User user) throws IOException {
+    , @RequestParam(value="formHtml", required = false) String formHtml, @RequestParam(value = "getTitleJson", required = false) String getTitleJsonString, @AuthenticationPrincipal User user) throws IOException {
+        System.out.println("FORM: "+formHtml);
         Long proNum = programService.addProgram(request, formHtml, getTitleJsonString, user);
 
         //programService.addProgramFormTitle(proNum, getTitleJsonString);

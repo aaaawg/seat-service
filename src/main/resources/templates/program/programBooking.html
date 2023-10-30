@@ -22,6 +22,9 @@
         var div = document.getElementById('formContent');
         div.innerHTML = programInfo;
         returnResult();
+    }else{
+        var div = document.getElementById('formContent');
+        div.innerHTML = "작성할 신청서가 없습니다. 다음으로 이동해주세요.";
     }
 </script>
     <input type="hidden" id="program">
@@ -145,6 +148,9 @@
             if(result === 0){
                 window.alert("질문에 모두 답변해주세요.");
             } else {
+                if (![[${chSC}]]) {
+                    window.resizeTo(575, 535);
+                }
                 document.getElementById("userResponseForm").value = JSON.stringify(result);
                 document.getElementById("enterForm").style.display = "none";
                 document.getElementById("viewingDate").style.display = "block";

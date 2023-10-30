@@ -153,7 +153,7 @@
     </div>
     <div th:if="${programInfo.userId} == ${#authentication.name}">
         <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button" sec:authorize="hasRole('BIZ')">수정</button>
-        <button th:onclick="|location.href='@{/program/{programNum}(programNum=${programInfo.programNum})}/formEdit'|" type="button" sec:authorize="hasRole('BIZ')">신청폼 수정</button>
+        <button id="changeForm" type="button" sec:authorize="hasRole('BIZ')">신청폼 수정</button>
     </div>
 </div>
 <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=@&libraries=services"></script>
@@ -233,6 +233,17 @@
     let sDate;
     let sTime;
     const pNum = [[${programInfo.programNum}]];
+    const bookingCount = [[${bookingCount}]];
+
+    const changeFormButton = document.getElementById("changeForm");
+    changeFormButton.addEventListener("click", function() {
+    if (bookingCount !== 0) {
+        event.preventDefault();
+        alert("신청자가 존재하여 수정이 불가능합니다.");
+    }else{
+        window.location.href = "/program/"+pNum+"/formEdit";
+    }
+  });
 
     function selectedDate(date) {
         sDate = date;
@@ -268,11 +279,12 @@
             } else {
                 let url = "/booking/" + num;
                 let width;
-                if([[${chSC}]])
+                width = "1025px";
+                /*if([[${chSC}]])
                     width = "1025px";
                 else
                     width = "545px";
-
+*/
                 window.open(url, "예약", `width=${width}, height=535px`);
             }
         } else {
