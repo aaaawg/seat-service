@@ -61,16 +61,25 @@ function findAddress() {
         }
     }).open();
 }
+let viewingDateAndTimeList = new Array();
 function addViewing() {
     const viewing = document.getElementById("viewing").value;
 
     if(viewing.trim().length > 0) {
-        const html = `<div class="form-check"><input class='form-check-input' type='checkbox' name='viewingDateAndTime' value="${viewing}" checked>
+        const html = `<div class="form-check"><input class='form-check-input' type='checkbox' onchange='chBoxChange(this)' name='viewingDateAndTime' value="${viewing}" checked>
                   <label class="form-check-label">${viewing}</label></div>`
         document.getElementById("viewingList").innerHTML += html;
+        viewingDateAndTimeList.push(viewing);
     }
     else
         alert("날짜가 선택되지 않았습니다.")
+}
+function chBoxChange(e) {
+    const i = viewingDateAndTimeList.indexOf(e.value);
+    if(e.checked)
+        viewingDateAndTimeList.push(e.value);
+    else
+        viewingDateAndTimeList.splice(i, 1);
 }
 function showPlaceInput(type) {
     valueClear();
@@ -209,9 +218,56 @@ function showArea() {
 
         html = `<select class="form-select" name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
     } else if (drop.selectedIndex === 2) {
-        html = '<input class="form-control" type=text name="targetDetail" placeholder="신청대상을 입력해 주세요.">';
+        html = '<input class="form-control" id="etcDetail" type=text name="targetDetail" placeholder="신청대상을 입력해 주세요.">';
     } else
         html = "";
 
     detailDiv.innerHTML = html;
+}
+function checkUserValue() {
+    if(document.getElementById("title").value.trim().length === 0) {
+        alert("프로그램명을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("place").value.trim().length === 0) {
+        alert("장소를 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("online").checked === true) {
+        if (document.getElementById("way").value.trim().length === 0) {
+            alert("참여방법을 입력해주세요.");
+            return false;
+        }
+    }
+    if(document.getElementById("drop").selectedIndex === 2 && document.getElementById("etcDetail").value.trim().length === 0) {
+        alert("신청대상을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("peopleChBox").checked === false && document.getElementById("peopleNum").value.trim().length === 0) {
+        alert("모집인원을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("startDate").value.trim().length === 0) {
+        alert("신청 시작일을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("endDate").value.trim().length === 0) {
+        alert("신청 종료일을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("startDate").value > document.getElementById("endDate").value) {
+        alert("신청 종료일이 신청 시작일보다 이후여야 합니다.");
+        return false;
+    }
+    if(document.getElementById("offline").checked) {
+        if (document.getElementById("ysc").checked && document.getElementById("seatingChart").value.trim().length === 0) {
+            alert("좌석표를 생성해주세요.");
+            return false;
+        }
+    }
+    if(viewingDateAndTimeList.length === 0) {
+        alert("진행일시를 추가해주세요.");
+        return false;
+    }
+    return true;
 }

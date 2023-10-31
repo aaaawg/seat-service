@@ -30,6 +30,8 @@ function userEnterData() {
         let phone = document.getElementById("phone");
 
         phone.value = phone1 + "-" + phone2 + "-" + phone3;
+        if(document.getElementById("role").value === "biz")
+            document.getElementById("birth").disabled = true;
 
         if (document.getElementById("addr2").value !== "")
             document.getElementById("address").value = document.getElementById("addr1").value + ', ' + document.getElementById("addr2").value;

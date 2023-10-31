@@ -19,8 +19,10 @@ public class Qna {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long qnaNum;
+    @Column(nullable = false)
     private String question;
     private String answer;
+    @Column(nullable = false)
     private boolean secret;
     @CreatedDate
     private Date createDate;
