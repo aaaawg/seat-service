@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
-<div class="container" style="max-width: 800px">
+<div class="container" style="max-width: 900px">
 <h3>신청내역</h3>
     <div>
         <span th:text="|총 ${lists.size()}건|"></span>
@@ -15,8 +15,9 @@
             <thead class="tbBorder">
             <tr>
                 <th></th>
-                <th>참여상태</th>
-                <th style="width: 50%">프로그램명</th>
+                <th style="text-align: center">참여상태</th>
+                <th>구분</th>
+                <th style="width: 46%">프로그램명</th>
                 <th>참여일시</th>
                 <th style="width: 12%">상세내용</th>
             </tr>
@@ -24,12 +25,13 @@
             <tbody>
             <tr th:each="list, iterStat: ${lists}">
                 <td th:text="${iterStat.count}"></td>
-                <td>
+                <td style="text-align: center">
                     <span th:if="${list.status == '예정'}" class="badge uBadge" style="background-color: #b0bea3">예정</span>
                     <span th:if="${list.status == '참가'}" class="badge uBadge" style="background-color: #617A55">참가</span>
                     <span th:if="${list.status == '불참'}" class="badge uBadge" style="background-color: rgba(192,56,56,0.85)">불참</span>
                     <span th:if="${list.status == '취소'}" class="badge uBadge" style="background-color: #9a9a9a">취소</span>
                 </td>
+                <td th:text="${list.programType == 'offline'}?'대면':'비대면'"></td>
                 <td th:text="${list.programName}"></td>
                 <td th:text="|${list.viewingDate} ${list.viewingTime}|"></td>
                 <td><button class="rounded-pill" th:onclick="|location.href='@{/myPage/{bookingNum}(bookingNum=${list.bookingNum})}'|" type="button">보기</button></td>

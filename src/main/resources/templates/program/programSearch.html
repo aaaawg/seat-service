@@ -20,7 +20,7 @@
                 <div>
                     <span class="badge bg-secondary" th:text="(${program.type} == 'offline')?'대면':'비대면'"></span>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().before(program.startDate)}">예정</span>
-                    <span class="badge bg-secondary" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
+                    <span class="badge bg-dark" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
                     <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
                 </div>
                 <h4 th:text="${program.title}"></h4>

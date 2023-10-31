@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/programList.css}" href="../css/programList.css" rel="stylesheet">
+    <link th:href="@{/css/statusBadge.css}" href="../css/statusBadge.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 <body>
@@ -21,13 +22,13 @@
             <div class="imgDiv">
                 <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 300px">
                 <div class="noImg" th:unless="${program.filename != null}"><i class="bi bi-image"></i></div>
-                <span class="badge bg-secondary imgBadge" th:text="(${program.type} == 'offline')?'대면':'비대면'"></span>
+                <span class="badge imgBadge" th:text="${program.type == 'offline'}?'대면':'비대면'" th:classappend="${program.type == 'offline'} ? 'bg-primary':'bg-dark'"></span>
                 <div>
-                    <span class="badge bg-secondary" th:if="${#dates.createToday().before(program.startDate)}">예정</span>
-                    <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
+                    <span class="badge" th:if="${#dates.createToday().before(program.startDate)}" style="background-color: #b0bea3">예정</span>
+                    <span class="badge" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}" style="background-color: #618264">진행</span>
 
-                    <span class="badge bg-secondary" th:if="${program.target} == 'etc' or ${program.target} == 'area'" th:text="${program.targetDetail}"></span>
-                    <span class="badge bg-secondary" th:unless="${program.target} == 'etc' or ${program.target} == 'area'">누구나</span>
+                    <span class="badge" th:if="${program.target} == 'etc' or ${program.target} == 'area'" th:text="${program.targetDetail}" style="background-color: #394867"></span>
+                    <span class="badge" th:unless="${program.target} == 'etc' or ${program.target} == 'area'" style="background-color: #7C96AB;">누구나</span>
                 </div>
             </div>
             <div class="textDiv">

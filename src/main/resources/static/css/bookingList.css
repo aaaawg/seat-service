@@ -16,3 +16,7 @@ td button {
     background-color: white;
     width: 65px;
 }
+.t {
+    letter-spacing: 1px;
+    padding-right: 15px;
+}
