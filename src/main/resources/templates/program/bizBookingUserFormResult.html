@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: head(~{::link})">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="../css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/bookingUserFormResult.css}" href="../css/bookingUserFormResult.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="/layout/nav.html :: nav"></div>
+<div id="all">
+  <div id="formContent">
+    <p id="userName" th:text="'USER: '+${userName}" />
+  </div>
+  <div id="backBtnDiv">
+    <button id="backList" onclick="back()">목록으로 이동</button>
+  </div>
+</div>
+<script th:inline="javascript">
+  var programQues = /*[[${question}]]*/ "";
+  var programRes = /*[[${response}]]*/ "";
+
+  let questionCount = 0;
+  if(programQues !== null){
+    questionCount = Object.keys(programQues).length;
+  }
+
+   window.addEventListener("load", function() {
+    if (questionCount === 0 ) {
+      alert("신청서가 존재하지 않아 이전 페이지로 돌아갑니다.");
+      history.go(-1);
+    }
+  });
+
+  const content = document.getElementById("formContent");
+
+  for (let i = 0; i < questionCount; i++) {
+      var subContent = document.createElement("div");
+      subContent.setAttribute("id", "subDiv"+i);
+      content.appendChild(subContent);
+
+      var subTitle = document.createElement("div");
+      subTitle.setAttribute("id", "subTitle"+i);
+      subContent.appendChild(subTitle);
+
+      var subAnswer = document.createElement("div");
+      subAnswer.setAttribute("id", "subAnswer"+i);
+      subContent.appendChild(subAnswer);
+  }
+
+    if (programQues) {
+    var reJson = JSON.parse(programRes);
+    let responseCount = Object.keys(reJson).length;
+
+    for (let i = 0; i < questionCount; i++) {
+        var findContent = document.getElementById("subTitle"+i);
+        findContent.innerText = "Q.  " + programQues[i];
+    }
+    for (let i = 0; i < responseCount; i++) {
+        var findContent = document.getElementById("subAnswer"+i);
+        findContent.innerText = reJson[i];
+    }
+  }
+
+  function back(){
+    history.back();
+  }
+</script>
+</body>
+</html>

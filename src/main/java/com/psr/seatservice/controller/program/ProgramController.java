@@ -63,6 +63,7 @@ public class ProgramController {
             fileDto.setFilename("NoInImage");
         }
         boolean ch = programService.checkSeatingChart(programNum);
+        Long bookingCount = programService.getBookingNumCount(programNum);
 
         List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
         model.addAttribute("programInfo", new ProgramInfoResponse(program));
@@ -70,15 +71,17 @@ public class ProgramController {
         model.addAttribute("programViewing", viewing);
         model.addAttribute("chSC", ch);
         model.addAttribute("qnaList", qnaList);
-
+        model.addAttribute("bookingCount", bookingCount);
         return "program/programInfo";
     }
 
     @GetMapping("/booking/{programNum}")
     public String booking(@PathVariable Long programNum, Model model) {
         List<ProgramViewingDateAndTimeResponse> viewing = programService.getProgramViewingDateAndTime(programNum);
+        boolean ch = programService.checkSeatingChart(programNum);
         model.addAttribute("programViewing", viewing);
         model.addAttribute("ProgramForm", programService.getProgramForm(programNum));
+        model.addAttribute("chSC", ch);
         return "program/programBooking";
     }
 
@@ -113,7 +116,7 @@ public class ProgramController {
     public String programFormEdit(@PathVariable Long programNum, Model model) {
         model.addAttribute("ProgramForm", programService.getProgramForm(programNum));
         //Json 넘겨보기
-        model.addAttribute("ProgramJson", programService.getJson(programNum));
+        model.addAttribute("ProgramJson", programService.getQuestionJson(programNum));
         return "program/programEdit";
     }
 

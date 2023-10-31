@@ -1,5 +1,6 @@
 package com.psr.seatservice.service.program;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.*;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -227,7 +229,7 @@ public class ProgramService {
     }
 
     //Json 값넘기기 Test
-    public JsonNode getJson(Long programNum){
+    public JsonNode getQuestionJson(Long programNum){
         Program program = programRepository.findById(programNum).orElse(null);
         String re = program.getProgramQuestion();
 
@@ -238,7 +240,6 @@ public class ProgramService {
                 jsonData = objectMapper.readTree(re);
             }
             if(program != null){
-                System.out.println("Json Change Data : "+jsonData);
                 return jsonData;
             }
         } catch (Exception e) {
@@ -247,6 +248,33 @@ public class ProgramService {
         return jsonData;
     }
 
+    public JsonNode getResponseJson(Long bookingNum){
+        List<ProgramBooking> programBooking = programBookingRepository.findAllByBookingNum(bookingNum);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            if (programBooking != null && !programBooking.isEmpty()) {
+                List<String> re = new ArrayList<>();
+
+                for (ProgramBooking booking : programBooking) {
+                    re.add(booking.getProgramResponse());
+                }
+
+                // JSON 배열 생성
+                String jsonStr = objectMapper.writeValueAsString(re);
+                JsonNode jsonData = objectMapper.readTree(jsonStr);
+                return jsonData;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public String getBookingUserName(Long bookingNum){
+        ProgramBooking p =  programBookingRepository.findById(bookingNum).orElse(null);
+        User u = p.getUser();
+        return u.getName();
+    }
 
     @Transactional
     public void bookingDelete(Long bookingNum){
@@ -304,4 +332,5 @@ public class ProgramService {
             programViewingRepository.deleteByProgramNoAndViewingDateAndViewingTime(programNum, date, time);
         }
     }
+
 }

@@ -13,7 +13,7 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
     const resultHtml = document.querySelector('#content').outerHTML;
     var additionalData;
     var formData = new FormData(document.getElementById('myForm'));
-    if(count === 0){
+    /*if(count === 0){
          additionalData = { formHtml: ''};
     }else{
          additionalData = { formHtml: resultHtml};
@@ -22,6 +22,14 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
             }
             var getTitleJson = getTitle();
             formData.append("getTitleJson", JSON.stringify(getTitleJson));
+    }*/
+    if (count !== 0) {
+        additionalData = { formHtml: resultHtml };
+        for (var key in additionalData) {
+            formData.append(key, additionalData[key]);
+        }
+        var getTitleJson = getTitle();
+        formData.append("getTitleJson", JSON.stringify(getTitleJson));
     }
 
   // 서버로 폼 데이터 전송

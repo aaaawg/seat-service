@@ -23,7 +23,6 @@
     var programInfo = /*[[${ProgramForm}]]*/ {};
     var div = document.getElementById('formContent');
 
-    console.log("test: "+programInfo);
     if(programInfo === null || programInfo === "null"){
         const contentDiv = document.createElement('div');
         contentDiv.setAttribute("id","content");
@@ -56,11 +55,11 @@
 }}
 
     //Json 가져와보기
-    var programJson = /*[[${ProgramJson}]]*/ {};
-    if(programJson !== null){
-        let reJson = JSON.parse(programJson);
-        console.log(Object.keys(reJson).length);
-    }
+    //var programJson = /*[[${ProgramJson}]]*/ {};
+    //if(programJson !== null){
+    //    let reJson = JSON.parse(programJson);
+   //     console.log(Object.keys(reJson).length);
+    //}
 
 </script>
 <script type="text/javascript" src="/js/addProgramContent.js?ver=4.3"></script>
