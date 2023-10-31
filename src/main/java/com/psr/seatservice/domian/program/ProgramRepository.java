@@ -41,4 +41,6 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
             "from Program p left outer join Files f on p.programNum = f.postId where p.target = ?1 and p.targetDetail = ?2 or p.targetDetail = ?3 order by p.startDate")
     List<ProgramListResponse> findAllByTargetAndTargetDetailAll(String target, String area1, String area2);
 
+    @Query("select title from Program where programNum=?1")
+    String findTitleByProgramNum(Long programNum);
 }

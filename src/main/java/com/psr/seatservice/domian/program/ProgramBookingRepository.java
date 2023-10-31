@@ -36,8 +36,6 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
     int countByUser_IdAndStatus(Long id, String status);
     List<ProgramBooking> findAllByBookingNum(Long bookingNum);
 
-    @Query("SELECT new com.psr.seatservice.dto.user.response.BookingDetailResponse(p.title, pb.viewingDate, pb.viewingTime, p.place, p.type, pb.seatNum, pb.bookingNum) FROM ProgramBooking pb JOIN Program p ON pb.programNum = p.programNum WHERE pb.user.id=?1 AND pb.bookingNum = ?2")
-    BookingDetailResponse findProgramBookingDetailByUserId(Long id, Long bookingNum);
-    @Query("SELECT new com.psr.seatservice.dto.excel(pb.name, pb.programResponse) FROM ProgramBooking pb WHERE pb.programNum = ?1")
-    List<ExcelDTO> findExcelDTOByProgramNum(Long programNum);
+    @Query("SELECT new com.psr.seatservice.dto.excel.ExcelDTO(u.name, u.birth, u.phone, u.email, pb.bookingDate, p.programQuestion, pb.programResponse) from ProgramBooking pb left join User u on pb.user.id = u.id left join Program p on pb.programNum = p.programNum where pb.programNum=?1 and pb.viewingDate=?2 and pb.viewingTime=?3")
+    List<ExcelDTO> findExcelDTOByProgramNum(Long programNum,String date, String time);
 }

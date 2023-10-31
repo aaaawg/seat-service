@@ -13,7 +13,6 @@ import com.psr.seatservice.dto.program.response.ProgramInfoUpdateResponse;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
 import com.psr.seatservice.service.user.UserDetailService;
-import com.psr.seatservice.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -232,6 +231,7 @@ public class BizUserProgramController {
         model.addAttribute("userList", list);
         model.addAttribute("checkSC", checkSC);
         model.addAttribute("programNum", programNum);
+        model.addAttribute("bookingNum",programService.getProgramBookingCount(programNum, date, time));
         return "program/bizBookingUserList";
     }
 
@@ -267,4 +267,5 @@ public class BizUserProgramController {
         model.addAttribute("userName",name);
         return "program/bizBookingUserFormResult";
     }
+
 }
