@@ -3,7 +3,6 @@ package com.psr.seatservice.controller.user;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.files.FileDto;
 import com.psr.seatservice.dto.user.request.AddUserRequest;
-import com.psr.seatservice.dto.user.request.IdCheckRequest;
 import com.psr.seatservice.dto.user.response.BookingDetailResponse;
 import com.psr.seatservice.dto.user.response.BookingListResponse;
 import com.psr.seatservice.service.files.FilesService;
@@ -79,10 +78,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping("/join/id")
-    public @ResponseBody ResponseEntity<Void> checkId(@RequestBody IdCheckRequest request) {
+    @GetMapping("/join/id")
+    public @ResponseBody ResponseEntity<Void> checkId(@RequestParam String id) {
         //아이디 중복 검사
-        if(userService.checkUserId(request.getUserId())) {
+        if(userService.checkUserId(id)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); //409 이미 존재하는 아이디
         }
         return ResponseEntity.status(HttpStatus.OK).build();

@@ -4,8 +4,6 @@ import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.ErrorResponse;
 import com.psr.seatservice.dto.files.FileDto;
-import com.psr.seatservice.dto.program.request.PeopleCountRequest;
-import com.psr.seatservice.dto.program.request.ProgramSeatingChartRequest;
 import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.user.request.BookingRequest;
 import com.psr.seatservice.service.files.FilesService;
@@ -85,14 +83,14 @@ public class ProgramController {
         return "program/programBooking";
     }
 
-    @PostMapping("/booking/seat")
-    public @ResponseBody ProgramBookingInfoResponse getSeatingChart(@RequestBody ProgramSeatingChartRequest request) {
-        Program program = programService.getProgramInfo(request.getProgramNum());
-        int bookingCount = programService.getProgramBookingCount(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
+    @GetMapping("/booking/seat")
+    public @ResponseBody ProgramBookingInfoResponse getSeatingChart(@RequestParam("programNum") Long programNum, @RequestParam String viewingDate, @RequestParam String viewingTime) {
+        Program program = programService.getProgramInfo(programNum);
+        int bookingCount = programService.getProgramBookingCount(programNum, viewingDate, viewingTime);
         ProgramBookingInfoResponse bookingInfoResponse;
 
         if (program.getSeatingChart() != null) {
-            List<Integer> list = programService.getBookedSeats(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
+            List<Integer> list = programService.getBookedSeats(programNum, viewingDate, viewingTime);
             bookingInfoResponse = new ProgramBookingInfoResponse(program.getSeatingChart(), program.getSeatCol(), bookingCount, list);
         } else {
             bookingInfoResponse = new ProgramBookingInfoResponse(bookingCount);
@@ -131,10 +129,10 @@ public class ProgramController {
         return "redirect:/program/" + programNum;
     }*/
 
-    @PostMapping("/program/peopleCount")
-    public @ResponseBody int peopleCount(@RequestBody PeopleCountRequest request) {
+    @GetMapping("/program/peopleCount")
+    public @ResponseBody int peopleCount(@RequestParam("programNum") Long programNum, @RequestParam String viewingDate, @RequestParam String viewingTime) {
         //프로그램 상세정보 - 날짜, 시간 선택 시 예약한 사람 수 표시
-        return programService.getProgramBookingCount(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
+        return programService.getProgramBookingCount(programNum, viewingDate, viewingTime);
     }
 
     @GetMapping("/program/search")

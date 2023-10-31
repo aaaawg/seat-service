@@ -72,7 +72,7 @@
         </div>
         <div id="seatB">
             <div><div class="seatBtn" style="background-color: #e5e5e5"></div><span>선택 불가</span></div>
-            <div><div class="seatBtn" style="background-color: #83A783"></div><span>선택 가능</span></div>
+            <div><div class="seatBtn" style="background-color: #c9dcbd"></div><span>선택 가능</span></div>
             <div><div class="seatBtn activeSeatBtn"></div><span>선택 좌석</span></div>
         </div>
     </div>
@@ -250,16 +250,7 @@
 
         document.getElementById("calText").innerText = `${date} ${time}`
 
-        fetch(`/booking/seat`, {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "programNum": programNum,
-                "viewingDate": date,
-                "viewingTime": time
-            })
+        fetch(`/booking/seat?programNum=${programNum}&viewingDate=${date}&viewingTime=${time}`, {
         }).then((r) => {
             return r.json();
         }).then((r) => {
@@ -298,7 +289,7 @@
                 if(bookingSeatList.includes(seatNum))
                     ht += "<div class='seatBtn' style='background-color: #e5e5e5;'></div>"
                 else
-                    ht += "<button type='button' class='seatBtn' style='background-color: #83A783;'>" + seatNum + "</button>";
+                    ht += "<button type='button' class='seatBtn' style='background-color: #c9dcbd;'>" + seatNum + "</button>";
                 seatNum++;
             }
             else {

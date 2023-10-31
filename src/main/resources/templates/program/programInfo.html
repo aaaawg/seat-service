@@ -304,21 +304,13 @@
 
     function showPeopleCount() {
         let iHtml;
+        const pNum = [[${programInfo.programNum}]];
         if ([[${programInfo.peopleNum}]] !== -1) {
-            fetch('/program/peopleCount', {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "programNum": [[${programInfo.programNum}]],
-                    "viewingDate": sDate,
-                    "viewingTime": sTime
-                })
+            fetch(`/program/peopleCount?programNum=${pNum}&viewingDate=${sDate}&viewingTime=${sTime}`, {
             }).then((r) => {
-                return r.json();
+                return r.text();
             }).then((r) => {
-                let count = JSON.parse(r);
+                let count = Number(r);
                 if ([[${programInfo.peopleNum}]] === count) {
                     iHtml = "<span class='badge bg-secondary'>인원 마감</span>";
                 } else

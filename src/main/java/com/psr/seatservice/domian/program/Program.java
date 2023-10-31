@@ -51,7 +51,7 @@ public class Program {
     @CreationTimestamp
     private Timestamp createDate;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String seatingChart;
     private Integer seatCol;
     @Column(nullable = false)
