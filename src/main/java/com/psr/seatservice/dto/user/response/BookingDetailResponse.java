@@ -23,6 +23,7 @@ public class BookingDetailResponse {
     private Integer seatNum;
     private Long bookingNum;
     private String filename;
+    private String yDate; //endDate의 하루 전
 
     public BookingDetailResponse(Long programNum, String title, Date endDate, String place, String type, String way, Date bookingDate, Date updateDate, String reason, String status, String viewingDate, String viewingTime, Integer seatNum, Long bookingNum) {
         this.programNum = programNum;
