@@ -1,8 +1,8 @@
 package com.psr.seatservice.service.files;
+
 import com.psr.seatservice.domian.files.Files;
 import com.psr.seatservice.domian.files.FilesRepository;
 import com.psr.seatservice.dto.files.FileDto;
-import lombok.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,9 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class FilesService {

@@ -3,17 +3,14 @@ package com.psr.seatservice.controller.program;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
-import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
-import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.files.FileDto;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
+import com.psr.seatservice.dto.program.request.BizUpdateProgramBookingStatusRequest;
 import com.psr.seatservice.dto.program.request.BizUpdateProgramRequest;
-import com.psr.seatservice.dto.program.response.BizProgramListResponse;
-import com.psr.seatservice.dto.program.response.ProgramInfoUpdateResponse;
+import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.service.files.FilesService;
 import com.psr.seatservice.service.program.ProgramService;
 import com.psr.seatservice.service.user.UserDetailService;
-import com.psr.seatservice.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -265,5 +262,25 @@ public class BizUserProgramController {
         model.addAttribute("response",programResponse);
         model.addAttribute("userName",name);
         return "program/bizBookingUserFormResult";
+    }
+
+    //관리자 폼
+    @GetMapping("/{programNum}/formEdit")
+    public String programFormEdit(@PathVariable Long programNum, Model model) {
+        model.addAttribute("ProgramForm", programService.getProgramForm(programNum));
+        //Json 넘겨보기
+        model.addAttribute("ProgramJson", programService.getQuestionJson(programNum));
+        return "program/programEdit";
+    }
+
+    @PostMapping("/{programNum}/formEdit")
+    public String programFormEdit(@PathVariable Long programNum, @RequestParam(value = "formHtml", required = false) String request,
+                                  @RequestParam(value = "getTitleJson", required = false) String getTitleJsonString) {
+        programService.updateProgramForm(programNum, request);
+        if (getTitleJsonString.equals("{}")) {
+            getTitleJsonString = null;
+        }
+        programService.updateProgramFormTitle(programNum, getTitleJsonString);
+        return "redirect:/program/" + programNum;
     }
 }

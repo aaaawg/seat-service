@@ -24,9 +24,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/**","/program/**", "/login", "/join/**", "/js/**", "/css/**", "/img/**").permitAll() //접근 전부 허용
                 .antMatchers("/business/**").hasRole("BIZ")
                 .antMatchers("/myPage/**", "/around/**", "/booking/**").hasRole("USER")
+                .antMatchers("/**","/program/**", "/login", "/join/**", "/js/**", "/css/**", "/img/**").permitAll() //접근 전부 허용
                 .anyRequest().authenticated() //나머지는 인증 후 접근 가능
                 .and()
                     .formLogin()

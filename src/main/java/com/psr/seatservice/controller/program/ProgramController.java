@@ -111,7 +111,7 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(result));
     }
 
-    //관리자 폼
+/*    //관리자 폼
     @GetMapping("/program/{programNum}/formEdit")
     public String programFormEdit(@PathVariable Long programNum, Model model) {
         model.addAttribute("ProgramForm", programService.getProgramForm(programNum));
@@ -129,7 +129,7 @@ public class ProgramController {
         }
         programService.updateProgramFormTitle(programNum, getTitleJsonString);
         return "redirect:/program/" + programNum;
-    }
+    }*/
 
     @PostMapping("/program/peopleCount")
     public @ResponseBody int peopleCount(@RequestBody PeopleCountRequest request) {
