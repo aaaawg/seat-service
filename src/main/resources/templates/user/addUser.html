@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/addUser.css}" href="../css/addUser.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 <body>
 <div class="container" style="max-width: 450px">
@@ -64,9 +63,9 @@
                     <input class="form-control" type="text" id="email1" th:field="*{email1}" th:classappend="${#fields.hasErrors('email')}?'errorInput':''">
                     <span class="input-group-text" th:classappend="${#fields.hasErrors('email')}?'errorInput':''">@</span>
                     <input class="form-control" type="text" id="email2" th:field="*{email2}" th:classappend="${#fields.hasErrors('email')}?'errorInput':''">
-                    <input type="hidden" id="email" name="email" th:field="*{email}">
-                    <a class="btn text-white" id="check" onclick="sendEmail()">인증하기</a>
+                    <a class="btn text-white" id="check" onclick="sendEmail()">인증</a>
                 </div>
+                <input type="hidden" id="email" name="email" th:field="*{email}">
                 <div class="errorText" th:errors="*{email}"></div>
                 <p id="sendEmailMessage"></p>
             </div>

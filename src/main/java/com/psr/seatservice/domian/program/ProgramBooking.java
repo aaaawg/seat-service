@@ -25,15 +25,16 @@ public class ProgramBooking {
 
     private Integer seatNum;
 
-    @Column(name = "program_num")
+    @Column(name = "program_num", nullable = false)
     private Long programNum;
 
-    @Column(name = "viewing_date")
+    @Column(name = "viewing_date", nullable = false)
     private String viewingDate;
 
-    @Column(name = "viewing_time")
+    @Column(name = "viewing_time", nullable = false)
     private String viewingTime;
 
+    @Column(nullable = false)
     private String status; //참가, 불참, 예약취소, 예정
     private String reason; //취소 사유
 

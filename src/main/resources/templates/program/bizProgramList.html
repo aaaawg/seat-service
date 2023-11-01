@@ -1,15 +1,19 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/head :: head(~{::link})">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link th:href="@{/css/bizPage.css}" href="../css/bizPage.css" rel="stylesheet">
 </head>
 <body>
+<div th:replace="/layout/nav.html :: nav"></div>
 <div class="container" style="max-width: 1046px">
     <div class="btnDiv">
         <button class="rounded-2" th:onclick="|location.href='@{/business/program/add}'|" type="button">추가</button>
     </div>
-    <div class="tb rounded-2 shadow" style="float:left; width: 650px">
+    <div>
+        <h4>프로그램 목록</h4>
+        <span th:text="|총 ${programs.size()}건|"></span>
+    </div>
+    <div class="tb rounded-2 shadow tbm" style="float:left; width: 650px">
         <table class="table table-hover table-borderless" id="tList">
             <thead>
             <tr>
@@ -31,7 +35,7 @@
             </tbody>
         </table>
     </div>
-    <div class="tb rounded-2 shadow" id="tbD">
+    <div class="tb rounded-2 shadow tbm" id="tbD">
         <table class="table table-borderless">
             <thead>
             <tr>
@@ -46,6 +50,8 @@
         </table>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/js/nav.js"></script>
 <script>
     function showViewingList(programNum, t) {
         if(programNum !== null) {
@@ -79,6 +85,5 @@
         location.href = `/business/program/${num}/booking?date=${date}&time=${time}`;
     }
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </body>
 </html>

@@ -20,7 +20,7 @@ public class QnaController {
 
     @PostMapping("/qna/{programNum}")
     public ResponseEntity<Object> addQna(@PathVariable Long programNum, @RequestBody AddQnaRequest request, @AuthenticationPrincipal User user) {
-        if(user.getUsername() != null || request.getContent() != null) {
+        if(user.getUsername() != null || request.getQuestion() != null) {
             qnaService.addQna(programNum, request, user);
             return ResponseEntity.status(HttpStatus.OK).build();
         }

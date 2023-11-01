@@ -72,7 +72,7 @@
         </div>
         <div id="seatB">
             <div><div class="seatBtn" style="background-color: #e5e5e5"></div><span>선택 불가</span></div>
-            <div><div class="seatBtn" style="background-color: #83A783"></div><span>선택 가능</span></div>
+            <div><div class="seatBtn" style="background-color: #c9dcbd"></div><span>선택 가능</span></div>
             <div><div class="seatBtn activeSeatBtn"></div><span>선택 좌석</span></div>
         </div>
     </div>
@@ -148,8 +148,9 @@
             if(result === 0){
                 window.alert("질문에 모두 답변해주세요.");
             } else {
+                document.body.style.backgroundColor = "white";
                 if (![[${chSC}]]) {
-                    window.resizeTo(575, 535);
+                    window.resizeBy(-480, 0);
                 }
                 document.getElementById("userResponseForm").value = JSON.stringify(result);
                 document.getElementById("enterForm").style.display = "none";
@@ -249,16 +250,7 @@
 
         document.getElementById("calText").innerText = `${date} ${time}`
 
-        fetch(`/booking/seat`, {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "programNum": programNum,
-                "viewingDate": date,
-                "viewingTime": time
-            })
+        fetch(`/booking/seat?programNum=${programNum}&viewingDate=${date}&viewingTime=${time}`, {
         }).then((r) => {
             return r.json();
         }).then((r) => {
@@ -297,7 +289,7 @@
                 if(bookingSeatList.includes(seatNum))
                     ht += "<div class='seatBtn' style='background-color: #e5e5e5;'></div>"
                 else
-                    ht += "<button type='button' class='seatBtn' style='background-color: #83A783;'>" + seatNum + "</button>";
+                    ht += "<button type='button' class='seatBtn' style='background-color: #c9dcbd;'>" + seatNum + "</button>";
                 seatNum++;
             }
             else {
@@ -326,6 +318,8 @@
     }
     function showBookingInfo(seatNum) {
         document.getElementById("chTitle").innerText = title;
+        let d = new Date(endDate);
+        d.setDate(d.getDate() - 1)
 
         if(bookingSeatList != null) {
             document.getElementById("chSeatNum").innerText = seatNum + "번";
@@ -333,8 +327,24 @@
             document.getElementById("seatNum").value = seatNum;
         }
 
+        let dd;
+        if(d.getDate() < 10) {
+            dd = "0" + d.getDate();
+        }
+        else
+            dd = d.getDate();
+
+        let mm;
+        let m = d.getMonth() + 1;
+        if(d.getMonth() < 10) {
+            mm = "0" + m;
+        }
+        else
+            mm = m;
+
+
         document.getElementById("chDate").innerText = ssDate + " " + ssTime;
-        document.getElementById("chCancel").innerText = endDate + " 24:00까지"
+        document.getElementById("chCancel").innerText = `${d.getFullYear()}-${mm}-${dd} 24:00까지`
     }
     function showAppCount(num) {
         const tDiv = document.getElementById("appCount");

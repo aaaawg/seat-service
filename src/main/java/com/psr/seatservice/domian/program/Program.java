@@ -17,19 +17,19 @@ public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long programNum;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title; //프로그램 제목
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String place; //장소
     private String way;
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String target; //신청대상
     private String targetDetail;
     @Temporal(value = TemporalType.DATE)
     private Date startDate; //신청시작일
     @Temporal(value = TemporalType.DATE)
     private Date endDate; //신청마감일
-    @Column(length = 7)
+    @Column(length = 7, nullable = false)
     private String type; //온라인 or 오프라인
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
@@ -51,9 +51,10 @@ public class Program {
     @CreationTimestamp
     private Timestamp createDate;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String seatingChart;
     private Integer seatCol;
+    @Column(nullable = false)
     private int peopleNum; //모집인원
 
     public Program(String title, String place, String way, String target, String targetDetail, String type, Date startDate, Date endDate, String seatingChart, Integer seatCol, int peopleNum, String contents, String programHtml, String programQuestion, User user) {

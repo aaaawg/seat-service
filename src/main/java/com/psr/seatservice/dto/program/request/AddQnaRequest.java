@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class AddQnaRequest {
-    private String content;
+    private String question;
     private boolean secret;
 }

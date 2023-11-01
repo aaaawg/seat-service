@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/seatingChart.css}" href="../css/seatingChart.css" rel="stylesheet">
-    <link th:href="@{/css/updateProgramSeatingChart.css}" href="../css/updateProgramSeatingChart.css" rel="stylesheet">
-    <title>좌석배치도 생성</title>
+    <link th:href="@{/css/addSeatingChart.css}" href="../css/addSeatingChart.css" rel="stylesheet">
+<!--    <link th:href="@{/css/updateProgramSeatingChart.css}" href="../css/updateProgramSeatingChart.css" rel="stylesheet">-->
+    <title>좌석표 생성</title>
 </head>
 <body>
-<div style="max-width: 1000px">
-    <p>좌석배치도</p>
-    <div id="seatingChart" class="input-group" style="max-width: 500px">
+<div style="padding: 0 20px; margin: 10px 0;">
+    <h4>좌석표 생성</h4>
+    <div id="seatingChart" class="input-group">
         <div class="form-floating">
             <input type="text" class="form-control" id="seatRow" placeholder="열 입력" oninput="checkNumber(id)">
             <label for="seatRow">열 입력</label>
@@ -20,12 +21,11 @@
             <input type="text" class="form-control" id="seat" placeholder="한 줄 좌석수 입력" oninput="checkNumber(id)">
             <label for="seat">한 줄 좌석수 입력</label>
         </div>
-        <input type="button" class="btn btn-primary" onclick="createSeatingChart()" value="생성">
+        <input type="button" class="btn btn-outline-dark" onclick="createSeatingChart()" value="생성">
     </div>
     <div>
-        <div id="stage">stage</div>
-        <div id="chart"></div>
-    </div>
+        <div id="stage"></div>
+        <div id="chart" class="container"></div>
     </div>
     <div id="btn">
         <button type="button" onclick="window.close()">취소</button>
@@ -33,8 +33,6 @@
     </div>
 </div>
 </body>
-<script>
-
-</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script type="text/javascript" src="/js/seatingChart.js?ver=1.1"></script>
 </html>

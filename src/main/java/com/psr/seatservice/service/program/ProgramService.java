@@ -1,6 +1,5 @@
 package com.psr.seatservice.service.program;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.*;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -142,9 +140,17 @@ public class ProgramService {
     @Transactional
     public String addBooking(Long programNum, BookingRequest request, User user) {
         int count = getProgramBookingCount(programNum, request.getViewingDate(), request.getViewingTime());
+        Program program = getProgramInfo(programNum);
         if(count < request.getPeopleNum() || request.getPeopleNum() == -1) {
+            if(program.getTarget().equals("area")) {
+                //신청대상이 지역일 경우 주소 확인
+                boolean add = checkProgramTargetDetailAndUserAddress(program.getTargetDetail(), user.getAddress());
+                if(!add)
+                    return "신청대상에 해당하지 않습니다.";
+            }
+
             int nonPCount = programBookingRepository.countByUser_IdAndStatus(user.getId(), "불참");
-            if(nonPCount < 3) {
+            if(nonPCount < 3) { //불참 횟수 확인
                 if (!programBookingRepository.existsByProgramNumAndViewingDateAndViewingTimeAndUser_Id(programNum, request.getViewingDate(), request.getViewingTime(), user.getId())) { //해당 회차를 신청 했는지
                     if (request.getSeatNum() != null && programBookingRepository.existsByProgramNumAndSeatNumAndViewingDateAndViewingTime(programNum, request.getSeatNum(), request.getViewingDate(), request.getViewingTime())) {
                         return "이미 신청된 좌석입니다.";
@@ -160,6 +166,17 @@ public class ProgramService {
                 return "불참 횟수(3회)로 인해 신청할 수 없습니다.";
         }
         return "인원 마감으로 인해 신청할 수 없습니다.";
+    }
+
+    public boolean checkProgramTargetDetailAndUserAddress(String targetDetail, String address) {
+        String addr = address.split(",")[0];
+        String[] addr2 = addr.split(" ", 3);
+
+        if(targetDetail.indexOf(" ") > 0) {
+            return targetDetail.equals(addr2[0] + " " + addr2[1]);
+        }
+        else
+            return targetDetail.equals(addr2[0]);
     }
 
     public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {
@@ -258,8 +275,8 @@ public class ProgramService {
     }
 
     @Transactional
-    public void BookingDelete(Long bookingNum){
-        programBookingRepository.deleteByBookingNum(bookingNum);
+    public void bookingDelete(Long bookingNum){
+        programBookingRepository.deleteById(bookingNum);
     }
 
     public List<ProgramListResponse> getProgramSearchResult(String keyword) {
@@ -277,23 +294,28 @@ public class ProgramService {
 
     public List<ProgramListResponse> getUserAroundProgramList(String area, String target, String detail){
         List<ProgramListResponse> programs;
+        String[] sArea = area.split(" ");
         String str;
 
         if(target.equals("all")) {
             //프로그램 target = 제한없음, 프로그램 진행 장소 기준 - 대면 프로그램만
-            str = (detail == null || detail.equals("01")) ? area.split(" ")[0] + "%" : area + "%";
+            str = (detail == null) ? sArea[0] + "%" : detail + "%";
             programs = programRepository.findAllByTargetAndTypeAndPlaceStartsWith(target, str, "offline");
         }
         else {
             //프로그램 target = 지역, 사용자 주소 = 지역
             if(detail == null) {
-                str = area.split(" ")[0];
-                programs = programRepository.findAllByTargetAndTargetDetailAll(target, str, area);
+                if(sArea.length == 3) {
+                    //구까지 있을 경우
+                    str = sArea[0] + sArea[1];
+                    programs = programRepository.findAllByTargetAndTargetDetailAll(target, sArea[0], str, area);
+                }
+                else
+                    programs = programRepository.findAllByTargetAndTargetDetailAll(target, sArea[0], area);
             }
             else {
-                if(detail.equals("01") || detail.equals("02")) {
-                    str = (detail.equals("01")) ? area.split(" ")[0] : area;
-                    programs = programRepository.findAllByTargetAndTargetDetail(target, str);
+                if(area.contains(detail)) {
+                    programs = programRepository.findAllByTargetAndTargetDetail(target, detail);
                 }
                 else
                     programs = null;

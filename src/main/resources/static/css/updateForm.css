@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(249 249 249) !important;
+    background-color: rgb(249 249 249);
 }
 .container div:not(.seatBtn){
     margin-top: 1.4rem;

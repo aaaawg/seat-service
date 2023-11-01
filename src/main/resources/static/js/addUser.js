@@ -30,6 +30,8 @@ function userEnterData() {
         let phone = document.getElementById("phone");
 
         phone.value = phone1 + "-" + phone2 + "-" + phone3;
+        if(document.getElementById("role").value === "biz")
+            document.getElementById("birth").disabled = true;
 
         if (document.getElementById("addr2").value !== "")
             document.getElementById("address").value = document.getElementById("addr1").value + ', ' + document.getElementById("addr2").value;
@@ -51,23 +53,16 @@ function sendEmail() {
 
     if(document.getElementById("email1").value.trim().length !== 0 && document.getElementById("email2").value.trim().length !== 0) {
         document.getElementById("sendEmailMessage").innerText = "이메일을 전송했습니다.";
-        fetch('/join/email', {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "userEmail": email
+        fetch(`/join/email?email=${email}`)
+            .then((r) => {
+                return r.text();
+            }).then((r) => {
+                num = r;
+                console.log(num);
+                document.getElementById("sendEmailMessage").innerText = "";
+                $('#enterNumberModal').modal('show');
+                document.getElementById("checkResult").innerText = "";
             })
-        }).then((r) => {
-            return r.text();
-        }).then((r) => {
-            num = r;
-            console.log(num);
-            document.getElementById("sendEmailMessage").innerText = "";
-            $('#enterNumberModal').modal('show');
-            document.getElementById("checkResult").innerText = "";
-        })
     }
     else
         alert("이메일을 입력해주세요.");
@@ -79,8 +74,9 @@ function checkAuthNum() {
     if (num == en.value) {
         document.getElementById("email1").readOnly = true;
         document.getElementById("email2").readOnly = true;
-        document.getElementById("check").style.display = "none";
+        document.getElementById("check").remove();
         $('#enterNumberModal').modal('hide');
+
     } else {
         re.innerText = "인증번호가 올바르지 않습니다.";
         en.value = "";
@@ -111,26 +107,19 @@ function changeText(id) {
 }
 
 function checkId() {
-    const userId = document.getElementById("userId");
+    const userId = document.getElementById("userId").value;
     document.getElementById("idMessage").innerHTML = "";
 
-    if(userId.value.trim().length !== 0) {
-        fetch('/join/id', {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "userId": userId.value
+    if(userId.trim().length !== 0) {
+        fetch(`/join/id?id=${userId}`)
+            .then((r) => {
+                document.getElementById("userId").classList.remove("errorInput");
+                if (r.ok) {
+                    document.getElementById("idMessage").innerHTML = "사용 가능한 아이디입니다.<button id='useIdBtn' class='badge bg-light text-dark' onclick='useId()'>사용하기</button>"
+                } else {
+                    document.getElementById("idMessage").innerText = "사용할 수 없는 아이디 입니다.";
+                }
             })
-        }).then((r) => {
-            document.getElementById("userId").classList.remove("errorInput");
-            if (r.ok) {
-                document.getElementById("idMessage").innerHTML = "사용 가능한 아이디입니다.<button id='useIdBtn' class='badge bg-light text-dark' onclick='useId()'>사용하기</button>"
-            } else {
-                document.getElementById("idMessage").innerText = "사용할 수 없는 아이디 입니다.";
-            }
-        })
     }
     else
         alert("아이디를 입력해주세요.");

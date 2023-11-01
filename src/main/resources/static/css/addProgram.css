@@ -13,10 +13,10 @@
     height: 20px;
     background-color: #83A783;
     border-radius: 3px;
-    margin: 2px 2px 2px 2px;
+    margin: 2px;
     text-align: center;
     font-size: 11px;
-    padding: 0px 0px 0px 0px;
+    padding: 2px;
     text-decoration: none;
     color: black;
 }
@@ -27,18 +27,217 @@
     margin-top: 15px;
 }
 
-.bi.bi-pencil-square {
-    background-color: #767676;
-    color: white;
-    width: 1.7rem;
-    display: block;
-    height: 1.7rem;
-    border-radius: 3px;
-}
-#tooltipBtn {
+.tooltipBtn {
     border: none;
-    background-color: #ffffff;
+    background: none;
     width: 30px;
     height: 30px;
     background-size: cover;
+}
+
+body{
+    background-color: rgb(249, 249, 249);
+}
+#myForm {
+    border: solid #d9d9d9 1px;
+    background-color: white;
+    margin-top: 10px;
+    padding: 40px;
+}
+input {
+    height: 38px;
+}
+.input-group a {
+    height: 38px;
+    background-color: #617A55;
+    border: none;
+    font-weight: bolder;
+    width: 100px;
+}
+.fDiv {
+    margin-bottom: 30px;
+}
+.col {
+    padding: 0 !important;
+}
+.col-4 {
+    padding: 0 !important;
+}
+label[class=col-2] {
+    padding-left: 0 !important;
+}
+#placeDiv .input-group {
+    margin-bottom: 5px;
+}
+#onlineWay textarea {
+    margin-top: 3px;
+}
+#vDiv {
+    margin-right: 10px;
+}
+.pDiv {
+    height: 38px;
+}
+#peopleNum {
+    width: 110px;
+    display: inline;
+}
+.chDiv {
+    margin-right: 20px;
+    float: left;
+}
+#myForm {
+    margin: 15px;
+}
+.vList {
+    margin-left: 10px;
+    border: solid #ced4da 1px;
+    padding: 10px;
+}
+.input-group a:hover {
+    background-color: #3d4d36 !important;
+}
+#offSeatingChart {
+    height: 35px;
+}
+#offSeatingChart button {
+    border: solid #617A55 1px;
+    background-color: white;
+    padding: 0 10px;
+}
+#formBtnDiv {
+    margin-top: 20px;
+    text-align: center;
+    height: 50px;
+}
+#formBtnDiv button {
+    width: 110px;
+    height: 100%;
+    border: solid #d9d9d9 1px;
+    margin: 0 5px;
+}
+#formBtnDiv button[type="button"]:hover {
+    border: solid #3d4d36 3px;
+    font-weight: bolder;
+}
+#formBtnDiv button[type="submit"] {
+    background-color: #617A55;
+    color: white;
+}
+#formBtnDiv button[type="submit"]:hover {
+    background-color: #3d4d36;
+    font-weight: bolder;
+}
+
+.chartPreview {
+    border: solid #d9d9d9 1px;
+    padding: 10px !important;
+}
+
+/* 항목 관련 css*/
+#content {
+    margin: 20px 0;
+}
+div[id*='plus'] {
+    padding: 20px !important;
+    margin-bottom: 10px !important;
+    border-radius: 5px !important;
+    border: solid #ced4da 1px !important;
+}
+
+.btn.btn-success{
+    padding: 0.45rem 0.9rem;
+    border-radius: 0.3rem;
+    color: white;
+    font-weight: bold;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-decoration: none;
+    background-color : #157347;
+    border: 1px solid #157347;
+    transition: 700ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    width: 6rem;
+    margin-top: 2rem;
+    &:hover{
+         transition: 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+         color: white;
+         background-color: #6B9B7E;
+         background-position: 99% 50%;
+         border: 1px solid #6B9B7E;
+     }
+}
+#content .btn:not(.btn.btn-success, .btn.btn-plus, .btn.btn-outline-secondary){
+    color: white;
+    background-color: #6B9B7E;
+    margin-right: .5rem;
+    &:hover{
+         transition: 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+         color: #6B9B7E;
+         background-color: white;
+         background-position: 99% 50%;
+         border: 1px solid #157347;
+     }
+}
+#content div[class*='class'] > input{
+    width: 83%;
+    margin-bottom: 5px;
+    word-wrap: normal;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.4rem;
+    height: 30px;
+}
+#content div[id*="origContent"] {
+    margin-top: 10px;
+}
+#content div[class*='class'] > span, div[id*='select'] > span{
+    padding-right: 0.5rem;
+    display: inline-block;
+    width: 6rem;
+}
+#content select {
+    word-wrap: normal;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.4rem;
+}
+#content div[class*='reDiv'] > input[class*='reply'], div[class*='reDiv'] > textarea{
+    width: 100%;
+}
+#content button[class*='reply']{
+    background-color: #157347;
+    color: white;
+    border: solid 2.13px #157347;
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+#content div[class*='select'] > label, label[id*='check']{
+    margin-right: 1rem;
+    margin-top: 0.6rem;
+
+}
+#content label * {
+    vertical-align:middle;
+}
+#content label input[type=text] {
+    height: 30px;
+    width: 260px;
+}
+
+#content button[id*='radioP'], button[id*='checkP']{
+    border-radius: 50px;
+    background-color: white;
+    color: #157347;
+    border: 1px solid #157347;
+    margin-top: 1.5rem;
+    width: 7rem;
+    height: 2rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 0.3rem 0.9rem;
+}
+#content div[class*='selectBtnDiv'], div[class*='checkBoxBtnDiv']{
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 1rem;
+}
+#content input[type=radio], input[type=checkbox]{
+    margin-right: 0.5rem;
 }

@@ -9,6 +9,9 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
    if (!check()) {
      return; // fetch 실행하지 않음
    }
+   if(!checkUserValue()) {
+       return;
+   }
    // 폼 데이터 생성
     const resultHtml = document.querySelector('#content').outerHTML;
     var additionalData;

@@ -20,8 +20,6 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
             "from User u, ProgramBooking b where u.id = b.user.id and b.programNum = ?1 and b.viewingDate = ?2 and b.viewingTime = ?3")
     List<BizProgramBookingUserListResponse> findByProgramNumAndViewingDateAndViewingTime(Long programNum, String viewingDate, String viewingTime);
 
-    void deleteByBookingNum(Long bookingNum);
-
     @Query("SELECT count(*) FROM ProgramBooking WHERE programNum = ?1")
     Long countByProgramNum(Long programNum);
 

@@ -12,17 +12,17 @@ import java.util.Date;
 @Setter
 public class QnaListResponse {
     private Long qnaNum;
-    private String content;
+    private String question;
     private boolean secret;
     private String writer;
     private Date createDate;
     private Date answerDate;
     private String answer;
-    private boolean applicant;
+    private boolean applicant; //프로그램 신청 여부
 
     public QnaListResponse(Qna qna) {
         this.qnaNum = qna.getQnaNum();
-        this.content = qna.getContent();
+        this.question = qna.getQuestion();
         this.secret = qna.isSecret();
         this.writer = qna.getUser().getUserId();
         this.createDate = qna.getCreateDate();

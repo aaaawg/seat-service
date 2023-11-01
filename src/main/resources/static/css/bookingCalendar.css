@@ -17,7 +17,6 @@
     width: 480px;
 }
 .activeSeatBtn {
-    border: solid black 2px !important;
     background-color: rgb(71, 91, 71) !important;
     color: white !important;
 }

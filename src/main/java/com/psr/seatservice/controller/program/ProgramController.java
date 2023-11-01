@@ -1,13 +1,9 @@
 package com.psr.seatservice.controller.program;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.ErrorResponse;
 import com.psr.seatservice.dto.files.FileDto;
-import com.psr.seatservice.dto.program.request.PeopleCountRequest;
-import com.psr.seatservice.dto.program.request.ProgramSeatingChartRequest;
 import com.psr.seatservice.dto.program.response.*;
 import com.psr.seatservice.dto.user.request.BookingRequest;
 import com.psr.seatservice.service.files.FilesService;
@@ -87,23 +83,20 @@ public class ProgramController {
         return "program/programBooking";
     }
 
-    @PostMapping("/booking/seat")
-    public @ResponseBody String getSeatingChart(@RequestBody ProgramSeatingChartRequest request) throws JsonProcessingException {
-        Program program = programService.getProgramInfo(request.getProgramNum());
-        int bookingCount = programService.getProgramBookingCount(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
+    @GetMapping("/booking/seat")
+    public @ResponseBody ProgramBookingInfoResponse getSeatingChart(@RequestParam("programNum") Long programNum, @RequestParam String viewingDate, @RequestParam String viewingTime) {
+        Program program = programService.getProgramInfo(programNum);
+        int bookingCount = programService.getProgramBookingCount(programNum, viewingDate, viewingTime);
         ProgramBookingInfoResponse bookingInfoResponse;
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json;
 
         if (program.getSeatingChart() != null) {
-            List<Integer> list = programService.getBookedSeats(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
+            List<Integer> list = programService.getBookedSeats(programNum, viewingDate, viewingTime);
             bookingInfoResponse = new ProgramBookingInfoResponse(program.getSeatingChart(), program.getSeatCol(), bookingCount, list);
         } else {
             bookingInfoResponse = new ProgramBookingInfoResponse(bookingCount);
         }
 
-        json = objectMapper.writeValueAsString(bookingInfoResponse);
-        return json;
+        return bookingInfoResponse;
     }
 
     @PostMapping("/booking/{programNum}")
@@ -116,7 +109,7 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(result));
     }
 
-    //관리자 폼
+/*    //관리자 폼
     @GetMapping("/program/{programNum}/formEdit")
     public String programFormEdit(@PathVariable Long programNum, Model model) {
         model.addAttribute("ProgramForm", programService.getProgramForm(programNum));
@@ -134,12 +127,12 @@ public class ProgramController {
         }
         programService.updateProgramFormTitle(programNum, getTitleJsonString);
         return "redirect:/program/" + programNum;
-    }
+    }*/
 
-    @PostMapping("/program/peopleCount")
-    public @ResponseBody int peopleCount(@RequestBody PeopleCountRequest request) {
+    @GetMapping("/program/peopleCount")
+    public @ResponseBody int peopleCount(@RequestParam("programNum") Long programNum, @RequestParam String viewingDate, @RequestParam String viewingTime) {
         //프로그램 상세정보 - 날짜, 시간 선택 시 예약한 사람 수 표시
-        return programService.getProgramBookingCount(request.getProgramNum(), request.getViewingDate(), request.getViewingTime());
+        return programService.getProgramBookingCount(programNum, viewingDate, viewingTime);
     }
 
     @GetMapping("/program/search")
@@ -152,7 +145,13 @@ public class ProgramController {
     @GetMapping( "/around/{target}")
     public String userAroundProgramListByTarget(@PathVariable String target, @RequestParam(required = false) String detail, @AuthenticationPrincipal User user, Model model) {
         String[] arr = user.getAddress().split(" ");
-        String area = arr[0] + " " + arr[1];
+        String area;
+
+        if(arr[2].endsWith("구")) {
+            area = arr[0] + " " + arr[1] + " " + arr[2];
+        }
+        else
+            area = arr[0] + " " + arr[1];
 
         if (target.equals("all") || target.equals("area")) {
             List<ProgramListResponse> placeList = programService.getUserAroundProgramList(area, target, detail);

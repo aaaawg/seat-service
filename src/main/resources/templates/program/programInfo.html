@@ -3,7 +3,6 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/programInfo.css}" href="../css/programInfo.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
@@ -15,8 +14,8 @@
             </span>
             <div class="noImg" th:unless="${file.filename != 'NoInImage'}"><i class="bi bi-image"></i></div>
         </div>
-        <div class="programTextDiv col">
-            <div>
+        <div class="programTextDiv col" style="position: relative;">
+            <div id="tDiv">
                 <span class="badge bg-secondary imgBadge" th:text="(${programInfo.type} == 'offline')?'대면':'비대면'"></span>
                 <h2 th:text="${programInfo.title}"></h2>
             </div>
@@ -39,10 +38,18 @@
                     <td th:text="${#dates.format(programInfo.startDate,'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(programInfo.endDate, 'yyyy.MM.dd')}"></td>
                 </tr>
                 <tr>
+                    <th>주최</th>
+                    <td th:text="${programInfo.bizName}"></td>
+                </tr>
+                <tr>
                     <th>문의</th>
-                    <td th:text="${programInfo.userPhone}"></td>
+                    <td th:text="${programInfo.bizPhone}"></td>
                 </tr>
             </table>
+            <div th:if="${programInfo.bizUserId} == ${#authentication.name}" sec:authorize="hasRole('BIZ')" id="bizBtn">
+                <button class="btn btn-outline-secondary btn-sm" th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button">내용 수정</button>
+                <button id="changeForm" class="btn btn-outline-dark btn-sm" type="button">신청폼 수정</button>
+            </div>
         </div>
     </div>
 
@@ -84,7 +91,7 @@
                 <div th:utext="${programInfo.contents}"></div>
             </div>
             <hr>
-            <div th:if="${programInfo.type == 'offline'}">
+            <div th:if="${programInfo.type == 'offline'}" id="mapDiv">
                 <h5>장소</h5>
                 <div id="map" style="width:400px; height:300px;"></div>
             </div>
@@ -112,10 +119,10 @@
                     <div>
                         <input type="hidden" class="qnaNum" th:value="${qna.qnaNum}">
                         <div th:if="${qna.secret}">
-                            <div th:if="${programInfo.userId} == ${#authentication.name} or ${qna.writer} == ${#authentication.name}">
+                            <div th:if="${programInfo.bizUserId} == ${#authentication.name} or ${qna.writer} == ${#authentication.name}">
                                 <input type="hidden" class="qnaNum" th:value="${qna.qnaNum}">
                                 <i class="bi bi-lock-fill"></i>
-                                <p th:utext="${qna.content}"></p>
+                                <p th:utext="${qna.question}"></p>
                                 <span th:text="${#dates.format(qna.createDate,'yyyy.MM.dd HH:mm')}"></span><i th:if="${qna.writer} == ${#authentication.name}" class="bi bi-trash-fill" onclick="deleteQna(this)"></i>
                                 <br>
                                 <button class="showAnswerBtn btn btn-outline-secondary btn-sm" th:if="${qna.answer} != null">답변</button>
@@ -125,11 +132,11 @@
                                     <span th:text="${#dates.format(qna.answerDate,'yyyy.MM.dd HH:mm')}"></span>
                                 </div>
                             </div>
-                            <div th:unless="${programInfo.userId} == ${#authentication.name} or ${qna.writer} == ${#authentication.name}"><i class="bi bi-lock-fill"></i>비밀글입니다.</div>
+                            <div th:unless="${programInfo.bizUserId} == ${#authentication.name} or ${qna.writer} == ${#authentication.name}"><i class="bi bi-lock-fill"></i>비밀글입니다.</div>
                         </div>
                         <div th:unless="${qna.secret}">
                             <input type="hidden" class="qnaNum" th:value="${qna.qnaNum}">
-                            <p th:utext="${qna.content}"></p>
+                            <p th:utext="${qna.question}"></p>
                             <span th:text="${#dates.format(qna.createDate,'yyyy.MM.dd HH:mm')}"></span><i th:if="${qna.writer} == ${#authentication.name}" class="bi bi-trash-fill" onclick="deleteQna(this)"></i>
                             <br>
                             <button class="showAnswerBtn btn btn-sm btn-outline-secondary" th:if="${qna.answer} != null">답변</button>
@@ -138,7 +145,7 @@
                                 <span th:text="${#dates.format(qna.answerDate,'yyyy.MM.dd HH:mm')}"></span>
                             </div>
                         </div>
-                        <div th:if="${qna.answer} == null and ${programInfo.userId} == ${#authentication.name}">
+                        <div th:if="${qna.answer} == null and ${programInfo.bizUserId} == ${#authentication.name}">
                             <button class="showEnterAnswerBtn btn btn-outline-secondary btn-sm">답변등록</button>
                             <div class="input-group enterAnswerDiv">
                                 <textarea class="form-control" placeholder="답변을 입력해주세요." rows="2" id="qnaAnswer"></textarea>
@@ -151,13 +158,9 @@
             </div>
         </div>
     </div>
-    <div th:if="${programInfo.userId} == ${#authentication.name}">
-        <button th:onclick="|location.href='@{/business/program/update/{programNum}(programNum=${programInfo.programNum})}'|" type="button" sec:authorize="hasRole('BIZ')">수정</button>
-        <button id="changeForm" type="button" sec:authorize="hasRole('BIZ')">신청폼 수정</button>
-    </div>
 </div>
-<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=@&libraries=services"></script>
-<script th:inline="javascript">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=##&libraries=services"></script>
+<!--<script th:inline="javascript">
     const p = [[${programInfo.place}]];
     let place = p.split(',', 1);
 
@@ -192,7 +195,7 @@
             map.setCenter(coords);
         }
     });
-</script> -->
+</script>-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script th:inline="javascript">
 
@@ -227,7 +230,6 @@
             $(".enterAnswerDiv").hide();
             $(this).next(".enterAnswerDiv").toggle();
         });
-
     });
 
     let sDate;
@@ -241,7 +243,7 @@
         event.preventDefault();
         alert("신청자가 존재하여 수정이 불가능합니다.");
     }else{
-        window.location.href = "/program/"+pNum+"/formEdit";
+        window.location.href = "/business/program/"+pNum+"/formEdit";
     }
   });
 
@@ -278,14 +280,7 @@
                 alert("시간을 선택해주세요.");
             } else {
                 let url = "/booking/" + num;
-                let width;
-                width = "1025px";
-                /*if([[${chSC}]])
-                    width = "1025px";
-                else
-                    width = "545px";
-*/
-                window.open(url, "예약", `width=${width}, height=535px`);
+                window.open(url, "예약", "width=1025px, height=535px");
             }
         } else {
             const answer = confirm("로그인이 필요합니다.")
@@ -309,21 +304,13 @@
 
     function showPeopleCount() {
         let iHtml;
+        const pNum = [[${programInfo.programNum}]];
         if ([[${programInfo.peopleNum}]] !== -1) {
-            fetch('/program/peopleCount', {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "programNum": [[${programInfo.programNum}]],
-                    "viewingDate": sDate,
-                    "viewingTime": sTime
-                })
+            fetch(`/program/peopleCount?programNum=${pNum}&viewingDate=${sDate}&viewingTime=${sTime}`, {
             }).then((r) => {
-                return r.json();
+                return r.text();
             }).then((r) => {
-                let count = JSON.parse(r);
+                let count = Number(r);
                 if ([[${programInfo.peopleNum}]] === count) {
                     iHtml = "<span class='badge bg-secondary'>인원 마감</span>";
                 } else
@@ -346,7 +333,7 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "content": rContent,
+                    "question": rContent,
                     "secret": chValue
                 })
             }).then((r) => {

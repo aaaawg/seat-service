@@ -4,7 +4,30 @@ let popupSeatCol;
 
 window.addEventListener("load", function() {
     showCreatSeatingChart(0);
-    enterPlace("오프라인");
+    showPlaceInput(0);
+});
+
+$(document).ready(function() {
+    $('.summernote').summernote({
+        tabsize: 2,
+        placeholder: '프로그램 상세정보를 입력해 주세요',
+        lang: "ko-KR",
+        height: 500,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+            ['view', ['help']],
+        ]
+    });
+
+    $("[data-bs-toggle='tooltip']").tooltip({
+        trigger: "click hover"
+    });
 });
 
 function placeValue() {
@@ -38,24 +61,25 @@ function findAddress() {
         }
     }).open();
 }
+let viewingDateAndTimeList = new Array();
 function addViewing() {
-    let viewing = document.getElementById("viewing").value;
+    const viewing = document.getElementById("viewing").value;
 
-    let check = document.createElement("input");
-    check.className = "form-check-input"
-    check.type = "checkbox";
-    check.value = viewing;
-    check.name = "viewingDateAndTime"
-    check.checked = true;
-
-    let label = document.createElement("label");
-    label.className = "form-check-label";
-    label.textContent = check.value;
-
-    let viewingList = document.getElementById("viewingList");
-    viewingList.appendChild(check);
-    viewingList.appendChild(label);
-    viewingList.appendChild(document.createElement("br"));
+    if(viewing.trim().length > 0) {
+        const html = `<div class="form-check"><input class='form-check-input' type='checkbox' onchange='chBoxChange(this)' name='viewingDateAndTime' value="${viewing}" checked>
+                  <label class="form-check-label">${viewing}</label></div>`
+        document.getElementById("viewingList").innerHTML += html;
+        viewingDateAndTimeList.push(viewing);
+    }
+    else
+        alert("날짜가 선택되지 않았습니다.")
+}
+function chBoxChange(e) {
+    const i = viewingDateAndTimeList.indexOf(e.value);
+    if(e.checked)
+        viewingDateAndTimeList.push(e.value);
+    else
+        viewingDateAndTimeList.splice(i, 1);
 }
 function showPlaceInput(type) {
     valueClear();
@@ -66,6 +90,7 @@ function showPlaceInput(type) {
     if(type) {
         enterPlace("온라인");
         document.getElementById("onlineWay").style.display = "block";
+        document.getElementById("way").disabled = false;
 
         document.getElementById("offSeatingChart").style.display = "none";
         showCreatSeatingChart(0);
@@ -73,6 +98,7 @@ function showPlaceInput(type) {
     else {
         enterPlace("오프라인");
         document.getElementById("onlineWay").style.display = "none";
+        document.getElementById("way").disabled = true;
 
         document.getElementById("nsc").checked = true;
         document.getElementById("offSeatingChart").style.display = "block"
@@ -80,11 +106,12 @@ function showPlaceInput(type) {
     }
 }
 function openPopup() {
-    const popup = window.open("/business/program/seat", "좌석배치도", "width=1000px, height=1000px");
+    const popup = window.open("/business/program/seat", "좌석배치도", "width=500px, height=520px");
 
     popup.addEventListener("beforeunload", function () {
         const c = document.getElementById("popupChart");
-        c.innerHTML = "";
+        c.classList.add("chartPreview");
+        c.innerHTML = "<div><i class='bi bi-eye'></i> 좌석표 미리보기</div><hr>";
         let num = 1;
         let seatNum = 1;
         let exSeatCount = 0;
@@ -97,10 +124,13 @@ function openPopup() {
                 exSeatCount++;
                 c.innerHTML += "<div class='col seatBtn' style='float: left; background-color: rgb(215, 215, 215);'></div>";
             }
+
             if(num % popupSeatCol === 0 )
                 c.innerHTML += "<br>";
+
             num++;
         }
+
         let chart = JSON.stringify(popupSeatArr);
         document.getElementById("seatingChart").value = chart;
         document.getElementById("seatCol").value = popupSeatCol;
@@ -115,7 +145,7 @@ function openPopup() {
 function showCreatSeatingChart(v) {
     valueClear();
     if(v) {
-        document.getElementById("csc").style.display = "block";
+        document.getElementById("csc").style.display = "inline";
         document.getElementById("cb").disabled = false;
         document.getElementById("seatingChart").disabled = false;
     } else {
@@ -138,6 +168,7 @@ function valueClear() {
     document.getElementById("peopleNum").value = null;
     document.getElementById("seatLength").innerText = null;
     document.getElementById("way").value = null;
+    document.getElementById("popupChart").classList.remove("chartPreview");
 }
 function peopleNumValue() {
     const ch = document.getElementById("peopleChBox");
@@ -164,14 +195,81 @@ function enterPlace(type) {
     let html;
 
     if(type === "오프라인") {
-        html = "<input type='button' id='searchAddr' value='주소 검색' onclick='findAddress()'>";
-        html += "<input type='text' id='address' readonly placeholder='주소'>";
-        html += "<input type='text' id='detailAddress' onchange='placeValue()' placeholder='상세주소'>";
+        html = "<div class='input-group'><input type='text' class='form-control' id='address' readonly placeholder='주소'>";
+        html += "<a class='btn text-white' id='searchAddr' onclick='findAddress()'>검색</a></div>";
+        html += "<input type='text' class='form-control' id='detailAddress' onchange='placeValue()' placeholder='상세주소'>";
         html += "<input type='hidden' id='place' name='place'>";
     }
     else {
-        html = "<input type='text' id='place' name='place'>";
+        html = "<input type='text' class='form-control' id='place' name='place'>";
     }
 
     placeDiv.innerHTML = html;
+}
+function showArea() {
+    const drop = document.getElementById("drop");
+    const detailDiv = document.getElementById("detail");
+    let html;
+
+    if (drop.selectedIndex === 1) {
+        let addr = userAddr.split(' ', 3);
+        let addr1 = addr[0];
+        let addr2 = addr[1];
+        if(addr[2].endsWith("구"))
+            html = `<select class="form-select" name="targetDetail"><option>${addr1}</option><option>${addr1} ${addr2}</option><option>${addr1} ${addr2} ${addr[2]}</option></select>`;
+        else
+            html = `<select class="form-select" name="targetDetail"><option>${addr1}</option><option>${addr1} ${addr2}</option></select>`;
+    } else if (drop.selectedIndex === 2) {
+        html = '<input class="form-control" id="etcDetail" type=text name="targetDetail" placeholder="신청대상을 입력해 주세요.">';
+    } else
+        html = "";
+
+    detailDiv.innerHTML = html;
+}
+function checkUserValue() {
+    if(document.getElementById("title").value.trim().length === 0) {
+        alert("프로그램명을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("place").value.trim().length === 0) {
+        alert("장소를 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("online").checked === true) {
+        if (document.getElementById("way").value.trim().length === 0) {
+            alert("참여방법을 입력해주세요.");
+            return false;
+        }
+    }
+    if(document.getElementById("drop").selectedIndex === 2 && document.getElementById("etcDetail").value.trim().length === 0) {
+        alert("신청대상을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("peopleChBox").checked === false && document.getElementById("peopleNum").value.trim().length === 0) {
+        alert("모집인원을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("startDate").value.trim().length === 0) {
+        alert("신청 시작일을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("endDate").value.trim().length === 0) {
+        alert("신청 종료일을 입력해주세요.");
+        return false;
+    }
+    if(document.getElementById("startDate").value > document.getElementById("endDate").value) {
+        alert("신청 종료일이 신청 시작일보다 이후여야 합니다.");
+        return false;
+    }
+    if(document.getElementById("offline").checked) {
+        if (document.getElementById("ysc").checked && document.getElementById("seatingChart").value.trim().length === 0) {
+            alert("좌석표를 생성해주세요.");
+            return false;
+        }
+    }
+    if(viewingDateAndTimeList.length === 0) {
+        alert("진행일시를 추가해주세요.");
+        return false;
+    }
+    return true;
 }

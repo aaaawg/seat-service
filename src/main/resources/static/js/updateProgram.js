@@ -114,6 +114,7 @@ function showPlaceInput(type, result) {
         document.getElementById("off").style.display = "none";
         document.getElementById("on").style.display = "block";
         document.getElementById("way").style.display = "block";
+        document.getElementById("inputWay").disabled = false;
         document.getElementById("peopleNum").readOnly=false;
         document.getElementById("peopleNum").disabled = false;
         document.getElementById("seatingChart").value = '';
@@ -147,6 +148,7 @@ function showPlaceInput(type, result) {
         document.getElementById("off").style.display = "block";
         document.getElementById("on").style.display = "none";
         document.getElementById("way").style.display = "none";
+        document.getElementById("inputWay").disabled = true;
         document.getElementById("searchAddr").style.display = "inline";
         document.getElementById("detailAddress").style.display = "inline";
 

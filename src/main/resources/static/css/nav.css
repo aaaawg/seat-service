@@ -1,16 +1,21 @@
 .searchDiv {
-    width: 280px;
-    height: 35px;
+    height: 30px;
 }
-input[type=text] {
+#enterKeyword {
     height: 100%;
 }
 #searchBtn {
-    width: 35px;
-    height: 35px;
+    width: 30px !important;
+    height: 30px !important;
     background-size: cover;
     border: solid 1px #c9c9c9;
     background-color: #ffffff;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+.navbar-brand img {
+    width: 35px;
+}
+.nav-item .dropdown-menu {
+    min-width: inherit;
 }

@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/programList.css}" href="../css/programList.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link th:href="@{/css/statusBadge.css}" href="../css/statusBadge.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
@@ -12,14 +12,15 @@
     <div>
         <div class="ar">
             <div class="arMenu">
-                <div class="arDiv" id="menuAll" th:onclick="|location.href='@{/around/all(detail='01')}'|"><h5>누구나</h5></div>
+                <div class="arDiv" id="menuAll" th:onclick="|location.href='@{/around/all}'|"><h5>누구나</h5></div>
                 <div class="arDiv" id="menuArea" th:onclick="|location.href='@{/around/area}'|"><h5>지역</h5></div>
             </div>
             <div sec:authorize="isAuthenticated()">
-                <select class="form-select" id="areaSelect" onchange="changeSelectValue(this.value)">
+                <select class="form-select" id="areaSelect" onchange="changeSelectValue(this.value)" th:with="area=${#strings.setSplit(userArea, ' ')}">
                     <option value="all" th:if="${target} != 'all'">전체</option>
-                    <option th:text="${#strings.setSplit(userArea, ' ')[0]}" value="01"></option>
-                    <option th:text="${userArea}" value="02"></option>
+                    <option th:text="${area[0]}"></option>
+                    <option th:text="|${area[0]} ${area[1]}|"></option>
+                    <option th:if="${area[0] + ' ' + area[1] != userArea}" th:text="${userArea}"></option>
                 </select>
             </div>
         </div>
@@ -34,18 +35,17 @@
             <div class="imgDiv">
                 <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 300px">
                 <div class="noImg" th:unless="${program.filename != null}"><i class="bi bi-image"></i></div>
-                <span class="badge bg-secondary imgBadge" th:text="(${program.type} == 'offline')?'대면':'비대면'"></span>
+                <span class="badge imgBadge" th:text="${program.type == 'offline'} ? '대면':'비대면'" th:classappend="${program.type == 'offline'} ? 'bg-primary':'bg-dark'"></span>
                 <div>
-                    <span class="badge bg-secondary" th:if="${#dates.createToday().before(program.startDate)}">예정</span>
-                    <span class="badge bg-secondary" th:if="${#dates.createToday().after(program.endDate)}">마감</span>
-                    <span class="badge bg-secondary" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}">진행</span>
+                    <span class="badge" th:if="${#dates.createToday().before(program.startDate)}" style="background-color: #b0bea3">예정</span>
+                    <span class="badge" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}" style="background-color: #618264">진행</span>
 
-                    <span class="badge bg-secondary" th:if="${program.target} == 'etc' or ${program.target} == 'area'" th:text="${program.targetDetail}"></span>
-                    <span class="badge bg-secondary" th:unless="${program.target} == 'etc' or ${program.target} == 'area'">누구나</span>
+                    <span class="badge" th:if="${program.target} == 'area'" th:text="${program.targetDetail}" style="background-color: #394867"></span>
+                    <span class="badge" th:if="${program.target} == 'all'" style="background-color: #7C96AB;">누구나</span>
                 </div>
             </div>
-            <div class="textDiv">
-                <span th:if="${target} == 'all'" th:text="|${#strings.setSplit(program.place, ' ')[0]} ${#strings.setSplit(program.place, ' ')[1]}|"></span>
+            <div class="textDiv" th:with="area=${#strings.setSplit(program.place, ' ')}">
+                <span th:if="${target} == 'all'" th:text="|${area[0]} ${area[1]} ${area[2]}|"></span>
                 <p th:text="${program.title}"></p>
                 <p th:text="${#dates.format(program.startDate,'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(program.endDate, 'yyyy.MM.dd')}"></p>
             </div>
@@ -66,10 +66,11 @@
             $("#menuArea").addClass("activeDiv");
         }
 
-        if(keyword != null)
+        if(keyword != null) {
             $("#areaSelect").val(keyword).prop('selected', true);
+        }
         else
-            $("#areaSelect").val("all").prop('selected', true);
+            $("#areaSelect option:eq(0)").prop("selected", true);
     });
 
     function changeSelectValue(v) {

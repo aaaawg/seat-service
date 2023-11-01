@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserDetailService implements UserDetailsService {
+    //스프링 시큐리티에서 사용
     private final UserRepository userRepository;
 
     public UserDetailService(UserRepository userRepository) {
@@ -15,8 +16,11 @@ public class UserDetailService implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String userId) throws UsernameNotFoundException {
+    public User loadUserByUsername(String userId) {
         //userId를 사용하여 사용자 정보를 가져옴
-        return userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId);
+        if(user == null)
+            throw new UsernameNotFoundException(userId);
+        return user;
     }
 }

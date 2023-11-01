@@ -2,89 +2,124 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <link th:href="@{/css/bootstrap.min.css}"
-        href="../css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
   <link th:href="@{/css/addProgram.css}" href="../css/addProgram.css?ver=1" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link th:href="@{/css/nav.css}" href="../css/nav.css" rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script src="/js/summernote/summernote-lite.js"></script>
   <script src="/js/summernote/lang/summernote-ko-KR.js"></script>
-  <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
+  <link th:href="@{/css/summernote/summernote-lite.css}" href="../css/summernote/summernote-lite.css" rel="stylesheet">
 </head>
 <body>
-<div class="container" style="max-width: 1000px">
-  <form th:action method="post" enctype="multipart/form-data" id="myForm">
-    <div>
-      <label>구분</label>
-      <input type="radio" id="offline" name="type" value="offline" checked onchange="showPlaceInput(0)">
-      <label for="offline">오프라인</label>
-      <input type="radio" id="online" name="type" value="online" onchange="showPlaceInput(1)">
-      <label for="online">온라인</label>
-    </div>
-    <div>
-      <label for="title">프로그램명</label>
-      <input type="text" id="title" name="title">
-    </div>
-    <div>
-      <label>장소</label>
-      <div id="placeDiv" style="display: inline;"></div>
-      <div id="onlineWay" style="display: none">
-        <label for="way">참여방법</label>
-        <textarea id="way" name='way' placeholder='접속 링크와 같은 정보를 입력해 주세요.' rows="4" cols="40"></textarea>
-        <button type="button" id=tooltipBtn th:style="|background-image: url(@{/img/icon-notice.png})|" data-bs-toggle="tooltip" data-bs-placement="right" title="해당 정보는 프로그램 진행 당일 신청자에게 표시됩니다."></button>
+<div th:replace="/layout/nav.html :: nav"></div>
+<div class="container" style="max-width: 900px">
+  <form th:action method="post" enctype="multipart/form-data" id="myForm" class="rounded-1">
+    <div class="fDiv row justify-content-start">
+      <label class="col-2">구분</label>
+      <div class="form-check form-check-inline col-2">
+        <input class="form-check-input" type="radio" id="offline" name="type" value="offline" checked onchange="showPlaceInput(0)">
+        <label class="form-check-label" for="offline">오프라인</label>
+      </div>
+      <div class="form-check form-check-inline col-2">
+        <input class="form-check-input" type="radio" id="online" name="type" value="online" onchange="showPlaceInput(1)">
+        <label class="form-check-label" for="online">온라인</label>
       </div>
     </div>
-    <div>
-      <label for="drop">신청대상</label>
-      <select id="drop" name="target" onchange="showArea()">
-        <option value="all" selected>제한없음</option>
-        <option id="area" value="area">지역</option>
-        <option value="etc">직접입력</option>
-      </select>
-      <div id="detail" style="display: inline;"></div>
+
+    <div class="fDiv row">
+      <label for="title" class="col-2">프로그램명</label>
+      <div class="col">
+        <input class="form-control" type="text" id="title" name="title">
+      </div>
     </div>
-    <div>
-      <label for="peopleNum" >모집인원</label>
-      <div id = enterPeopleNum>
-        <label><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
-        <input type="text" id="peopleNum" name="peopleNum" placeholder="숫자 입력">
+
+    <div class="fDiv">
+      <div class="row">
+        <label class="col-2">장소</label>
+        <div id="placeDiv" class="col" style="display: inline;"></div>
+      </div>
+      <div id="onlineWay">
+        <label for="way">참여방법<button type="button" class="tooltipBtn" data-bs-toggle="tooltip" data-bs-placement="right" title="해당 정보는 프로그램 진행 당일 신청자에게 표시됩니다."><i class="bi bi-question-circle-fill"></i></button></label>
+        <textarea class="form-control" id="way" name='way' placeholder='접속 링크와 같은 정보를 입력해 주세요.' rows="4" cols="40"></textarea>
+      </div>
+    </div>
+
+    <div class="fDiv row justify-content-start">
+      <label for="drop" class="col-2">신청대상</label>
+      <div class="col-4" style="margin-right: 10px">
+        <select class="form-select" id="drop" name="target" onchange="showArea()" style="margin-right: 10px">
+          <option value="all" selected>제한없음</option>
+          <option id="area" value="area">지역</option>
+          <option value="etc">직접입력</option>
+        </select>
+      </div>
+      <div id="detail" class="col-4" style="display: inline; margin-left: 10px"></div>
+    </div>
+    <div class="fDiv pDiv">
+      <label for="peopleNum" class="col-2" style="float:left;">모집인원</label>
+      <div id="enterPeopleNum">
+        <div class="chDiv">
+          <input class="form-check-input" type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">
+          <label class="form-check-label" for="peopleChBox">무제한</label>
+        </div>
+        <input type="text" class="form-control" id="peopleNum" name="peopleNum" placeholder="숫자 입력">
       </div>
       <span id="seatLength"></span>
     </div>
-    <div>
-      <label for="startDate">신청기간</label>
-      <input type="date" id="startDate" name="startDate"><b> ~ </b>
-      <input type="date" id="endDate" name="endDate">
+    <div class="fDiv row">
+      <label for="startDate" class="col-2">신청기간</label>
+      <div class="col-4" style="margin-right: 10px">
+        <label for="startDate">시작일</label>
+        <input class="form-control" type="date" id="startDate" name="startDate">
+      </div>
+      <div class="col-4" style="margin-left: 10px">
+        <label for="endDate">종료일</label>
+        <input class="form-control" type="date" id="endDate" name="endDate">
+      </div>
     </div>
-    <div>
-      <label for="viewing">진행일시</label>
-      <input type="datetime-local" id="viewing">
-      <input type="button" onclick="addViewing()" value="추가">
-      <div id="viewingList" class="form-check"></div>
-    </div>
-
-    <div>
-      <label for="inputFile"><strong>첨부 파일</strong></label>
-      <div>
-        <div class="custom-file" id="inputFile">
-          <input multiple="multiple" name="file" type="file" class="custom-file-input" id="customFile"/>
-          <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
-        </div>
+    <div class="fDiv row">
+      <label for="viewing" class="col-2">진행일시</label>
+      <div class="input-group col" id="vDiv">
+        <input class="form-control" type="datetime-local" id="viewing">
+        <a class="btn text-white" onclick="addViewing()" style="width: 80px">추가</a>
+      </div>
+      <div class="form-check col-5 rounded-2 vList">
+        <span>목록<button type="button" class=tooltipBtn data-bs-toggle="tooltip" data-bs-placement="right" title="체크된 일시만 추가됩니다."><i class="bi bi-question-circle-fill"></i></button></span>
+        <hr>
+        <div id="viewingList"></div>
       </div>
     </div>
 
-    <div id="offSeatingChart" style="max-width: 1000px; display: block;">
-      <label>좌석표</label>
-      <input type="radio" id="nsc" name="ynsc" checked onchange="showCreatSeatingChart(0)">
-      <label for="nsc">사용안함</label>
-      <input type="radio" id="ysc" name="ynsc" onchange="showCreatSeatingChart(1)">
-      <label for="ysc">사용</label>
-      <div id="csc" style="display: none;">
-        <button type="button" id="cb" onclick="openPopup()">좌석배치도 생성</button>
-        <div id="popupChart" class="container"></div>
-        <input type="hidden" id="seatingChart" name="seatingChart">
-        <input type="hidden" id="seatCol" name="seatCol">
+    <div class="fDiv row">
+      <label for="inputFile" class="col-2">첨부 파일</label>
+      <div class="custom-file col" id="inputFile">
+        <input multiple="multiple" name="file" type="file" class="custom-file-input form-control" id="customFile"/>
+        <!--<label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>-->
+      </div>
+    </div>
+
+    <div class="fDiv" style="margin-bottom: 10px">
+      <div id="offSeatingChart" style="display: block;" class="row justify-content-start">
+        <label class="col-2">좌석표</label>
+        <div class="form-check form-check-inline col-2">
+          <input class="form-check-input" type="radio" id="nsc" name="ynsc" checked onchange="showCreatSeatingChart(0)">
+          <label class="form-check-label" for="nsc">사용안함</label>
+        </div>
+        <div class="form-check form-check-inline col-4">
+          <input class="form-check-input" type="radio" id="ysc" name="ynsc" onchange="showCreatSeatingChart(1)">
+          <label class="form-check-label" for="ysc">사용</label>
+          <div id="csc" style="display: none;">
+            <button type="button" id="cb" onclick="openPopup()" class="rounded-pill btn btn-sm">생성</button>
+            <input type="hidden" id="seatingChart" name="seatingChart">
+            <input type="hidden" id="seatCol" name="seatCol">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <span class="col-2"></span>
+        <div id="popupChart" class="container col rounded-2"></div>
       </div>
     </div>
 
@@ -94,64 +129,20 @@
 
     <div id="content"></div>
 
-    <button type="submit" class="btn btn-success">등록하기</button>
-    <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
+    <div id="formBtnDiv">
+      <button type="button" class="btn rounded-3" onclick='addContent()'>항목추가</button>
+      <button type="submit" class="btn rounded-3">등록하기</button>
+    </div>
   </form>
 </div>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script type="text/javascript" src="/js/addProgram.js"></script>
-<script type="text/javascript" src="/js/addProgramContent.js?ver=7"></script>
-<script>
-  $(document).ready(function() {
-    $('.summernote').summernote({
-      tabsize: 2,
-      placeholder: '프로그램 상세정보를 입력해주세요',
-      lang: "ko-KR",
-      height: 500,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['table', ['table']],
-        ['insert', ['link', 'picture']],
-        ['view', ['help']],
-      ]
-    });
-    $("[data-bs-toggle='tooltip']").tooltip({
-      trigger: "click hover"
-    });
-  });
-
-</script>
+<script type="text/javascript" src="/js/nav.js"></script>
 <script th:inline="javascript">
   const userAddr = [[${userAddr}]];
-
-  function showArea() {
-    const drop = document.getElementById("drop");
-    const detailDiv = document.getElementById("detail");
-    let html;
-
-    if(drop.selectedIndex === 1) {
-      let addr = userAddr.split(' ', 2);
-      let addr1 = addr[0];
-      let addr2 = addr[1];
-
-      html = `<select name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
-    }
-    else if(drop.selectedIndex === 2) {
-      html = '<input type=text name="targetDetail">';
-    }
-    else
-      html = "";
-
-    detailDiv.innerHTML = html;
-  }
 </script>
-<!--<script type="text/javascript" src="/js/addProgram.js?ver=2.1"></script>
-<script type="text/javascript" src="/js/addProgramContent.js?ver=7.3"></script>-->
+<script type="text/javascript" src="/js/addProgramContent.js?ver=7.3"></script>
 </body>
 </html>

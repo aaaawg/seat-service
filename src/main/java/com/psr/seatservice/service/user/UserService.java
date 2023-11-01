@@ -9,6 +9,8 @@ import com.psr.seatservice.dto.user.response.BookingListResponse;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -40,7 +42,18 @@ public class UserService {
         return userRepository.findProgramBookingInfoByUserId(user.getId());
     }
     public BookingDetailResponse getBookingDetailByUserId(User user, Long bookingNum){
-        return userRepository.findProgramBookingDetailByUserId(user.getId(), bookingNum);
+        BookingDetailResponse b = userRepository.findProgramBookingDetailByUserId(user.getId(), bookingNum);
+
+        //신청 마감일 하루 전날 구하기
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(b.getEndDate());
+        cal.add(Calendar.DATE, -1);
+
+        b.setYDate(format.format(cal.getTime()));
+
+        return b;
     }
 
     public boolean checkUserId(String userId) {
