@@ -238,7 +238,6 @@
     const bookingCount = [[${bookingCount}]];
 
     const changeFormButton = document.getElementById("changeForm");
-    if(changeFormButton!==null){
     changeFormButton.addEventListener("click", function() {
     if (bookingCount !== 0) {
         event.preventDefault();
@@ -247,7 +246,6 @@
         window.location.href = "/business/program/"+pNum+"/formEdit";
     }
   });
-  }
 
     function selectedDate(date) {
         sDate = date;

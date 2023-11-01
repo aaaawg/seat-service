@@ -305,13 +305,7 @@ public class ProgramService {
         else {
             //프로그램 target = 지역, 사용자 주소 = 지역
             if(detail == null) {
-                if(sArea.length == 3) {
-                    //구까지 있을 경우
-                    str = sArea[0] + sArea[1];
-                    programs = programRepository.findAllByTargetAndTargetDetailAll(target, sArea[0], str, area);
-                }
-                else
-                    programs = programRepository.findAllByTargetAndTargetDetailAll(target, sArea[0], area);
+                programs = programRepository.findAllByTargetAndTargetDetail(target, sArea[0]);
             }
             else {
                 if(area.contains(detail)) {

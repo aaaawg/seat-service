@@ -318,8 +318,6 @@
     }
     function showBookingInfo(seatNum) {
         document.getElementById("chTitle").innerText = title;
-        let d = new Date(endDate);
-        d.setDate(d.getDate() - 1)
 
         if(bookingSeatList != null) {
             document.getElementById("chSeatNum").innerText = seatNum + "번";
@@ -327,24 +325,8 @@
             document.getElementById("seatNum").value = seatNum;
         }
 
-        let dd;
-        if(d.getDate() < 10) {
-            dd = "0" + d.getDate();
-        }
-        else
-            dd = d.getDate();
-
-        let mm;
-        let m = d.getMonth() + 1;
-        if(d.getMonth() < 10) {
-            mm = "0" + m;
-        }
-        else
-            mm = m;
-
-
         document.getElementById("chDate").innerText = ssDate + " " + ssTime;
-        document.getElementById("chCancel").innerText = `${d.getFullYear()}-${mm}-${dd} 24:00까지`
+        document.getElementById("chCancel").innerText = endDate + " 24:00까지"
     }
     function showAppCount(num) {
         const tDiv = document.getElementById("appCount");

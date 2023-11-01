@@ -17,7 +17,6 @@
             </div>
             <div sec:authorize="isAuthenticated()">
                 <select class="form-select" id="areaSelect" onchange="changeSelectValue(this.value)" th:with="area=${#strings.setSplit(userArea, ' ')}">
-                    <option value="all" th:if="${target} != 'all'">전체</option>
                     <option th:text="${area[0]}"></option>
                     <option th:text="|${area[0]} ${area[1]}|"></option>
                     <option th:if="${area[0] + ' ' + area[1] != userArea}" th:text="${userArea}"></option>

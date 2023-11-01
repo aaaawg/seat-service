@@ -46,7 +46,6 @@ public class EmailService {
                 mailSender.send(simpleMailMessage); //메일을 실제로 보냄
             }
         }).start();*/
-        System.out.println("*****Num:"+randomNum);
         return randomNum;
     }
 }
