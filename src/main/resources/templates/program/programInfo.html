@@ -10,7 +10,7 @@
     <div class="row programInfoDiv">
         <div class="programImgDiv col-3">
             <span th:if ="${file.filename != 'NoInImage'}">
-                <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" title=${im.origfilename}/>
+                <img th:src="@{'/files/' + ${fileList[0].filename}}" title="${fileList[0].origfilename}" />
             </span>
             <div class="noImg" th:unless="${file.filename != 'NoInImage'}"><i class="bi bi-image"></i></div>
         </div>
@@ -159,8 +159,8 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=##&libraries=services"></script>
-<!--<script th:inline="javascript">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2770e73ec9df0b2a34193fea69f0c9dd&libraries=services"></script>
+<script th:inline="javascript">
     const p = [[${programInfo.place}]];
     let place = p.split(',', 1);
 
@@ -195,7 +195,7 @@
             map.setCenter(coords);
         }
     });
-</script>-->
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script th:inline="javascript">
 
@@ -238,6 +238,7 @@
     const bookingCount = [[${bookingCount}]];
 
     const changeFormButton = document.getElementById("changeForm");
+    if(changeFormButton!==null){
     changeFormButton.addEventListener("click", function() {
     if (bookingCount !== 0) {
         event.preventDefault();
@@ -246,6 +247,7 @@
         window.location.href = "/business/program/"+pNum+"/formEdit";
     }
   });
+  }
 
     function selectedDate(date) {
         sDate = date;
