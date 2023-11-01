@@ -41,7 +41,7 @@
         </div>
         <div id="way">
             <label for="way" class="normalLabel">접속링크</label>
-            <input type="text" name="way" id="inputWay" th:value="${programInfo.way}">
+            <input type="text" name="way" id="inWay" th:value="${programInfo.way}">
         </div>
         <div>
             <label for="drop" class="normalLabel">신청대상</label>
@@ -217,7 +217,7 @@ if (programInfo !== null) {
     if(type === "offline"){
          document.getElementById("offline").checked = true;
          document.getElementById("on").style.display = "none";
-         document.getElementById("inputWay").disabled = true;
+         document.getElementById("inWay").disabled = true;
          document.getElementById("way").style.display = "none";
          if(programInfo.seatingChart === null){
             document.getElementById("isNotSeatColSelect").style.display = "inline";
