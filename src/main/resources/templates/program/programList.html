@@ -3,7 +3,6 @@
 <head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/programList.css}" href="../css/programList.css" rel="stylesheet">
     <link th:href="@{/css/statusBadge.css}" href="../css/statusBadge.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
@@ -27,8 +26,8 @@
                     <span class="badge" th:if="${#dates.createToday().before(program.startDate)}" style="background-color: #b0bea3">예정</span>
                     <span class="badge" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}" style="background-color: #618264">진행</span>
 
-                    <span class="badge" th:if="${program.target} == 'etc' or ${program.target} == 'area'" th:text="${program.targetDetail}" style="background-color: #394867"></span>
-                    <span class="badge" th:unless="${program.target} == 'etc' or ${program.target} == 'area'" style="background-color: #7C96AB;">누구나</span>
+                    <span class="badge" th:if="${program.target} == 'area'" th:text="${program.targetDetail}" style="background-color: #394867"></span>
+                    <span class="badge" th:if="${program.target} == 'all'" style="background-color: #7C96AB;">누구나</span>
                 </div>
             </div>
             <div class="textDiv">

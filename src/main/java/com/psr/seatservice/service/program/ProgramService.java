@@ -294,23 +294,28 @@ public class ProgramService {
 
     public List<ProgramListResponse> getUserAroundProgramList(String area, String target, String detail){
         List<ProgramListResponse> programs;
+        String[] sArea = area.split(" ");
         String str;
 
         if(target.equals("all")) {
             //프로그램 target = 제한없음, 프로그램 진행 장소 기준 - 대면 프로그램만
-            str = (detail == null || detail.equals("01")) ? area.split(" ")[0] + "%" : area + "%";
+            str = (detail == null) ? sArea[0] + "%" : detail + "%";
             programs = programRepository.findAllByTargetAndTypeAndPlaceStartsWith(target, str, "offline");
         }
         else {
             //프로그램 target = 지역, 사용자 주소 = 지역
             if(detail == null) {
-                str = area.split(" ")[0];
-                programs = programRepository.findAllByTargetAndTargetDetailAll(target, str, area);
+                if(sArea.length == 3) {
+                    //구까지 있을 경우
+                    str = sArea[0] + sArea[1];
+                    programs = programRepository.findAllByTargetAndTargetDetailAll(target, sArea[0], str, area);
+                }
+                else
+                    programs = programRepository.findAllByTargetAndTargetDetailAll(target, sArea[0], area);
             }
             else {
-                if(detail.equals("01") || detail.equals("02")) {
-                    str = (detail.equals("01")) ? area.split(" ")[0] : area;
-                    programs = programRepository.findAllByTargetAndTargetDetail(target, str);
+                if(area.contains(detail)) {
+                    programs = programRepository.findAllByTargetAndTargetDetail(target, detail);
                 }
                 else
                     programs = null;

@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <nav th:fragment="nav">
   <div class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid navDiv" style="max-width: 1470px">
+    <div class="container-fluid navDiv" style="max-width: 1370px">
       <a class="navbar-brand" th:href="@{/}">
         <img src="/img/logo.png">
       </a>
@@ -16,7 +16,7 @@
             <a class="nav-link" th:href="@{/online}">비대면</a>
           </li>
           <li class="nav-item" sec:authorize="hasRole('USER')">
-            <a class="nav-link" th:href="@{/around/all(detail='01')}">내 주변</a>
+            <a class="nav-link" th:href="@{/around/all}">내 주변</a>
           </li>
 
           <li class="nav-item" sec:authorize="hasRole('BIZ')">

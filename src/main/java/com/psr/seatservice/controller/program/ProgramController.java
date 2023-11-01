@@ -145,7 +145,13 @@ public class ProgramController {
     @GetMapping( "/around/{target}")
     public String userAroundProgramListByTarget(@PathVariable String target, @RequestParam(required = false) String detail, @AuthenticationPrincipal User user, Model model) {
         String[] arr = user.getAddress().split(" ");
-        String area = arr[0] + " " + arr[1];
+        String area;
+
+        if(arr[2].endsWith("구")) {
+            area = arr[0] + " " + arr[1] + " " + arr[2];
+        }
+        else
+            area = arr[0] + " " + arr[1];
 
         if (target.equals("all") || target.equals("area")) {
             List<ProgramListResponse> placeList = programService.getUserAroundProgramList(area, target, detail);

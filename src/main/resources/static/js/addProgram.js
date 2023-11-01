@@ -212,11 +212,13 @@ function showArea() {
     let html;
 
     if (drop.selectedIndex === 1) {
-        let addr = userAddr.split(' ', 2);
+        let addr = userAddr.split(' ', 3);
         let addr1 = addr[0];
         let addr2 = addr[1];
-
-        html = `<select class="form-select" name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
+        if(addr[2].endsWith("구"))
+            html = `<select class="form-select" name="targetDetail"><option>${addr1}</option><option>${addr1} ${addr2}</option><option>${addr1} ${addr2} ${addr[2]}</option></select>`;
+        else
+            html = `<select class="form-select" name="targetDetail"><option>${addr1}</option><option>${addr1} ${addr2}</option></select>`;
     } else if (drop.selectedIndex === 2) {
         html = '<input class="form-control" id="etcDetail" type=text name="targetDetail" placeholder="신청대상을 입력해 주세요.">';
     } else

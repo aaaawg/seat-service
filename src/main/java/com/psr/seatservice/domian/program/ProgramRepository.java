@@ -41,4 +41,7 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
             "from Program p left outer join Files f on p.programNum = f.postId where p.target = ?1 and p.endDate >= current_date and p.targetDetail = ?2 or p.targetDetail = ?3 order by p.startDate")
     List<ProgramListResponse> findAllByTargetAndTargetDetailAll(String target, String area1, String area2);
 
+    @Query("select new com.psr.seatservice.dto.program.response.ProgramListResponse(p.programNum, p.title, p.startDate, p.endDate, p.place, p.type, f.filename, p.target, p.targetDetail)" +
+            "from Program p left outer join Files f on p.programNum = f.postId where p.target = ?1 and p.endDate >= current_date and p.targetDetail = ?2 or p.targetDetail = ?3 or p.targetDetail = ?4 order by p.startDate")
+    List<ProgramListResponse> findAllByTargetAndTargetDetailAll(String target, String area1, String area2, String area3);
 }
