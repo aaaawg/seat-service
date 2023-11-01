@@ -64,10 +64,10 @@
         <tr th:if="${detail.status != '취소'}">
           <td style="background-color: #f5f5f5">취소가능일</td>
           <td colspan="3">
-            <span th:text="|${detail.yDate} 24:00까지|"></span>
+            <span th:text="|${#dates.format(detail.endDate, 'yyyy.MM.dd 24:00')}까지|"></span>
             <span>
-              <span class="badge bg-danger" th:if="${detail.yDate} <= ${#dates.format(#dates.createToday(), 'yyyy.MM.dd')}">취소 불가</span>
-              <button th:unless="${detail.yDate} <= ${#dates.format(#dates.createToday(), 'yyyy.MM.dd')}" class="btn cBtn rounded-pill btn-sm text-white" id="deleteProgram">신청취소</button>
+              <span class="badge bg-danger" th:if="${#dates.createToday().after(detail.endDate)}">취소 불가</span>
+              <button th:unless="${#dates.createToday().after(detail.endDate)}" class="btn cBtn rounded-pill btn-sm text-white" id="deleteProgram">신청취소</button>
             </span>
           </td>
         </tr>
