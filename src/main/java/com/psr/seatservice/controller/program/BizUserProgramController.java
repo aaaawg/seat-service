@@ -228,6 +228,7 @@ public class BizUserProgramController {
         model.addAttribute("userList", list);
         model.addAttribute("checkSC", checkSC);
         model.addAttribute("programNum", programNum);
+        model.addAttribute("bookingNum",programService.getProgramBookingCount(programNum, date, time));
         return "program/bizBookingUserList";
     }
 

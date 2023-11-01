@@ -11,9 +11,10 @@
         <button class="rounded-2" type="button" onclick="showModal()" style="width: 110px;">상태 변경</button>
         <button class="rounded-2" type="button" th:if="${checkSC}" onclick="showSeatingChart()" style="width: 110px;">좌석 현황</button>
     </div>
-    <div>
+    <div class="subDiv">
         <h4>신청자 목록</h4>
         <span th:text="|총 ${userList.size()}건|"></span>
+        <button type="button" id="excelDownload">엑셀 다운로드</button>
     </div>
     <div class="tbm">
         <table class="table table-striped" id="tb">
@@ -156,6 +157,17 @@
         let url = `/business/program/${programNum}/seat?date=${viewingDate}&time=${viewingTime}`;
         window.open(url, "좌석 현황", "width=540px, height=500px");
     }
+
+    document.getElementById("excelDownload").addEventListener("click", function() {
+        let bookingCount = [[${bookingNum}]];
+        if(bookingCount !== 0){
+            var link = document.createElement("a");
+            link.setAttribute("href", "http://localhost:8080/" + programNum + "/userResponse/download?date="+viewingDate+"&time="+viewingTime+"&excelDownload=true");
+            link.click();
+        }else{
+            alert("신청자가 없습니다.");
+        }
+    });
 </script>
 </body>
 </html>

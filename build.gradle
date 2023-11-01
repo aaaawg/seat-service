@@ -36,6 +36,9 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	implementation 'org.apache.poi:poi:5.2.2'                // .xls 확장자
+	implementation 'org.apache.poi:poi-ooxml:5.2.2'          // .xlsx 확장자
 }
 
 tasks.named('test') {

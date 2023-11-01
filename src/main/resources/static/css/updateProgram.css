@@ -1,7 +1,7 @@
 body{
     background-color: rgb(249 249 249) !important;
 }
-.container div:not(.viewingList){
+.container div:not(.viewingList, .note-btn-group, .note-editing-area, .note-editable, .note-handle,.note-statusbar, .note-resizebar){
     margin-top: 1.8rem;
 }
 form{
@@ -105,7 +105,7 @@ input:focus {outline: none;}
 .custom-file-label{width:auto;}
 .custom-file{display: inline;}
 
-input[type=button], button[type=button]:not(.navbar-toggler){
+input[type=button], button[type=button]:not(.navbar-toggler, .note-btn-group>button){
     border: solid 1px #0f0f0f;
     font-weight: bold;
     color: #0f0f0fb5;
@@ -296,3 +296,13 @@ img{
    transition: transform 1.2s;
    transform: translateX(17rem);
  }
+
+.note-toolbar{
+    margin: 0 auto!important;
+    padding-bottom: 6px!important;
+    padding-right: 10px!important;
+    padding-left: 18px!important;
+}
+.note-editable{
+    min-height: 100px;
+}

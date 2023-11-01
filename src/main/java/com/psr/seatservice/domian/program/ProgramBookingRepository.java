@@ -1,7 +1,9 @@
 package com.psr.seatservice.domian.program;
 
+import com.psr.seatservice.dto.excel.ExcelDTO;
 import com.psr.seatservice.dto.program.response.BizProgramBookingUserListResponse;
 import com.psr.seatservice.dto.program.response.ProgramBookingDateTimeResponse;
+import com.psr.seatservice.dto.user.response.BookingDetailResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -31,4 +33,7 @@ public interface ProgramBookingRepository extends JpaRepository<ProgramBooking, 
 
     int countByUser_IdAndStatus(Long id, String status);
     List<ProgramBooking> findAllByBookingNum(Long bookingNum);
+
+    @Query("SELECT new com.psr.seatservice.dto.excel.ExcelDTO(u.name, u.birth, u.phone, u.email, pb.bookingDate, p.programQuestion, pb.programResponse) from ProgramBooking pb left join User u on pb.user.id = u.id left join Program p on pb.programNum = p.programNum where pb.programNum=?1 and pb.viewingDate=?2 and pb.viewingTime=?3")
+    List<ExcelDTO> findExcelDTOByProgramNum(Long programNum,String date, String time);
 }
