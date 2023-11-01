@@ -157,14 +157,9 @@ public class BizUserProgramController {
         programService.deleteViewing(programNum, viewingDateAndTimeDel);
 
         String savePath = System.getProperty("user.dir");
-        //1. 변경 안하는 경우 - files files.get(0).getOriginalFilename().equals("")), deleteFiles O, 삭제X 추가X @
-        //2. 사진 없다가 새로 추가 - files O, deleteFiles X, 삭제X 추가O @
-        //3. 사진 있었고 새로 변경 - files O, deleteFiles O, 삭제O 추가O @
-        //4. 사진 없애기 - files X, deleteFiles X, deleteFiles2 O, 삭제O 추가X @
 
         if (files.get(0).getOriginalFilename().equals("")){
             if (deleteFiles!=null && deleteFiles2!=null) {
-
             }else if(deleteFiles==null){
                 fileService.deleteFile(programNum);
                 //실제로 파일 삭제
@@ -179,15 +174,17 @@ public class BizUserProgramController {
                 }
             }
         }else {
-            if (deleteFiles != null) {
-                //삭제
-                fileService.deleteFile(programNum);
-                //실제로 파일 삭제
-                int num = deleteFiles.size();
-                for (int i = 0; i < num; i++) {
-                    File fileToDelete = new File(savePath + deleteFiles.get(i));
-                    if (fileToDelete.exists()) {
-                        fileToDelete.delete();
+            if (deleteFiles == null) {
+                if (deleteFiles2 != null) {
+                    //삭제
+                    fileService.deleteFile(programNum);
+                    //실제로 파일 삭제
+                    int num = deleteFiles2.size();
+                    for (int i = 0; i < num; i++) {
+                        File fileToDelete = new File(savePath + deleteFiles2.get(i));
+                        if (fileToDelete.exists()) {
+                            fileToDelete.delete();
+                        }
                     }
                 }
             }

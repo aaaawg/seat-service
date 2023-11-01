@@ -10,7 +10,7 @@
     <div class="row programInfoDiv">
         <div class="programImgDiv col-3">
             <span th:if ="${file.filename != 'NoInImage'}">
-                <img th:each="im : ${fileList}" th:src="@{'/files/' + ${im.filename}}" title=${im.origfilename}/>
+                <img th:src="@{'/files/' + ${fileList[0].filename}}" title="${fileList[0].origfilename}" />
             </span>
             <div class="noImg" th:unless="${file.filename != 'NoInImage'}"><i class="bi bi-image"></i></div>
         </div>

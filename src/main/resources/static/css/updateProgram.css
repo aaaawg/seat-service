@@ -1,7 +1,8 @@
 body{
     background-color: rgb(249 249 249) !important;
 }
-.container div:not(.viewingList, .note-btn-group, .note-editing-area, .note-editable, .note-handle,.note-statusbar, .note-resizebar){
+.container div:not(.viewingList, .note-btn-group, .note-editing-area, .note-editable, .note-handle,.note-statusbar, .note-resizebar,.note-modal-header
+                                    , .note-modal-body,.form-group.note-form-group.note-group-select-from-files,.form-group.note-group-image-url,.note-modal-footer){
     margin-top: 1.8rem;
 }
 form{
@@ -25,7 +26,7 @@ margin-top: 0.9rem;
 .viewingList{
 margin-top: 0.5rem;
 }
-input[type=text]:not(#enterKeyword){
+input[type=text]:not(#enterKeyword,.note-image-url.form-control.note-form-control.note-input){
     width: 13.1rem;
 }
 
@@ -105,7 +106,7 @@ input:focus {outline: none;}
 .custom-file-label{width:auto;}
 .custom-file{display: inline;}
 
-input[type=button], button[type=button]:not(.navbar-toggler, .note-btn-group>button){
+input[type=button], button[type=button]:not(.navbar-toggler, .note-btn-group>button, .close, #file-upload-button, .btn.btn-primary.note-btn.note-btn-primarynote-image-btn){
     border: solid 1px #0f0f0f;
     font-weight: bold;
     color: #0f0f0fb5;
@@ -305,4 +306,8 @@ img{
 }
 .note-editable{
     min-height: 100px;
+}
+
+.note-modal-footer{
+    margin-bottom: 1rem;
 }
