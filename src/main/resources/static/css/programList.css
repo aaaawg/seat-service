@@ -86,3 +86,89 @@ p {
     font-size: 3rem;
     line-height: 300px;
 }
+
+
+#banner{
+    width: 100%;
+    height: 22rem;
+    background-color: #fffced;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 3.5rem;
+}
+
+.animated-title {
+    font-size:1.3rem;
+    font-family: Century Gothic, sans-serif;
+    font-weight:300;
+    position: relative;
+    width: 100%;
+    max-width:100%;
+    min-width:100%;
+    height: auto;
+    padding:3rem 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background-color: #fffced;
+    margin-bottom: 4.5rem;
+}
+.animated-title .track {
+    position: absolute;
+    white-space: nowrap;
+    will-change: transform;
+    animation: marquee 40s linear infinite;
+}
+.content{
+    padding-top: 0.5rem;
+    padding-bottom: 0.8rem;
+    background-color: #fffced;
+    color: #5f5f5f;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-60%); }
+}
+@media (hover: hover) and (min-width: 1900px){
+.animated-title .content {
+    -webkit-transform: translateY(calc(100% - 8rem));
+    transform: translateY(calc(100% - 8rem));
+    }
+}
+#innerBanner{
+    padding-top: 4.5rem;
+    height: 9rem;
+    margin-left: 4rem;
+    margin-right: 1rem;
+}
+#bannerImg{
+    width: 20rem;
+    height: fit-content;
+    margin-right: 10rem;
+    margin-left: 11rem;
+    padding-top: 1rem;
+}
+#innerBanner>span{
+    border: 1px solid #cae062;
+    background-color: #cae062;
+    margin-left: 1.2rem;
+    padding: 0.3rem 1rem;
+    font-size: 0.9rem;
+    font-weight: bolder;
+    text-align: center;
+    border-radius: 4px;
+        color: #56534F;
+}
+#innerBanner>h1{
+    padding-left: 1rem;
+    color: #000000;
+    font-size: 1.8rem;
+    font-weight: bolder;
+    padding-bottom: 0.8rem;
+    padding-top: 1.6rem;
+    margin-bottom: 0;
+}
+#innerBanner>p{
+padding-left: 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
