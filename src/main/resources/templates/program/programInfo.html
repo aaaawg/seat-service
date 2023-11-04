@@ -21,7 +21,7 @@
             </div>
             <table id="tableId" class="table table-borderless">
                 <tr>
-                    <th style="width: 20%">대상</th>
+                    <th style="width: 25%">대상</th>
                     <td th:if="${programInfo.target} == 'etc'" th:text="${programInfo.targetDetail}"></td>
                     <td th:unless="${programInfo.target} == 'etc'" th:text="${programInfo.target} == 'all'? '제한없음' : ${programInfo.targetDetail} + ' 거주'"></td>
                 </tr>
