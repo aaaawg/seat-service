@@ -13,14 +13,17 @@
     height: 300px;
     background-color: #a2a2a2;
     text-align: center;
+    margin-bottom: 0.5rem;
+    border-radius: 15px;
 }
 p {
     margin-bottom: 0;
 }
 .pDiv {
     display: inline-block;
-    width: 250px;
+    width: 16rem;
     height: 400px;
+    margin-bottom: 1rem!important;
 }
 .textDiv {
     margin-top: 3px;
@@ -31,24 +34,37 @@ p {
 }
 .menu div {
     width: 100px;
-    height: 100%;
     padding: 5px;
-    text-align: center;
-    margin-right: 10px;
     display: inline-block;
+    border: 1px solid #617A55;
+    color: #617A55;
+    margin: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 50px;
+    cursor: pointer;
 }
+.menu div:hover{
+    background-color: #cae062;
+    color: white;
+    background-position: right center;
+    //background-image: linear-gradient(to right, #E1F8D4 0%, #9dbb8f 60%, #617a55e8 100%);
+    border: none;
+}
+
 .menu h6 {
     font-weight: bolder;
     margin: 0;
     padding: 5px;
 }
-.menu h6:hover {
-    color: #618264;
-}
 
 .activeMenu {
-    border: solid rgba(0, 0, 0, 0.12) 1px;
-    color: #618264;
+    border: solid #618264 1px;
+    background-color: #618264;
+    color: white!important;
 }
 
 .ar {
@@ -147,7 +163,7 @@ p {
     margin-left: 11rem;
     padding-top: 1rem;
 }
-#innerBanner>span{
+#bannerButton{
     border: 1px solid #cae062;
     background-color: #cae062;
     margin-left: 1.2rem;
@@ -157,6 +173,9 @@ p {
     text-align: center;
     border-radius: 4px;
         color: #56534F;
+}
+#bannerButton:focus-visible{
+    outline:none;
 }
 #innerBanner>h1{
     padding-left: 1rem;
@@ -172,3 +191,64 @@ padding-left: 1rem;
     font-size: 1rem;
     font-weight: bold;
 }
+
+
+/*
+:root {
+  --bg: #3C465C;
+  --primary: #617A55;
+  --solid: #617A55;
+  --btn-w: 100px;
+  --dot-w: calc(var(--btn-w)*.2);
+  --tr-X: calc(var(--btn-w) - var(--dot-w));
+}
+* {box-sizing: border-box;}
+*:before, *:after {box-sizing: border-box;}
+.buttonTest {
+  position: relative;
+  margin: 0 auto;
+  width: var(--btn-w);
+  color: var(--primary);
+  border: .15em solid var(--primary);
+  border-radius: 5em;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1.3em;
+  line-height: 2em;
+  cursor: pointer;
+}
+.dot {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: var(--dot-w);
+  height: 100%;
+  border-radius: 100%;
+  transition: all 300ms ease;
+  display: none;
+}
+.dot:after {
+  content: '';
+  position: absolute;
+  left: calc(50% - .4em);
+  top: -.4em;
+  height: .8em;
+  width: .8em;
+  background: var(--primary);
+  border-radius: 1em;
+  border: .25em solid var(--solid);
+  box-shadow: 0 0 .7em var(--solid),
+        0 0 2em var(--primary);
+}
+.buttonTest:hover .dot,
+.buttonTest:focus .dot {
+  animation: atom 2s infinite linear;
+  display: block;
+}
+@keyframes atom {
+  0% {transform: translateX(0) rotate(0);}
+  30%{transform: translateX(var(--tr-X)) rotate(0);}
+  50% {transform: translateX(var(--tr-X)) rotate(180deg);}
+  80% {transform: translateX(0) rotate(180deg);}
+  100% {transform: translateX(0) rotate(360deg);}
+}*/

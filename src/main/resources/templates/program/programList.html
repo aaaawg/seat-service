@@ -3,21 +3,21 @@
 <head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/programList.css}" href="../css/programList.css" rel="stylesheet">
     <link th:href="@{/css/statusBadge.css}" href="../css/statusBadge.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
-<div id="banner">
+<div th:if="${pType == null}" id="banner">
     <div id="innerBanner">
-        <span>상시 등록중</span>
+        <button id="bannerButton" type="button" onclick="fnMove('section1')"><span>상시 등록중</span></button>
         <h1>주변에서 진행 중인 프로그램</h1>
         <p>확인하고 신청해 보세요!</p>
     </div>
     <img id="bannerImg" src="img/dazzle-blog-post-article.gif" />
 </div>
 
-<br>
-<div class="container" style="max-width: 1400px; clear: both">
-    <div style="height: 50px;">
+<div id="section1" class="container" style="max-width: 1400px; clear: both">
+    <div style="height: 50px;margin-bottom: 2.5rem;">
         <div class="menu">
             <div id="n" th:onclick="|location.href='@{/{type}(type=${pType})}'|"><h6>전체</h6></div>
             <div id="all" th:onclick="|location.href='@{/{type}(type=${pType}, target=all)}'|"><h6>누구나</h6></div>
@@ -28,12 +28,12 @@
     <th:block th:each="program: ${programs}">
         <div class="p-3 mx-1 my-2 bg-light text-dark rounded-3 row pDiv" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
             <div class="imgDiv">
-                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 300px">
+                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%;height: 300px;border-radius: 15px;margin-bottom: 0.5rem;">
                 <div class="noImg" th:unless="${program.filename != null}"><i class="bi bi-image"></i></div>
                 <span class="badge imgBadge" th:text="${program.type == 'offline'}?'대면':'비대면'" th:classappend="${program.type == 'offline'} ? 'bg-primary':'bg-dark'"></span>
                 <div>
                     <span class="badge" th:if="${#dates.createToday().before(program.startDate)}" style="background-color: #b0bea3">예정</span>
-                    <span class="badge" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}" style="background-color: #618264">진행</span>
+                    <span class="badge" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}" style="background-color: #617A55">진행</span>
 
                     <span class="badge" th:if="${program.target} == 'area'" th:text="${program.targetDetail}" style="background-color: #394867"></span>
                     <span class="badge" th:if="${program.target} == 'all'" style="background-color: #7C96AB;">누구나</span>
@@ -46,6 +46,7 @@
         </div>
     </th:block>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="/js/nav.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
@@ -58,6 +59,15 @@
         else
             document.getElementById(target).classList.add("rounded-pill", "activeMenu");
     })
+</script>
+<script>
+    const button1 = document.getElementById('bannerButton');
+    const section1 = document.getElementById('section1');
+    function fnMove(seq) {
+    var offset = $("#" + seq).offset();
+    $("html, body").animate({ scrollTop: offset.top }, 100);
+    }
+
 </script>
 </body>
 </html>

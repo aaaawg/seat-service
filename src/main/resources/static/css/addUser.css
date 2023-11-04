@@ -11,16 +11,22 @@ button {
     border: none;
 }
 h4 {
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    color: #4e6145;
+    font-weight: bolder;
+        display: none;
 }
 .dInput {
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
 }
 label {
     margin-bottom: 3px !important;
+    font-weight: 550!important;
 }
 input:read-only {
-    background-color: #e7e7e7;
+    background-color: #e9ecef;
+    border-color: #e9ecef;
 }
 .input-group-text {
     height: 38px;
@@ -35,9 +41,13 @@ input:read-only {
     color: #c00000;
 }
 #useIdBtn {
-    margin-left: 3px;
+    font-size: 0.75rem;
+    margin-left: 0.4rem;
+    padding: 0.2rem 0.6rem;
     margin-top: 2px;
-    border: solid #617A55 1px;
+    background-color: #FCD588!important;
+    display: inline-block;
+    height: 1.3rem;
 }
 #btnDiv {
     width: 100%;
@@ -65,10 +75,21 @@ input:read-only {
 .logo {
     text-align: center;
     margin: 20px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 img {
     width: 70px;
 }
 .container {
     margin-bottom: 20px;
+}
+i{
+    margin-right: 0.5rem;
+}
+#joinSite{
+    width: 100%;
+    height: 3rem!important;
+    margin-top: 1rem;
+    font-size: 1.2rem;
 }
