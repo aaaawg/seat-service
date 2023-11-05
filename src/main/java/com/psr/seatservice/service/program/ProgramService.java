@@ -98,20 +98,33 @@ public class ProgramService {
     }
 
 
-    public List<ProgramListResponse> getProgramList(String type, String target) {
+    public List<ProgramListResponse> getProgramList(String type, String target, String ad) {
         List<ProgramListResponse> programs;
+        String str;
 
         if(type.equals("online") || type.equals("offline")) {
             if(target == null)
                 programs = programRepository.findAllByType(type);
-            else
-                programs = programRepository.findAllByTarget(type, target);
+            else {
+                if(target.equals("area") && ad != null) {
+                    str = ad + "%";
+                    programs = programRepository.findAllByAreaAndAreaDetail(type, "area", str);
+                }
+                else
+                    programs = programRepository.findAllByTarget(type, target);
+            }
         }
         else {
             if(target == null)
                 programs = programRepository.findAllProgramAndImg();
-            else
-                programs = programRepository.findAllProgramAndImgByTarget(target);
+            else {
+                if(target.equals("area") && ad != null) {
+                    str = ad + "%";
+                    programs = programRepository.findAllByAreaAndAreaDetail("area", str);
+                }
+                else
+                    programs = programRepository.findAllProgramAndImgByTarget(target);
+            }
         }
 
         return programs;
