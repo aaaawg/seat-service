@@ -15,12 +15,13 @@
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
-<div class="container">
+<div class="container" id="all">
     <form th:action method="post" enctype="multipart/form-data" id="updateForm">
         <div>
             <label class="normalLabel" for="title">프로그램명</label>
             <input type="text" id="title" name="title" th:value="${programInfo.title}">
         </div>
+        <hr>
         <div>
             <label class="normalLabel">구분</label>
             <input type="radio" id="offline" name="type" value="offline" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(0, this.getAttribute('bookCount'))">
@@ -28,6 +29,7 @@
             <input type="radio" id="online" name="type" value="online" th:attr="bookCount=${bookingCount}" onchange="showPlaceInput(1, this.getAttribute('bookCount'))">
             <label id="onlineCheck" for="online">온라인</label>
         </div>
+        <hr>
         <div id="off">
             <label for="place" class="normalLabel">장소</label>
             <input type="button" id="searchAddr" value="주소 검색" onclick="findAddress()">
@@ -43,6 +45,7 @@
             <label for="way" class="normalLabel">접속링크</label>
             <input type="text" name="way" id="inWay" th:value="${programInfo.way}">
         </div>
+        <hr>
         <div>
             <label for="drop" class="normalLabel">신청대상</label>
             <select id="drop" name="target" th:attr="bookCount=${bookingCount}" onchange="showArea()">
@@ -55,6 +58,7 @@
             </div>
 
         </div>
+        <hr>
         <div>
             <label for="startDate" class="normalLabel">신청 시작일</label>
             <input type="date" id="startDate" name="startDate" th:value="${programInfo.startDate}">
@@ -63,6 +67,7 @@
             <label for="endDate" class="normalLabel">신청 종료일</label>
             <input type="date" id="endDate" name="endDate" th:value="${programInfo.endDate}">
         </div>
+        <hr>
         <div>
             <label for="viewing" class="normalLabel">진행 일시</label>
             <input type="datetime-local" id="viewing">

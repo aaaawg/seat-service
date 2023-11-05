@@ -1,18 +1,18 @@
 body{
-    background-color: rgb(249 249 249) !important;
+    background-color: #f7f7f7 !important;
 }
 .container div:not(.viewingList, .note-btn-group, .note-editing-area, .note-editable, .note-handle,.note-statusbar, .note-resizebar,.note-modal-header
                                     , .note-modal-body,.form-group.note-form-group.note-group-select-from-files,.form-group.note-group-image-url,.note-modal-footer){
     margin-top: 1.8rem;
 }
 form{
-    max-width: 770px;
-    min-width: 770px;
-    margin: 0.8rem auto;
+    max-width: 900px;
+    min-width: 900px;
+    margin: 3rem auto;
     background-color: white;
-    padding: 30px;
+    padding: 2rem 5rem;
     border: solid 1px #d9d9d9;
-    border-radius: 0.25rem;
+    border-radius: 16px;
     min-height: 820px;
 }
 label{
@@ -106,7 +106,8 @@ input:focus {outline: none;}
 .custom-file-label{width:auto;}
 .custom-file{display: inline;}
 
-input[type=button], button[type=button]:not(.navbar-toggler, .note-btn-group>button, .close, #file-upload-button, .btn.btn-primary.note-btn.note-btn-primarynote-image-btn){
+input[type=button], button[type=button]:not(.navbar-toggler, .note-btn-group>button, .close, #file-upload-button, .btn.btn-primary.note-btn.note-btn-primarynote-image-btn
+, #searchBtn){
     border: solid 1px #0f0f0f;
     font-weight: bold;
     color: #0f0f0fb5;
@@ -180,17 +181,7 @@ input[type=file]:hover::file-selector-button {
 .normalLabel{
 font-weight: 550;
 }
-/*#searchBtn {
-    width: 35px!important;
-    height: 35px!important;
-    background-size: cover!important;
-    border: solid 1px #c9c9c9!important;
-    background-color: #ffffff!important;
-    border-top-right-radius: 5px!important;
-    border-bottom-right-radius: 5px!important;
-    background-position: 2px 2px!important;
-    background-size: 90%!important;
-}*/
+
 input[type=radio]{
     cursor: pointer;
     accent-color:#157347;
@@ -217,7 +208,7 @@ input[type=radio]{
 }
 #origImg {
     width: 400px;
-    margin-left: 9.34rem;
+    margin-left: 10rem;
 }
 .fileAddDiv{
     width: 400px;
@@ -264,19 +255,18 @@ img{
 
 /* Shikoba */
 .button.button--shikoba {
-  position: relative;
-  margin: 2rem 0 1rem 0;
-  padding: 1em 30px 1em 50px;
-  overflow: hidden;
-  color: white;
-  border: solid 1px;
-  border-radius: 0.4rem;
-  width: 44rem;
-  height: 5rem;
-  background-image: linear-gradient(to right, #6B9B7E, #4E937D, #008363, #006333);
-  background-size: 300% 100%;
-  -webkit-transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    position: relative;
+    margin: 2rem 0 1rem 0;
+    padding: 1em 30px 1em 50px;
+    overflow: hidden;
+    color: white;
+    border: solid 1px;
+    border-radius: 0.4rem;
+    width: 100%;
+    height: 5rem;
+    background-image: linear-gradient(to right, #617A55, #49725B,#36695F,#2B5F61, #2A535F, #454555 );
+    background-size: 300% 100%;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
 }
 .button--shikoba > span {
   display: inline-block;
@@ -311,4 +301,18 @@ img{
 
 .note-modal-footer{
     margin-bottom: 1rem;
+}
+
+#text1{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    color: white;
+    font-size: 15rem;
+    font-weight: 900;
+    line-height: 14rem;
+    padding-left: 1rem;
+}
+hr{
+    margin-top: 2rem!important;
 }
