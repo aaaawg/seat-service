@@ -180,7 +180,7 @@ input[type=file]:hover::file-selector-button {
 .normalLabel{
 font-weight: 550;
 }
-#searchBtn {
+/*#searchBtn {
     width: 35px!important;
     height: 35px!important;
     background-size: cover!important;
@@ -190,7 +190,7 @@ font-weight: 550;
     border-bottom-right-radius: 5px!important;
     background-position: 2px 2px!important;
     background-size: 90%!important;
-}
+}*/
 input[type=radio]{
     cursor: pointer;
     accent-color:#157347;
