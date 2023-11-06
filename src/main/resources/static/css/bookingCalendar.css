@@ -92,6 +92,13 @@ td {
 }
 #checkInfo button {
     width: 100%;
+    background: white;
+    color: #617A55;
+    border:1.5px solid #617A55;
+    &:hover{
+        background: #617A55;
+        color: white;
+    }
 }
 #scrollDiv {
     overflow: scroll;
@@ -101,7 +108,7 @@ td {
 }
 .bookingSe {
     height: 45px;
-    background-color: rgb(121, 154, 121);
+    background-color: #617A55;
     margin-bottom: 10px;
     padding-left: 10px;
     padding-top: 10px;

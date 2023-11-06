@@ -71,14 +71,15 @@
         <div>
             <label for="viewing" class="normalLabel">진행 일시</label>
             <input type="datetime-local" id="viewing">
-            <button type="button" id="viewTime" onclick="addViewing()">추가</button>
+            <input type="button" id="viewTime" onclick="addViewing()" value="추가">
             <div id="viewDateTime">
                 <div class="viewingList" th:each="im, iterStat : ${viewTime}">
                     <input type="text" th:value="@{${im.viewingDate} +'T'+ ${im.viewingTime}}" name="viewingDateAndTime" th:id="'input_' + ${iterStat.index}">
-                    <button type="button" th:id="'button_' + ${iterStat.index}" th:class="${iterStat.index}" onclick="deleteViewing(this)">X</button>
+                    <input type="button" th:id="'button_' + ${iterStat.index}" th:class="${iterStat.index}" onclick="deleteViewing(this)" value="X">
                 </div>
             </div>
         </div>
+        <hr>
         <div>
             <label for="endDate" class="normalLabel">모집 인원</label>
             <label id="peopleNumLabel"><input type="checkbox" id="peopleChBox" name="peopleNum" value=-1 onchange="peopleNumValue()">무제한</label>
@@ -91,6 +92,7 @@
             <input type="hidden" id="seatCol" name="seatCol" th:value="${programInfo.seatCol}" />
 
         </div>
+        <hr>
         <div>
             <div id="fileAdd">
                 <label for="inputFile" class="normalLabel">첨부 파일</label>
@@ -280,8 +282,8 @@ if (programInfo.target === "all") {
             }
         }
         const detailTarget = document.getElementById("targetDetail");
-         detailTarget.style.height = '1.7rem';
-         detailTarget.style.width = '4.75rem';
+         /*detailTarget.style.height = '1.7rem';
+         detailTarget.style.width = '4.75rem';*/
     }
 } else if(programInfo.target === "etc") {
     optionElements[2].selected = true; // "지역" 옵션을 선택
@@ -493,8 +495,7 @@ if(bookingCount > 0){
 
 const targetDetail = document.getElementById("targetDetail");
     if(drop.selectedIndex === 1){
-         targetDetail.style.height = '1.7rem';
-         targetDetail.style.width = '4.75rem';
+
     } else if(drop.selectedIndex === 2){
         if(targetDetail !== null){
         targetDetail.style.display="block";

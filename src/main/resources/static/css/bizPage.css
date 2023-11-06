@@ -55,18 +55,6 @@ td p {
     border: solid #618264 3px;
 }
 
-
-#searchBtn {
-    width: 35px;
-    height: 35px;
-    background-size: cover;
-    border: solid 1px #c9c9c9;
-    background-color: #ffffff;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    background-position: 2px 2px;
-    background-size: 90%;
-}
 .tbm {
     margin: 20px 0;
 }

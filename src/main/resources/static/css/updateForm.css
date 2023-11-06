@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(249 249 249);
+    background-color: #f7f7f7 !important;
 }
 .container div:not(.seatBtn){
     margin-top: 1.4rem;
@@ -15,8 +15,14 @@ body{
     border-radius: 0.25rem;
     min-height: 700px;
 }
+#myFormEdit{
+border-radius: 16px;
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
 #userResponse{
     min-height: 350px;
+    border-radius: 13px;
 }
 .btn.btn-success{
     padding: 0.45rem 0.9rem;
@@ -26,8 +32,8 @@ body{
         font-size: 0.85rem;
         letter-spacing: 2px;
         text-decoration: none;
-      background-color : #157347;
-      border: 1px solid #157347;
+      background-color : #305e44;
+      border: 1px solid #305e44;
       transition: 700ms cubic-bezier(0.165, 0.84, 0.44, 1);
     width: 6rem;
     margin-top: 2rem;
@@ -61,7 +67,7 @@ span[id*='ContentSpan']{
 
 div[id*='plus']{
     border: 1px solid #adb5bd;
-    border-radius: 0.25rem;
+    border-radius: 10px;
     margin-bottom: 1.5rem;
     padding: 1.5rem 2rem !important;
 }
@@ -100,9 +106,9 @@ div[class*='reDiv'] > input[class*='reply'], div[class*='reDiv'] > textarea{
 }
 
 button[class*='reply']{
-    background-color: #157347;
+    background-color: #4D7C60;
     color: white;
-    border: solid 2.13px #157347;
+    border: solid 2.13px #4D7C60;
     border-radius: 0 0.25rem 0.25rem 0;
 }
 
@@ -114,8 +120,8 @@ div[class*='selectBtnDiv'], div[class*='checkBoxBtnDiv']{
 button[id*='radioP'], button[id*='checkP']{
     border-radius: 50px;
     background-color: white;
-    color: #157347;
-    border: 1px solid #157347;
+    color: #305e44;
+    border: 1px solid #305e44;
     margin-top: 1.5rem;
     width: 7rem;
     height: 2rem;
@@ -127,7 +133,7 @@ button[id*='radioP'], button[id*='checkP']{
 .btn.btn-plus{
     border-radius: 50px;
     background-color: white;
-    color: #157347;
+    color: #454555 ;
     margin-bottom: 1rem;
     width: 10rem;
     height: 2.5rem;
@@ -136,14 +142,13 @@ button[id*='radioP'], button[id*='checkP']{
     font-size: 0.85rem;
     letter-spacing: 2px;
     text-decoration: none;
-    border: 1px solid #157347;
-    transition: 700ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 2px solid #454555 ;
     &:hover{
             transition: 400ms cubic-bezier(0.165, 0.84, 0.44, 1) !important;
             color: white;
-            background-color: #157347 !important;
+            background-color: #454555  !important;
             background-position: 99% 50% !important;
-            border: 1px solid #157347;
+            border: 1px solid #454555;
     }
 }
 #contentAdd{
@@ -163,7 +168,7 @@ button[id*='radioP'], button[id*='checkP']{
   border-radius: 0.4rem;
   width: 674px;
   height: 5rem;
-  background-image: linear-gradient(to right, #6B9B7E, #4E937D, #008363, #006333);
+  background-image: linear-gradient(to right, #617A55, #49725B,#36695F,#2B5F61, #2A535F, #454555 );
   background-size: 300% 100%;
   -webkit-transition: background-color 0.3s, border-color 0.3s, color 0.3s;
   transition: background-color 0.3s, border-color 0.3s, color 0.3s;
@@ -188,25 +193,15 @@ button[id*='radioP'], button[id*='checkP']{
    transition: transform 1.2s;
    transform: translateX(17rem);
  }
-#searchBtn {
-    width: 35px;
-    height: 35px;
-    background-size: cover;
-    border: solid 1px #c9c9c9;
-    background-color: #ffffff;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    background-position: 2px 2px;
-    background-size: 90%;
-}
 
 #startTitle{
-    color: rgb(121, 154, 121);
+    color: #617A55;
     font-size: 1.5rem;
     font-weight: bold;
     max-width: 760px;
     min-width: 760px;
     margin: 1rem auto;
+    margin-top: 2rem;
 }
 
 textarea:focus {
@@ -229,15 +224,24 @@ accent-color: rgb(121, 154, 121);
     justify-content: center;
     align-items: center;
     height: 4rem;
-    background-color: rgb(121, 154, 121);
+    background-color: #617A55;
     color: white;
-    border-radius: 0.25rem;
-    font-size: 1.5rem;
+    border-radius: 13px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-color: #617A55;
      &:hover{
             transition: 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
             color: white;
-            background-color: #157347;
+            background-color: #4e6145;
             background-position: 99% 50%;
             opacity: 1;
        }
+}
+span[id*='titleSpan']{
+font-weight: bold;
+}
+#bi-pen-fill{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }

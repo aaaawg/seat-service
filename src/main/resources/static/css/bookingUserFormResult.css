@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(249 249 249) !important;
+    background-color: #f7f7f7 !important;
 }
 
 #all{
@@ -11,11 +11,13 @@ body{
     border: solid 1px #d9d9d9;
     border-radius: 0.25rem;
     min-height: 780px;
+    border-radius: 16px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 div[id*='subDiv']{
     border: 1px solid #adb5bd;
-    border-radius: 0.25rem;
+    border-radius: 15px;
     margin-bottom: 1.5rem;
     padding: 2rem !important;
 }
@@ -24,7 +26,7 @@ div[id*='subTitle']{
     line-height: 2.3rem;
     font-size: 1.1rem;
     margin-left: 0.23rem;
-    color: #6B9B7E;
+    color: #4D7C60;
 }
 
 div[id*='subAnswer']{
@@ -33,20 +35,8 @@ div[id*='subAnswer']{
     margin-left: 0.23rem;
 }
 
-#searchBtn {
-    width: 35px;
-    height: 35px;
-    background-size: cover;
-    border: solid 1px #c9c9c9;
-    background-color: #ffffff;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    background-position: 2px 2px;
-    background-size: 90%;
-}
-
 #userName{
-    color: #6B9B7E;
+    color: #617A55;
     font-weight: bold;
     font-size: 1.5rem;
     margin-left: 0.4rem;
@@ -60,9 +50,9 @@ div[id*='subAnswer']{
 }
 
 #backList{
-    border: 1px solid #6B9B7E;
+    border: 1px solid #617A55;
     border-radius: 50px;
-    background-color: #6B9B7E;
+    background-color: #617A55;
     color: white;
     padding: 0.5rem 1.9rem;
     margin-top: 0.5rem;

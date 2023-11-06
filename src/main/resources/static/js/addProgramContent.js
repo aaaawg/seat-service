@@ -115,7 +115,7 @@ function addContent(){
     const element = document.getElementById('content');
     const newContentDiv = document.createElement('div');
     newContentDiv.setAttribute("id", "plus"+count)
-    newContentDiv.style.background = '#fffce2';
+    newContentDiv.style.background = '#fbfbf3';
     newContentDiv.style.padding = "20px 0 20px 0";
     element.appendChild(newContentDiv);
 
@@ -377,7 +377,7 @@ function addEditSelect(e){
     //버튼 눌린 상태로 변경
     if(target.disabled === false){
         target.disabled = true;
-        changeColor.style.background = '#fffce2';
+        changeColor.style.background = '#fbfbf3';
     }
 }
 //셀렉트 선택시

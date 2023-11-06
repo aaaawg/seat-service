@@ -6,6 +6,7 @@
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/updateForm.css}" href="../css/updateForm.css?ver=1.1" rel="stylesheet">
+    <link th:href="@{/css/nav.css}" href="../css/nav.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
@@ -14,7 +15,9 @@
         <div id="formContent">
         </div>
         <div id="contentAdd">
-            <button type="button" class="btn btn-plus" onclick='addContent()'>항목추가</button>
+            <button type="button" class="btn btn-plus" onclick='addContent()'>
+                <i class="bi bi-plus-lg"></i>
+                항목추가</button>
         </div>
         <button type="submit" class="button button--shikoba button--text-medium button--round-l button--inverted"><span>수정완료</span></button>
     </form>
