@@ -21,7 +21,7 @@
         <div class="menu">
             <div id="n" th:onclick="|location.href='@{/{type}(type=${pType})}'|"><h6>전체</h6></div>
             <div id="all" th:onclick="|location.href='@{/{type}(type=${pType}, target=all)}'|"><h6>누구나</h6></div>
-            <div id="area" th:onclick="|location.href='@{/{type}(type=${pType}, target=area)}'|"><h6>지역</h6></div>
+            <div id="area" th:onclick="|location.href='@{/{type}(type=${pType}, target=area, ad=서울)}'|"><h6>지역</h6></div>
             <div id="etc" th:onclick="|location.href='@{/{type}(type=${pType}, target=etc)}'|"><h6>기타</h6></div>
         </div>
         <div id="selectBoxDiv" th:if="${pTarget == 'area'}">

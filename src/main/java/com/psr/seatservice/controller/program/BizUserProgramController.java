@@ -47,8 +47,7 @@ public class BizUserProgramController {
     }
 
     @GetMapping("/add")
-    public String addProgram(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("userAddr", user.getAddress());
+    public String addProgram() {
         return "program/bizAddProgram";
     }
 

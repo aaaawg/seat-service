@@ -216,7 +216,7 @@ function showArea() {
         document.getElementById("detail2").classList.add("col");
         html = "<input type='hidden' id='areaTargetDetail' name='targetDetail'>"
         html += '    <select id="area1" class="form-select" onchange="getAreaDetail(this)">\n' +
-            '        <option selected disabled>선택1</option>\n' +
+            '        <option selected disabled>=== 지역 선택 ===</option>\n' +
             '        <option>서울</option>\n' +
             '        <option>경기</option>\n' +
             '        <option>인천</option>\n' +
