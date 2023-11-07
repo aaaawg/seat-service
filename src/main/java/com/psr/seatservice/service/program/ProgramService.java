@@ -2,6 +2,8 @@ package com.psr.seatservice.service.program;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.psr.seatservice.domian.area.Area;
+import com.psr.seatservice.domian.area.AreaRepository;
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
@@ -22,11 +24,13 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final ProgramViewingRepository programViewingRepository;
     private final ProgramBookingRepository programBookingRepository;
+    private final AreaRepository areaRepository;
 
-    public ProgramService(ProgramRepository programRepository, ProgramViewingRepository programViewingRepository, ProgramBookingRepository programBookingRepository) {
+    public ProgramService(ProgramRepository programRepository, ProgramViewingRepository programViewingRepository, ProgramBookingRepository programBookingRepository, AreaRepository areaRepository) {
         this.programRepository = programRepository;
         this.programViewingRepository = programViewingRepository;
         this.programBookingRepository = programBookingRepository;
+        this.areaRepository = areaRepository;
     }
 
     public List<BizProgramListResponse> programs(Long user) {
@@ -343,4 +347,7 @@ public class ProgramService {
         }
     }
 
+    public List<Area> getAreaList(String area) {
+        return areaRepository.findAllByArea1(area);
+    }
 }

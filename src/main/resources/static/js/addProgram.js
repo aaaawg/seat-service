@@ -209,22 +209,66 @@ function enterPlace(type) {
 function showArea() {
     const drop = document.getElementById("drop");
     const detailDiv = document.getElementById("detail");
+    document.getElementById("detail2").innerHTML = "";
     let html;
 
     if (drop.selectedIndex === 1) {
-        let addr = userAddr.split(' ', 3);
-        let addr1 = addr[0];
-        let addr2 = addr[1];
-        if(addr[2].endsWith("구"))
-            html = `<select class="form-select" name="targetDetail"><option>${addr1}</option><option>${addr1} ${addr2}</option><option>${addr1} ${addr2} ${addr[2]}</option></select>`;
-        else
-            html = `<select class="form-select" name="targetDetail"><option>${addr1}</option><option>${addr1} ${addr2}</option></select>`;
+        document.getElementById("detail2").classList.add("col");
+        html = "<input type='hidden' id='areaTargetDetail' name='targetDetail'>"
+        html += '    <select id="area1" class="form-select" onchange="getAreaDetail(this)">\n' +
+            '        <option selected disabled>선택1</option>\n' +
+            '        <option>서울</option>\n' +
+            '        <option>경기</option>\n' +
+            '        <option>인천</option>\n' +
+            '        <option>부산</option>\n' +
+            '        <option>대구</option>\n' +
+            '        <option>광주</option>\n' +
+            '        <option>대전</option>\n' +
+            '        <option>울산</option>\n' +
+            '        <option>세종</option>\n' +
+            '        <option>강원</option>\n' +
+            '        <option>경남</option>\n' +
+            '        <option>경북</option>\n' +
+            '        <option>전남</option>\n' +
+            '        <option>전북</option>\n' +
+            '        <option>충남</option>\n' +
+            '        <option>충북</option>\n' +
+            '        <option>제주</option>\n' +
+            '    </select>';
     } else if (drop.selectedIndex === 2) {
+        document.getElementById("detail2").classList.remove("col");
         html = '<input class="form-control" id="etcDetail" type=text name="targetDetail" placeholder="신청대상을 입력해 주세요.">';
     } else
         html = "";
 
     detailDiv.innerHTML = html;
+}
+function showAreaDetail(t) {
+    let list = t;
+    const aDiv = document.getElementById("detail2");
+
+    let html = "<select id='area2' class='form-select'><option selected>선택안함</option>"
+    for (let i = 0; i < list.length; i++) {
+        html += `<option>${list[i]}</option>`
+    }
+    html += "</select>"
+
+    aDiv.innerHTML = html;
+}
+
+function getAreaDetail(t) {
+    const a = t.value;
+    const list = [];
+    fetch(`/business/program/areaList?area=${a}`)
+        .then((r) => {
+            return r.json()
+        })
+        .then((r) => {
+            for (let i = 0; i < r.length; i++) {
+                list.push(r[i].area2)
+            }
+            showAreaDetail(list);
+        })
 }
 function checkUserValue() {
     if(document.getElementById("title").value.trim().length === 0) {

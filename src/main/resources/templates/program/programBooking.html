@@ -72,7 +72,7 @@
             <div id="chart" class="container" style="padding: 0px"></div>
         </div>
         <div id="seatB">
-            <div><div class="seatBtn" style="background-color: #e5e5e5"></div><span>선택 불가</span></div>
+            <div><div class="seatBtn" style="background-color: #D9D9D9"></div><span>선택 불가</span></div>
             <div><div class="seatBtn" style="background-color: #c9dcbd"></div><span>선택 가능</span></div>
             <div><div class="seatBtn activeSeatBtn"></div><span>선택 좌석</span></div>
         </div>
@@ -288,13 +288,13 @@
 
             if(seatingChart[i]){
                 if(bookingSeatList.includes(seatNum))
-                    ht += "<div class='seatBtn' style='background-color: #e5e5e5;'></div>"
+                    ht += "<div class='seatBtn' style='background-color: #d9d9d9;'></div>"
                 else
                     ht += "<button type='button' class='seatBtn' style='background-color: #c9dcbd;'>" + seatNum + "</button>";
                 seatNum++;
             }
             else {
-                ht += "<div class='seatBtn' style='background-color: #ffffff;'></div>"
+                ht += "<div class='seatBtn' style='background-color: #f7f7f7;'></div>"
             }
 
             num++;

@@ -12,6 +12,20 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
    if(!checkUserValue()) {
        return;
    }
+
+   if(document.getElementById("drop").selectedIndex === 1) {
+       //신청대상이 지역일 때, targetDetail 값 넣기
+       const a1 = document.getElementById("area1");
+       const a2 = document.getElementById("area2");
+
+       if(a2.selectedIndex === 0) {
+           document.getElementById("areaTargetDetail").value = a1.options[a1.selectedIndex].value;
+       }
+       else {
+           document.getElementById("areaTargetDetail").value = a1.options[a1.selectedIndex].value + " " + a2.options[a2.selectedIndex].value;
+       }
+   }
+
    // 폼 데이터 생성
     const resultHtml = document.querySelector('#content').outerHTML;
     var additionalData;
