@@ -85,7 +85,7 @@ body{
     margin: 0;
     margin-bottom: 1rem;
 }
-i:not(.bi-person-fill, .bi-search) {
+i:not(.bi-person-fill, .bi-search, .bi-trash-fill) {
     float: left;
     margin-right: 10px;
     margin-left: 0.3rem;
@@ -138,11 +138,13 @@ i:not(.bi-person-fill, .bi-search) {
 }
 .showEnterAnswerBtn {
     margin-top: 0.5rem;
+    margin-bottom: 1rem;
     padding: 0.3rem 1rem;
     color: white;
     background-color: #454555;
     border-color: #454555;
     font-weight: bold;
+        width: 7.9rem;
 }
 
 .bg-success {
@@ -158,6 +160,7 @@ i:not(.bi-person-fill, .bi-search) {
     margin-top: 0.5rem;
     padding: 0.3rem 1rem;
     color: #363636;
+    width: 7.9rem;
 }
 .showAnswerBtn:hover {
     font-weight: bold;
@@ -285,4 +288,7 @@ hr {
     border-radius: 16px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     margin-bottom: 3rem;
+}
+.answerDiv span{
+    margin-left: 0!important;
 }
