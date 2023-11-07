@@ -12,8 +12,8 @@
         <button class="rounded-2" type="button" th:if="${checkSC}" onclick="showSeatingChart()" style="width: 110px;">좌석 현황</button>
     </div>
     <div class="subDiv">
-        <h4>신청자 목록</h4>
-        <span th:text="|총 ${userList.size()}건|"></span>
+        <h4 style="font-weight: bold;">신청자 목록</h4>
+        <span style="color: #ee4878;" th:text="|총 ${userList.size()}건|"></span>
         <button type="button" id="excelDownload">엑셀 다운로드</button>
     </div>
     <div class="tbm">
@@ -21,6 +21,7 @@
             <thead style="border: none">
             <tr>
                 <th><input type="checkbox" class="form-check" onclick="checkAll(this)" id="allCheck"></th>
+                <th>순서번호</th>
                 <th>신청번호</th>
                 <th>신청일</th>
                 <th>수정일</th>
@@ -34,8 +35,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="booking: ${userList}">
+            <tr th:each="booking, iterStat : ${userList}">
                 <td style="width: 2%"><input name="listCheckbox" type="checkbox" class="form-check" th:disabled="${booking.status} == '취소'"></td>
+                <td style="width: 8%" th:text="${iterStat.count}"></td>
                 <td style="width: 8%" th:text="${booking.bookingNum}"></td>
                 <td style="width: 12%" th:text="${#dates.format(booking.bookingDate, 'yyyy-MM-dd HH:mm')}"></td>
                 <td style="width: 12%" th:text="(${booking.bookingDate} != ${booking.updateDate}) ? ${#dates.format(booking.updateDate, 'yyyy-MM-dd HH:mm')} : ''">수정일</td>

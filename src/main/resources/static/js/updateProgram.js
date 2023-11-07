@@ -13,7 +13,7 @@ window.addEventListener("load", (event) => {
     origAddress = document.getElementById("address").value;
     origDetailAddress = document.getElementById("detailAddress").value;
     if(peopleNum === '무제한') peopleNum = '';
-    init();
+    //init();
 });
 
 document.getElementById('updateForm').addEventListener('submit', function(event) {
@@ -400,7 +400,7 @@ console.log("n"+imagesLength);
      }
 }
 
-function init(){
+/*function init(){
     const btnPrevious = document.querySelector(".previous");
     const btnNext = document.querySelector(".next");
     btnPrevious.setAttribute('disabled','true');
@@ -413,4 +413,4 @@ function init(){
             btnPreviousOrig.addEventListener("click", prevOrig);
             btnNextOrig.addEventListener("click", nextOrig);
     }
-}
+}*/

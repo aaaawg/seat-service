@@ -15,7 +15,7 @@
     </div>
     <img id="bannerImg" src="img/dazzle-blog-post-article.gif" />
 </div>
-
+<hr th:if="${pType != null}" id="mainHr">
 <div id="section1" class="container" style="max-width: 1400px; clear: both">
     <div style="height: 50px;margin-bottom: 2.5rem;">
         <div class="menu">
@@ -49,7 +49,7 @@
     <th:block th:each="program: ${programs}">
         <div class="p-3 mx-1 my-2 bg-light text-dark rounded-3 row pDiv" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
             <div class="imgDiv">
-                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%;height: 300px;border-radius: 15px;margin-bottom: 0.5rem;">
+                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%;height: 300px;margin-bottom: 0.5rem;">
                 <div class="noImg" th:unless="${program.filename != null}"><i class="bi bi-image"></i></div>
                 <span class="badge imgBadge" th:text="${program.type == 'offline'}?'대면':'비대면'" th:classappend="${program.type == 'offline'} ? 'bg-primary':'bg-dark'"></span>
                 <div>

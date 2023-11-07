@@ -1,5 +1,5 @@
 body{
-background-color: #f3f6f5;
+    background-color: #f7f7f7;
 }
 .programInfoDiv {
     margin-left: 0;
@@ -38,7 +38,7 @@ background-color: #f3f6f5;
     margin-left: 1rem;
     padding: 2rem 3rem;
     background-color: white;
-    box-shadow: 0 0 0 1px #e3e5e8, 0 1px 2px 0 rgba(0,0,0,.04);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 #tDiv{
     border-bottom: solid #212529 1.5px;
@@ -47,6 +47,8 @@ background-color: #f3f6f5;
 }
 .programInfoDiv h2 {
     margin-top: 10px;
+    font-size: 1.9rem;
+        font-weight: 700;
 }
 .infoMenu {
     height: 3rem;
@@ -64,6 +66,7 @@ background-color: #f3f6f5;
     margin: 0;
     padding-bottom: 10px;
         cursor: pointer;
+        font-weight: 550;
 }
 .activeDiv {
     border-bottom: solid #617A55 5px;
@@ -72,7 +75,7 @@ background-color: #f3f6f5;
     padding: 20px;
     border-radius: 16px!important;
     background-color: white;
-    box-shadow: 0 0 0 1px #e3e5e8, 0 1px 2px 0 rgba(0,0,0,.04);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .programDateDiv .col {
     margin-top: 10px;
@@ -102,8 +105,8 @@ i:not(.bi-person-fill, .bi-search) {
 }
 .activeli {
     font-weight: bold;
-    color: #E65339;
-    background-color: #f8f9fa;
+    color: #617A55;
+    background-color: #f8faf9;
 }
 #peopleCount {
     padding-top: 30px;
@@ -122,7 +125,11 @@ i:not(.bi-person-fill, .bi-search) {
     background-color: #4e6145 !important;
     border-color: #4e6145!important;
 }
-.card {margin-bottom: 2rem;}
+.card {
+    border: none;
+    padding: 1rem 1rem 0 1rem;
+    border-radius: 16px;
+    }
 
 .bi-trash-fill {
     float: right;
@@ -133,15 +140,11 @@ i:not(.bi-person-fill, .bi-search) {
     margin-top: 0.5rem;
     padding: 0.3rem 1rem;
     color: white;
-    background-color: #4e6145;
-    border-color: #4e6145;
+    background-color: #454555;
+    border-color: #454555;
     font-weight: bold;
 }
-.showEnterAnswerBtn:hover {
-    background-color: #4e6145!important;
-    border-color: #4e6145!important;
-    font-weight: bold;
-}
+
 .bg-success {
     background-color: #618264 !important;
 }
@@ -165,11 +168,9 @@ i:not(.bi-person-fill, .bi-search) {
     margin-bottom: 0;
 }
 #qnaList{
-background-color: white;
     padding: 2.5rem;
     border-radius: 16px;
-    margin-bottom: 3rem;
-    box-shadow: 0 0 0 1px #e3e5e8, 0 1px 2px 0 rgba(0,0,0,.04);
+    padding-top: 0;
 }
 table td {
     padding-left: 0 !important;
@@ -182,15 +183,18 @@ table th {
 }
 #bizBtn {
     position: absolute;
-    bottom: 25px;
+    bottom: 1.7rem;
 }
 #bizBtn button {
-    width: 100px;
+    width: 7rem;
     height: 30px;
     margin-right: 10px;
     color: white;
-    background-color: #4a4d51;
-    border-color: #4a4d51;
+    background-color: #454555;
+    border-color: #454555;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 #mapDiv {
     margin-bottom: 2rem;
@@ -256,21 +260,29 @@ margin-bottom: 0.5rem;
     padding-top: 1rem;
     border-radius: 16px;
     margin-bottom: 2rem;
-    box-shadow: 0 0 0 1px #e3e5e8, 0 1px 2px 0 rgba(0,0,0,.04);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 #subDiv{
     padding-top: 0!important;
     margin-top: 1rem!important;
 }
 #cardFooterDiv{
-    background-color: #4e6145;
-    color: white;
+    background-color:white;
+    border: none;
     padding-right: 2.5rem;
+        padding-bottom: 0;
+        padding-top: 0;
 }
 hr {
-    margin: 2rem 0;
+    margin: 1rem 0;
     color: inherit;
     border: 0;
     border-top: 1px solid;
     opacity: .25;
+}
+#infoC{
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin-bottom: 3rem;
 }
