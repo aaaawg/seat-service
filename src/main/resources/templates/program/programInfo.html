@@ -125,7 +125,7 @@
                                 <p th:utext="${qna.question}"></p>
                                 <span th:text="${#dates.format(qna.createDate,'yyyy.MM.dd HH:mm')} "></span><i th:if="${qna.writer} == ${#authentication.name}" class="bi bi-trash-fill" onclick="deleteQna(this)"></i>
                                 <br>
-                                <button class="showAnswerBtn btn btn-outline-secondary btn-sm" th:if="${qna.answer} != null">답변</button>
+                                <button id="secretAnswer" class="showAnswerBtn btn btn-outline-secondary btn-sm" th:if="${qna.answer} != null"><i class="bi bi-check-circle-fill"></i>답변확인</button>
 
                                 <div class="answerDiv rounded-2" th:if="${qna.answer} != null">
                                     <p th:utext="${qna.answer}"></p>
@@ -228,14 +228,28 @@
             $(this).next(".answerDiv").toggle();
 
             var typeQna = $(this).parent().parent().prev().offset();
+            if(typeQna.left === 0 || typeQna.top === 0) {}
+            else{
             $("html, body").animate({ scrollTop: typeQna.top }, 100);
+            }
         });
         $(".showEnterAnswerBtn").click(function () {
             $(".enterAnswerDiv").hide();
             $(this).next(".enterAnswerDiv").toggle();
 
             var typeQna = $(this).parent().parent().prev().offset();
+            if(typeQna.left === 0 || typeQna.top === 0) {}
+            else{
             $("html, body").animate({ scrollTop: typeQna.top }, 100);
+            }
+        });
+
+        $("#secretAnswer").click(function () {
+            var typeQna = $(this).parent().parent().parent().prev().offset();
+            if(typeQna.left === 0 || typeQna.top === 0) {}
+            else{
+            $("html, body").animate({ scrollTop: typeQna.top }, 100);
+            }
         });
     });
 

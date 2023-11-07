@@ -17,33 +17,54 @@
 </div>
 <hr th:if="${pType != null}" id="mainHr">
 <div id="section1" class="container" style="max-width: 1400px; clear: both">
-    <div style="height: 50px;margin-bottom: 2.5rem;">
+    <div id="changeDiv" style="margin-bottom: 2.5rem;">
         <div class="menu">
             <div id="n" th:onclick="|location.href='@{/{type}(type=${pType})}'|"><h6>전체</h6></div>
             <div id="all" th:onclick="|location.href='@{/{type}(type=${pType}, target=all)}'|"><h6>누구나</h6></div>
             <div id="area" th:onclick="|location.href='@{/{type}(type=${pType}, target=area)}'|"><h6>지역</h6></div>
             <div id="etc" th:onclick="|location.href='@{/{type}(type=${pType}, target=etc)}'|"><h6>기타</h6></div>
         </div>
+        <div id="selectBoxDiv" th:if="${pTarget == 'area'}">
+            <select id="selectbox" onchange="changeLangSelect()">
+                <option value="서울" class="selectOption">서울</option>
+                <option value="경기" class="selectOption">경기</option>
+                <option value="인천" class="selectOption">인천</option>
+                <option value="부산" class="selectOption">부산</option>
+                <option value="대구" class="selectOption">대구</option>
+                <option value="광주" class="selectOption">광주</option>
+                <option value="대전" class="selectOption">대전</option>
+                <option value="울산" class="selectOption">울산</option>
+                <option value="세종" class="selectOption">세종</option>
+                <option value="강원" class="selectOption">강원</option>
+                <option value="경남" class="selectOption">경남</option>
+                <option value="경북" class="selectOption">경북</option>
+                <option value="전남" class="selectOption">전남</option>
+                <option value="전북" class="selectOption">전북</option>
+                <option value="충남" class="selectOption">충남</option>
+                <option value="충북" class="selectOption">충북</option>
+                <option value="제주" class="selectOption">제주</option>
+            </select>
+        </div>
     </div>
 
     <div id="areaSelectBtnDiv" th:if="${pTarget == 'area'}">
-        <button class="">서울</button>
-        <button class="">경기</button>
-        <button class="">인천</button>
-        <button class="">부산</button>
-        <button class="">대구</button>
-        <button class="">광주</button>
-        <button class="">대전</button>
-        <button class="">울산</button>
-        <button class="">세종</button>
-        <button class="">강원</button>
-        <button class="">경남</button>
-        <button class="">경북</button>
-        <button class="">전남</button>
-        <button class="">전북</button>
-        <button class="">충남</button>
-        <button class="">충북</button>
-        <button class="">제주</button>
+        <button id="서울" class="">서울</button>
+        <button id="경기" class="">경기</button>
+        <button id="인천" class="">인천</button>
+        <button id="부산" class="">부산</button>
+        <button id="대구" class="">대구</button>
+        <button id="광주" class="">광주</button>
+        <button id="대전" class="">대전</button>
+        <button id="울산" class="">울산</button>
+        <button id="세종" class="">세종</button>
+        <button id="강원" class="">강원</button>
+        <button id="경남" class="">경남</button>
+        <button id="경북" class="">경북</button>
+        <button id="전남" class="">전남</button>
+        <button id="전북" class="">전북</button>
+        <button id="충남" class="">충남</button>
+        <button id="충북" class="">충북</button>
+        <button id="제주" class="">제주</button>
     </div>
 
     <th:block th:each="program: ${programs}">
@@ -74,6 +95,7 @@
 <script>
     const params = new URLSearchParams(location.search);
     const target = params.get("target");
+    const ad = params.get("ad");
 
     window.addEventListener("load", function () {
         if(target === null)
@@ -82,19 +104,40 @@
             document.getElementById(target).classList.add("rounded-pill", "activeMenu");
     })
 
+    if(target !== null){
+        fnMove('section1');
+    }
+
+    if(ad !== null){
+        console.log(ad);
+        const selectElement = document.getElementById("selectbox");
+        const optionToSelect = selectElement.querySelector('[value='+ad+']');
+        if (optionToSelect) {
+            optionToSelect.selected = true;
+        }
+    }
+
+    function changeLangSelect(){
+    var langSelect = document.getElementById("selectbox");
+    var selectValue = langSelect.options[langSelect.selectedIndex].value;
+
+    var langSelectButton = document.getElementById(selectValue);
+    console.log(langSelectButton);
+    langSelectButton.click();
+}
+
+
     $("#areaSelectBtnDiv").children("button").click(function () {
         let url  = location.href.split("&");
         window.location.replace(url[0] + "&ad=" + this.innerText)
     });
-</script>
-<script>
+
     const button1 = document.getElementById('bannerButton');
     const section1 = document.getElementById('section1');
     function fnMove(seq) {
     var offset = $("#" + seq).offset();
     $("html, body").animate({ scrollTop: offset.top }, 100);
     }
-
 </script>
 </body>
 </html>
