@@ -31,18 +31,21 @@ public class ProgramController {
     }
 
     @GetMapping("/")
-    public String main(@RequestParam(required = false) String target, Model model) {
-        List<ProgramListResponse> programs = programService.getProgramList("main", target);
+    public String main(@RequestParam(required = false) String target, @RequestParam(required = false) String ad,Model model) {
+        List<ProgramListResponse> programs = programService.getProgramList("main", target, ad);
         model.addAttribute("programs", programs);
         model.addAttribute("pType", null);
+        model.addAttribute("pTarget", target);
         return "program/programList";
     }
 
     @GetMapping("/{type}")
-    public String programListByType(@PathVariable String type, @RequestParam(required = false) String target, Model model) {
-        List<ProgramListResponse> programs = programService.getProgramList(type, target);
+    public String programListByType(@PathVariable String type, @RequestParam(required = false) String target, @RequestParam(required = false) String ad, Model model) {
+        List<ProgramListResponse> programs = programService.getProgramList(type, target, ad);
+
         model.addAttribute("programs", programs);
         model.addAttribute("pType", type);
+        model.addAttribute("pTarget", target);
         return "program/programList";
     }
 
@@ -108,26 +111,6 @@ public class ProgramController {
         else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(result));
     }
-
-/*    //관리자 폼
-    @GetMapping("/program/{programNum}/formEdit")
-    public String programFormEdit(@PathVariable Long programNum, Model model) {
-        model.addAttribute("ProgramForm", programService.getProgramForm(programNum));
-        //Json 넘겨보기
-        model.addAttribute("ProgramJson", programService.getQuestionJson(programNum));
-        return "program/programEdit";
-    }
-
-    @PostMapping("/program/{programNum}/formEdit")
-    public String programFormEdit(@PathVariable Long programNum, @RequestParam(value = "formHtml", required = false) String request,
-                                  @RequestParam(value = "getTitleJson", required = false) String getTitleJsonString) {
-        programService.updateProgramForm(programNum, request);
-        if (getTitleJsonString.equals("{}")) {
-            getTitleJsonString = null;
-        }
-        programService.updateProgramFormTitle(programNum, getTitleJsonString);
-        return "redirect:/program/" + programNum;
-    }*/
 
     @GetMapping("/program/peopleCount")
     public @ResponseBody int peopleCount(@RequestParam("programNum") Long programNum, @RequestParam String viewingDate, @RequestParam String viewingTime) {
