@@ -66,7 +66,7 @@
           <td colspan="3">
             <span th:text="|${#dates.format(detail.endDate, 'yyyy.MM.dd 24:00')}까지|"></span>
             <span>
-              <span class="badge bg-danger" th:if="${#dates.createToday().after(detail.endDate)}">취소 불가</span>
+              <span class="badge bg-danger" th:if="${#dates.createToday().after(detail.endDate)}" style="background-color: #E65339!important;">취소 불가</span>
               <button th:unless="${#dates.createToday().after(detail.endDate)}" class="btn cBtn rounded-pill btn-sm text-white" id="deleteProgram">신청취소</button>
             </span>
           </td>

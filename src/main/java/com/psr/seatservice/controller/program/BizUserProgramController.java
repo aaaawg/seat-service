@@ -1,6 +1,7 @@
 package com.psr.seatservice.controller.program;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.psr.seatservice.domian.area.Area;
 import com.psr.seatservice.domian.program.Program;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.files.FileDto;
@@ -46,8 +47,7 @@ public class BizUserProgramController {
     }
 
     @GetMapping("/add")
-    public String addProgram(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("userAddr", user.getAddress());
+    public String addProgram() {
         return "program/bizAddProgram";
     }
 
@@ -280,5 +280,10 @@ public class BizUserProgramController {
         }
         programService.updateProgramFormTitle(programNum, getTitleJsonString);
         return "redirect:/program/" + programNum;
+    }
+
+    @GetMapping("/areaList")
+    public @ResponseBody List<Area> getAreaList(@RequestParam String area) {
+        return programService.getAreaList(area);
     }
 }

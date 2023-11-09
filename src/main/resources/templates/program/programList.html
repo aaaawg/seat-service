@@ -3,28 +3,79 @@
 <head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/programList.css}" href="../css/programList.css" rel="stylesheet">
     <link th:href="@{/css/statusBadge.css}" href="../css/statusBadge.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
-<br>
-<div class="container" style="max-width: 1400px; clear: both">
-    <div style="height: 50px;">
+<div th:if="${pType == null}" id="banner">
+    <div id="innerBanner">
+        <button id="bannerButton" type="button" onclick="fnMove('section1')"><span>상시 등록중</span></button>
+        <h1>주변에서 진행 중인 프로그램</h1>
+        <p>확인하고 신청해 보세요!</p>
+    </div>
+    <img id="bannerImg" src="img/dazzle-blog-post-article.gif" />
+</div>
+<hr th:if="${pType != null}" id="mainHr">
+<div id="section1" class="container" style="max-width: 1400px; clear: both">
+    <div id="changeDiv" style="margin-bottom: 2.5rem;">
         <div class="menu">
             <div id="n" th:onclick="|location.href='@{/{type}(type=${pType})}'|"><h6>전체</h6></div>
             <div id="all" th:onclick="|location.href='@{/{type}(type=${pType}, target=all)}'|"><h6>누구나</h6></div>
-            <div id="area" th:onclick="|location.href='@{/{type}(type=${pType}, target=area)}'|"><h6>지역</h6></div>
+            <div id="area" th:onclick="|location.href='@{/{type}(type=${pType}, target=area, ad=서울)}'|"><h6>지역</h6></div>
             <div id="etc" th:onclick="|location.href='@{/{type}(type=${pType}, target=etc)}'|"><h6>기타</h6></div>
         </div>
+        <div id="selectBoxDiv" th:if="${pTarget == 'area'}">
+            <select id="selectbox" onchange="changeLangSelect()">
+                <option value="서울" class="selectOption">서울</option>
+                <option value="경기" class="selectOption">경기</option>
+                <option value="인천" class="selectOption">인천</option>
+                <option value="부산" class="selectOption">부산</option>
+                <option value="대구" class="selectOption">대구</option>
+                <option value="광주" class="selectOption">광주</option>
+                <option value="대전" class="selectOption">대전</option>
+                <option value="울산" class="selectOption">울산</option>
+                <option value="세종" class="selectOption">세종</option>
+                <option value="강원" class="selectOption">강원</option>
+                <option value="경남" class="selectOption">경남</option>
+                <option value="경북" class="selectOption">경북</option>
+                <option value="전남" class="selectOption">전남</option>
+                <option value="전북" class="selectOption">전북</option>
+                <option value="충남" class="selectOption">충남</option>
+                <option value="충북" class="selectOption">충북</option>
+                <option value="제주" class="selectOption">제주</option>
+            </select>
+        </div>
     </div>
+
+    <div id="areaSelectBtnDiv" th:if="${pTarget == 'area'}">
+        <button id="서울" class="">서울</button>
+        <button id="경기" class="">경기</button>
+        <button id="인천" class="">인천</button>
+        <button id="부산" class="">부산</button>
+        <button id="대구" class="">대구</button>
+        <button id="광주" class="">광주</button>
+        <button id="대전" class="">대전</button>
+        <button id="울산" class="">울산</button>
+        <button id="세종" class="">세종</button>
+        <button id="강원" class="">강원</button>
+        <button id="경남" class="">경남</button>
+        <button id="경북" class="">경북</button>
+        <button id="전남" class="">전남</button>
+        <button id="전북" class="">전북</button>
+        <button id="충남" class="">충남</button>
+        <button id="충북" class="">충북</button>
+        <button id="제주" class="">제주</button>
+    </div>
+
     <th:block th:each="program: ${programs}">
         <div class="p-3 mx-1 my-2 bg-light text-dark rounded-3 row pDiv" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
             <div class="imgDiv">
-                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 300px">
+                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%;height: 300px;margin-bottom: 0.5rem;">
                 <div class="noImg" th:unless="${program.filename != null}"><i class="bi bi-image"></i></div>
                 <span class="badge imgBadge" th:text="${program.type == 'offline'}?'대면':'비대면'" th:classappend="${program.type == 'offline'} ? 'bg-primary':'bg-dark'"></span>
                 <div>
                     <span class="badge" th:if="${#dates.createToday().before(program.startDate)}" style="background-color: #b0bea3">예정</span>
-                    <span class="badge" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}" style="background-color: #618264">진행</span>
+                    <span class="badge" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}" style="background-color: #617A55">진행</span>
 
                     <span class="badge" th:if="${program.target} == 'area'" th:text="${program.targetDetail}" style="background-color: #394867"></span>
                     <span class="badge" th:if="${program.target} == 'all'" style="background-color: #7C96AB;">누구나</span>
@@ -37,11 +88,14 @@
         </div>
     </th:block>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="/js/nav.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
     const params = new URLSearchParams(location.search);
     const target = params.get("target");
+    const ad = params.get("ad");
 
     window.addEventListener("load", function () {
         if(target === null)
@@ -49,6 +103,41 @@
         else
             document.getElementById(target).classList.add("rounded-pill", "activeMenu");
     })
+
+    if(target !== null){
+        fnMove('section1');
+    }
+
+    if(ad !== null){
+        console.log(ad);
+        const selectElement = document.getElementById("selectbox");
+        const optionToSelect = selectElement.querySelector('[value='+ad+']');
+        if (optionToSelect) {
+            optionToSelect.selected = true;
+        }
+    }
+
+    function changeLangSelect(){
+    var langSelect = document.getElementById("selectbox");
+    var selectValue = langSelect.options[langSelect.selectedIndex].value;
+
+    var langSelectButton = document.getElementById(selectValue);
+    console.log(langSelectButton);
+    langSelectButton.click();
+}
+
+
+    $("#areaSelectBtnDiv").children("button").click(function () {
+        let url  = location.href.split("&");
+        window.location.replace(url[0] + "&ad=" + this.innerText)
+    });
+
+    const button1 = document.getElementById('bannerButton');
+    const section1 = document.getElementById('section1');
+    function fnMove(seq) {
+    var offset = $("#" + seq).offset();
+    $("html, body").animate({ scrollTop: offset.top }, 100);
+    }
 </script>
 </body>
 </html>

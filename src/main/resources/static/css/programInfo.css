@@ -1,12 +1,18 @@
+body{
+    background-color: #f7f7f7;
+}
 .programInfoDiv {
-    margin-top: 25px;
     margin-left: 0;
     margin-right: 0;
+    min-height: 500px;
 }
 .programImgDiv {
     width: 350px;
     height: 500px;
     padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+    min-height: 500px;
 }
 .noImg {
     width: 100%;
@@ -27,51 +33,62 @@
     height: 100%;
 }
 .programTextDiv {
+    border-radius: 16px;
     float: left;
-    padding: 10px 0 10px 30px;
+    margin-left: 1rem;
+    padding: 2rem 3rem;
+    background-color: white;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 #tDiv{
-    border-bottom: solid #618264 2px;
+    border-bottom: solid #212529 1.5px;
     padding-bottom: 16px;
     margin-bottom: 16px;
 }
 .programInfoDiv h2 {
     margin-top: 10px;
+    font-size: 1.9rem;
+        font-weight: 700;
 }
 .infoMenu {
-    height: 50px;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    height: 3rem;
+    margin-top: 4rem;
 }
 .infoMenu div {
     width: 130px;
     height: 100%;
     float: left;
-    padding: 5px;
     text-align: center;
     margin-right: 10px;
+    padding: 5px;
 }
 .infoMenu h5 {
     margin: 0;
     padding-bottom: 10px;
+        cursor: pointer;
+        font-weight: 550;
 }
 .activeDiv {
-    border-bottom: solid #618264 5px;
+    border-bottom: solid #617A55 5px;
 }
 .programDateDiv {
-    margin-top: 20px;
-    border: solid #c9c9c9 1px;
     padding: 20px;
+    border-radius: 16px!important;
+    background-color: white;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .programDateDiv .col {
     margin-top: 10px;
+        //margin-bottom: 0.5rem;
 }
 .programDateDiv h5 {
     margin: 0;
+    margin-bottom: 1rem;
 }
-i {
+i:not(.bi-person-fill, .bi-search, .bi-trash-fill) {
     float: left;
     margin-right: 10px;
+    margin-left: 0.3rem;
 }
 #peopleCount {
     text-align: right;
@@ -79,12 +96,17 @@ i {
 #appDiv button {
     height: 55px;
     margin-top: 10px;
-    background-color: #618264;
+    background-color: #617A55;
     color: white;
     font-weight: bold;
 }
+#appDiv button:hover {
+    background-color: #4e6145;
+}
 .activeli {
-    background-color: #E4E4D0;
+    font-weight: bold;
+    color: #617A55;
+    background-color: #f8faf9;
 }
 #peopleCount {
     padding-top: 30px;
@@ -93,52 +115,180 @@ i {
     display: none;
 }
 .card-body button {
+    color: white!important;
     width: 100px;
     font-weight: bold;
+    border-color: #617a55;
+    background-color: #617a55;
 }
 .card-body button:hover {
-    background-color: #618264 !important;
+    background-color: #4e6145 !important;
+    border-color: #4e6145!important;
 }
 .card {
-    margin-bottom: 10px;
-}
+    border: none;
+    padding: 1rem 1rem 0 1rem;
+    border-radius: 16px;
+    }
 
 .bi-trash-fill {
     float: right;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 .showEnterAnswerBtn {
-    margin-bottom: 5px;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0.3rem 1rem;
+    color: white;
+    background-color: #454555;
+    border-color: #454555;
+    font-weight: bold;
+        width: 7.9rem;
 }
+
 .bg-success {
     background-color: #618264 !important;
 }
 .answerDiv {
-    margin-top: 5px;
+    margin-top: 1rem;
     background-color: #f8f9fa;
-    padding: 5px;
+    padding: 0.5rem 0.4rem;
     border: solid #dee2e6 1px;
 }
 .showAnswerBtn {
-    margin-top: 5px;
+    margin-top: 0.5rem;
+    padding: 0.3rem 1rem;
+    color: #363636;
+    width: 7.9rem;
+}
+.showAnswerBtn:hover {
+    font-weight: bold;
+    background-color:white!important;
+    color: #6c757d!important;
 }
 #qnaList p {
     margin-bottom: 0;
 }
+#qnaList{
+    padding: 2.5rem;
+    border-radius: 16px;
+    padding-top: 0;
+}
 table td {
     padding-left: 0 !important;
+    font-size:1rem;
 }
 table th {
     padding-left: 0 !important;
+    padding-bottom: 0.7rem!important;
+    font-size:1.1rem;
 }
 #bizBtn {
     position: absolute;
-    bottom: 0;
+    bottom: 1.7rem;
 }
 #bizBtn button {
-    width: 100px;
+    width: 7rem;
     height: 30px;
     margin-right: 10px;
+    color: white;
+    background-color: #454555;
+    border-color: #454555;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 #mapDiv {
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+#typeSpan{
+    background-color: #0d6efd!important;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.5rem;
+    text-align: center;
+    height: 1.5rem;
+}
+#programContents{
+    padding-left: 1rem;
+    min-height: 5rem;
+    padding-top: 1rem;
+}
+#detailMapH5 i{
+    color: #E65339;
+}
+#qnaContent{
+    min-height: 7rem;
+}
+#qnaContent:focus-visible, #qnaContent:focus{
+    border-color: #ced4da;
+        outline: 0;
+        box-shadow: none;
+}
+.qnaEditDiv span{
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+.qnaEditDivNotSecret span{
+    font-size: 0.9rem;
+}
+#typeQna span{
+margin-bottom: 0.5rem;
+}
+.form-control:focus, .form-control:focus-visible{
+     border-color: #ced4da;
+     outline: 0;
+     box-shadow: none;
+}
+.bi-check-circle-fill{
+    margin-right: 0.5rem;
+    margin-left: 0;
+    color: #0d6efd;
+}
+.bi-arrow-return-right{
+    color: white;
+    margin-right: 0.5rem;
+    margin-left: 0;
+}
+.container{
+    max-width: 1100px;
+    padding-top:1rem;
+    margin: 0 auto;
+    margin-top: 2rem;
+}
+#programDetailDiv{
+    background-color: white;
+    padding: 1rem;
+    padding-top: 1rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+#subDiv{
+    padding-top: 0!important;
+    margin-top: 1rem!important;
+}
+#cardFooterDiv{
+    background-color:white;
+    border: none;
+    padding-right: 2.5rem;
+        padding-bottom: 0;
+        padding-top: 0;
+}
+hr {
+    margin: 1rem 0;
+    color: inherit;
+    border: 0;
+    border-top: 1px solid;
+    opacity: .25;
+}
+#infoC{
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin-bottom: 3rem;
+}
+.answerDiv span{
+    margin-left: 0!important;
 }

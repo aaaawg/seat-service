@@ -12,6 +12,20 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
    if(!checkUserValue()) {
        return;
    }
+
+   if(document.getElementById("drop").selectedIndex === 1) {
+       //신청대상이 지역일 때, targetDetail 값 넣기
+       const a1 = document.getElementById("area1");
+       const a2 = document.getElementById("area2");
+
+       if(a2.selectedIndex === 0) {
+           document.getElementById("areaTargetDetail").value = a1.options[a1.selectedIndex].value;
+       }
+       else {
+           document.getElementById("areaTargetDetail").value = a1.options[a1.selectedIndex].value + " " + a2.options[a2.selectedIndex].value;
+       }
+   }
+
    // 폼 데이터 생성
     const resultHtml = document.querySelector('#content').outerHTML;
     var additionalData;
@@ -115,7 +129,7 @@ function addContent(){
     const element = document.getElementById('content');
     const newContentDiv = document.createElement('div');
     newContentDiv.setAttribute("id", "plus"+count)
-    newContentDiv.style.background = '#fffce2';
+    newContentDiv.style.background = '#fbfbf3';
     newContentDiv.style.padding = "20px 0 20px 0";
     element.appendChild(newContentDiv);
 
@@ -377,7 +391,7 @@ function addEditSelect(e){
     //버튼 눌린 상태로 변경
     if(target.disabled === false){
         target.disabled = true;
-        changeColor.style.background = '#fffce2';
+        changeColor.style.background = '#fbfbf3';
     }
 }
 //셀렉트 선택시

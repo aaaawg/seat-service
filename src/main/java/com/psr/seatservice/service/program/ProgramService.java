@@ -2,6 +2,8 @@ package com.psr.seatservice.service.program;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.psr.seatservice.domian.area.Area;
+import com.psr.seatservice.domian.area.AreaRepository;
 import com.psr.seatservice.domian.program.*;
 import com.psr.seatservice.domian.user.User;
 import com.psr.seatservice.dto.program.request.BizAddProgramRequest;
@@ -22,11 +24,13 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final ProgramViewingRepository programViewingRepository;
     private final ProgramBookingRepository programBookingRepository;
+    private final AreaRepository areaRepository;
 
-    public ProgramService(ProgramRepository programRepository, ProgramViewingRepository programViewingRepository, ProgramBookingRepository programBookingRepository) {
+    public ProgramService(ProgramRepository programRepository, ProgramViewingRepository programViewingRepository, ProgramBookingRepository programBookingRepository, AreaRepository areaRepository) {
         this.programRepository = programRepository;
         this.programViewingRepository = programViewingRepository;
         this.programBookingRepository = programBookingRepository;
+        this.areaRepository = areaRepository;
     }
 
     public List<BizProgramListResponse> programs(Long user) {
@@ -98,20 +102,33 @@ public class ProgramService {
     }
 
 
-    public List<ProgramListResponse> getProgramList(String type, String target) {
+    public List<ProgramListResponse> getProgramList(String type, String target, String ad) {
         List<ProgramListResponse> programs;
+        String str;
 
         if(type.equals("online") || type.equals("offline")) {
             if(target == null)
                 programs = programRepository.findAllByType(type);
-            else
-                programs = programRepository.findAllByTarget(type, target);
+            else {
+                if(target.equals("area") && ad != null) {
+                    str = ad + "%";
+                    programs = programRepository.findAllByAreaAndAreaDetail(type, "area", str);
+                }
+                else
+                    programs = programRepository.findAllByTarget(type, target);
+            }
         }
         else {
             if(target == null)
                 programs = programRepository.findAllProgramAndImg();
-            else
-                programs = programRepository.findAllProgramAndImgByTarget(target);
+            else {
+                if(target.equals("area") && ad != null) {
+                    str = ad + "%";
+                    programs = programRepository.findAllByAreaAndAreaDetail("area", str);
+                }
+                else
+                    programs = programRepository.findAllProgramAndImgByTarget(target);
+            }
         }
 
         return programs;
@@ -330,4 +347,7 @@ public class ProgramService {
         }
     }
 
+    public List<Area> getAreaList(String area) {
+        return areaRepository.findAllByArea1(area);
+    }
 }

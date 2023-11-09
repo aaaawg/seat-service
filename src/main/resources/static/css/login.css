@@ -1,6 +1,8 @@
 .logo {
     text-align: center;
     margin: 20px;
+    margin-top: 6rem;
+    margin-bottom: 4rem;
 }
 img {
     width: 70px;
@@ -15,6 +17,10 @@ form button {
     padding: 8px 12px;
     font-weight: bolder;
     color: white;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+form button:hover{
+    background-color: #4e6145;
 }
 button {
     float: right;
@@ -29,4 +35,21 @@ button {
 #eDiv {
     color: #c00000;
     margin-bottom: 3px;
+}
+
+.form-control{
+    height: 2.8rem;
+}
+.form-control:focus, .form-control:focus-visible{
+    border-color: #363636!important;
+    box-shadow: none;
+}
+.rounded-2{
+    height: 3.2rem;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+}
+button[type=button]{
+    margin-top: 1rem;
+    color: #363636;
 }

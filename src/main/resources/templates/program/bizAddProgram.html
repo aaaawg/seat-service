@@ -48,14 +48,15 @@
 
     <div class="fDiv row justify-content-start">
       <label for="drop" class="col-2">신청대상</label>
-      <div class="col-4" style="margin-right: 10px">
+      <div class="col-3" style="margin-right: 10px">
         <select class="form-select" id="drop" name="target" onchange="showArea()" style="margin-right: 10px">
           <option value="all" selected>제한없음</option>
           <option id="area" value="area">지역</option>
           <option value="etc">직접입력</option>
         </select>
       </div>
-      <div id="detail" class="col-4" style="display: inline; margin-left: 10px"></div>
+      <div id="detail" class="col" style="display: inline;"></div>
+      <div id="detail2" style="display: inline; margin-left: 10px"></div>
     </div>
     <div class="fDiv pDiv">
       <label for="peopleNum" class="col-2" style="float:left;">모집인원</label>
@@ -96,7 +97,6 @@
       <label for="inputFile" class="col-2">첨부 파일</label>
       <div class="custom-file col" id="inputFile">
         <input multiple="multiple" name="file" type="file" class="custom-file-input form-control" id="customFile"/>
-        <!--<label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>-->
       </div>
     </div>
 
@@ -140,9 +140,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script type="text/javascript" src="/js/addProgram.js"></script>
 <script type="text/javascript" src="/js/nav.js"></script>
-<script th:inline="javascript">
-  const userAddr = [[${userAddr}]];
-</script>
 <script type="text/javascript" src="/js/addProgramContent.js?ver=7.3"></script>
 </body>
 </html>

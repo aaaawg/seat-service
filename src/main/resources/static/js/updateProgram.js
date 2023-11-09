@@ -13,7 +13,7 @@ window.addEventListener("load", (event) => {
     origAddress = document.getElementById("address").value;
     origDetailAddress = document.getElementById("detailAddress").value;
     if(peopleNum === '무제한') peopleNum = '';
-    init();
+    //init();
 });
 
 document.getElementById('updateForm').addEventListener('submit', function(event) {
@@ -114,7 +114,7 @@ function showPlaceInput(type, result) {
         document.getElementById("off").style.display = "none";
         document.getElementById("on").style.display = "block";
         document.getElementById("way").style.display = "block";
-        document.getElementById("inputWay").disabled = false;
+        document.getElementById("inWay").disabled = false;
         document.getElementById("peopleNum").readOnly=false;
         document.getElementById("peopleNum").disabled = false;
         document.getElementById("seatingChart").value = '';
@@ -148,7 +148,7 @@ function showPlaceInput(type, result) {
         document.getElementById("off").style.display = "block";
         document.getElementById("on").style.display = "none";
         document.getElementById("way").style.display = "none";
-        document.getElementById("inputWay").disabled = true;
+        document.getElementById("inWay").disabled = true;
         document.getElementById("searchAddr").style.display = "inline";
         document.getElementById("detailAddress").style.display = "inline";
 
@@ -400,7 +400,7 @@ console.log("n"+imagesLength);
      }
 }
 
-function init(){
+/*function init(){
     const btnPrevious = document.querySelector(".previous");
     const btnNext = document.querySelector(".next");
     btnPrevious.setAttribute('disabled','true');
@@ -413,4 +413,4 @@ function init(){
             btnPreviousOrig.addEventListener("click", prevOrig);
             btnNextOrig.addEventListener("click", nextOrig);
     }
-}
+}*/

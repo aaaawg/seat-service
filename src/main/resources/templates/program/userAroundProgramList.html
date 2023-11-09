@@ -4,11 +4,13 @@
 <head th:replace="layout/head :: head(~{::link})">
     <link th:href="@{/css/programList.css}" href="../css/programList.css" rel="stylesheet">
     <link th:href="@{/css/statusBadge.css}" href="../css/statusBadge.css" rel="stylesheet">
+    <link th:href="@{/css/userAroundProgramList.css}" href="../css/userAroundProgramList.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="/layout/nav.html :: nav"></div>
-<br>
-<div class="container" style="max-width: 1400px; clear: both">
+<hr id="mainHr">
+
+<div class="container" style="max-width: 1000px; clear: both">
     <div>
         <div class="ar">
             <div class="arMenu">
@@ -29,27 +31,33 @@
             <button class="btn btn-outline-dark btn-sm rounded-pill" th:onclick="|location.href='@{/online}'|">비대면<i class="bi bi-chevron-right"></i></button>
         </div>
     </div>
-    <th:block th:each="program: ${programs}">
-        <div class="p-3 mx-1 my-2 bg-light text-dark rounded-3 row pDiv" th:classappend="${target} == 'all'?'aroundAllDiv':''" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
-            <div class="imgDiv">
-                <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 300px">
-                <div class="noImg" th:unless="${program.filename != null}"><i class="bi bi-image"></i></div>
-                <span class="badge imgBadge" th:text="${program.type == 'offline'} ? '대면':'비대면'" th:classappend="${program.type == 'offline'} ? 'bg-primary':'bg-dark'"></span>
-                <div>
-                    <span class="badge" th:if="${#dates.createToday().before(program.startDate)}" style="background-color: #b0bea3">예정</span>
-                    <span class="badge" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}" style="background-color: #618264">진행</span>
 
-                    <span class="badge" th:if="${program.target} == 'area'" th:text="${program.targetDetail}" style="background-color: #394867"></span>
-                    <span class="badge" th:if="${program.target} == 'all'" style="background-color: #7C96AB;">누구나</span>
+    <div>
+        <th:block th:each="program: ${programs}">
+            <div class="row pInfo rounded-3" th:classappend="${target} == 'all'?'aroundAllDiv':''" th:onclick="|location.href='@{/program/{programNum}(programNum=${program.programNum})}'|">
+                <div class="col-3 iDiv">
+                    <img th:if="${program.filename != null}" th:src="@{'/files/' + ${program.filename}}" style="width: 100%; height: 100%; margin: 0">
+                    <div class="nImg" th:unless="${program.filename != null}"><i class="bi bi-image" style="line-height: 200px; font-size: 2rem; margin: 0"></i></div>
+                </div>
+                <div class="tDiv col">
+                    <div class="sDiv">
+                        <span class="badge" th:text="${program.type == 'offline'}?'대면':'비대면'" th:classappend="${program.type == 'offline'} ? 'bg-primary':'bg-dark'"></span>
+
+                        <span class="badge" th:if="${program.target} == 'area'" th:text="${program.targetDetail}" style="background-color: #394867"></span>
+                        <span class="badge" th:if="${program.target} == 'all'" style="background-color: #7C96AB;">누구나</span>
+                    </div>
+                    <h3 th:text="${program.title}"></h3>
+                    <p th:if="${target} == 'all'"><b>장소: </b><span th:text="${program.place}"></span></p>
+                    <p th:unless="${target} == 'all'"><b>신청대상: </b><span th:text="|${program.targetDetail} 거주|"></span></p>
+                    <p><b>신청기간: </b><span th:text="${#dates.format(program.startDate,'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(program.endDate, 'yyyy.MM.dd')}"></span></p>
+                </div>
+                <div class="col-2 aDiv">
+                    <div class="rounded-3 aDiv-1" th:if="${#dates.createToday().before(program.startDate)}"><span>신청예정</span></div>
+                    <div class="rounded-3 aDiv-2" th:if="${#dates.createToday().compareTo(program.startDate) >= 0} and ${program.endDate.compareTo(#dates.createToday()) >= 0}"><span>신청하기</span></div>
                 </div>
             </div>
-            <div class="textDiv" th:with="area=${#strings.setSplit(program.place, ' ')}">
-                <span th:if="${target} == 'all'" th:text="|${area[0]} ${area[1]} ${area[2]}|"></span>
-                <p th:text="${program.title}"></p>
-                <p th:text="${#dates.format(program.startDate,'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(program.endDate, 'yyyy.MM.dd')}"></p>
-            </div>
-        </div>
-    </th:block>
+        </th:block>
+    </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script th:inline="javascript">
