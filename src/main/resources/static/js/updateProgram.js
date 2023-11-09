@@ -87,9 +87,21 @@ function check(){
     document.getElementById("online").disabled = false;
     document.getElementById("startDate").disabled = false;
 
-    const detailTarget = document.getElementById("targetDetail");
+    const detailTarget = document.getElementById("areaTargetDetail");
+
     if(detailTarget !== null){
         detailTarget.disabled = false;
+    }
+
+    const area1 = document.getElementById("area1");
+    if(area1!==null){
+    const area2 = document.getElementById("area2");
+    console.log("area2: "+area2.value);
+        if(area2.value!=='선택안함'){
+            detailTarget.value = area1.value+" "+area2.value;
+        }else if(area2.value === '선택안함'){
+            detailTarget.value = area1.value;
+        }
     }
 
     if(document.getElementById("onPlace").value!=='온라인 관람'){

@@ -158,7 +158,7 @@ function makeTextInput(className, placeholderName){
     input.setAttribute("type", "text");
     input.setAttribute("class", className);
     input.setAttribute("placeholder", placeholderName);
-    input.setAttribute('maxlength',10);
+    //input.setAttribute('maxlength',10);
     return input;
 }
 

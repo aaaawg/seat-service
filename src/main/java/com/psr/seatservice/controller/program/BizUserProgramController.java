@@ -111,6 +111,8 @@ public class BizUserProgramController {
                                     @RequestParam(value ="deleteFile2", required = false) List<String> deleteFiles2) throws IOException {
         if(request.getSeatingChart().isEmpty()){request.setSeatingChart(null);}
 
+        System.out.println(request.getTargetDetail());
+
         List<ProgramViewingDateAndTimeResponse> viewTime = programService.getProgramViewingDateAndTime(programNum);
         List<String> viewingDateAndTime = new ArrayList<>();
         List<String> viewingDateAndTimeDel = new ArrayList<>();
