@@ -53,10 +53,8 @@
                 <option id="area" value="area">지역</option>
                 <option value="etc">직접입력</option>
             </select>
-            <div id="detail" style="display: inline;">
-
-            </div>
-
+            <div id="detail" style="display: inline;"></div>
+            <div id="detail2" style="display: inline;"></div>
         </div>
         <hr>
         <div>
@@ -260,48 +258,64 @@ if (programInfo.target === "all") {
 } else if (programInfo.target === "area") {
     optionElements[1].selected = true; // "지역" 옵션을 선택
     if(programInfo.targetDetail!==null){
-        let addr = userAddr.split(' ', 2);
+        let addr = programInfo.targetDetail.split(' ', 2);
         let addr1 = addr[0];
         let addr2 = addr[1];
 
-        html = `<select id="targetDetail" name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
+         showArea();
 
-        const detailDiv = document.getElementById("detail");
-        detailDiv.innerHTML = html;
+        if(addr1 !== null){
+        var selectElement = document.getElementById("area1");
 
-        const selectedValue = programInfo.targetDetail;
+        const options = selectElement.options;
+         for (let i = 0; i < options.length; i++) {
+            const option = options[i];
+            const optionText = option.textContent || option.innerText;
 
-        // select 요소를 찾아옵니다.
-        const targetDetailSelect = document.getElementsByName('targetDetail')[0];
-
-        // select 요소의 option들을 반복하여 원하는 option을 선택합니다.
-        for (let i = 0; i < targetDetailSelect.options.length; i++) {
-            if (targetDetailSelect.options[i].value === selectedValue) {
-                targetDetailSelect.selectedIndex = i;
-                break;
+            if (addr1 === optionText) {
+                option.selected = true;
+                break;  // 일치하는 것을 찾으면 루프 종료
             }
         }
-        const detailTarget = document.getElementById("targetDetail");
-         /*detailTarget.style.height = '1.7rem';
-         detailTarget.style.width = '4.75rem';*/
+
+     console.log(addr2);
+     selectElement = document.getElementById("area1");
+     getAreaDetail(selectElement);
+
+
+        window.onload = function(){
+        var selectElement3= document.getElementById("area2");
+        const options2 = selectElement3.options;
+         for (let i = 0; i < options2.length; i++) {
+            const option = options2[i];
+            const optionText = option.textContent || option.innerText;
+
+            if (addr2 === optionText) {
+                option.selected = true;
+                break;  // 일치하는 것을 찾으면 루프 종료
+            }
+        }
+    }
+
+
+}
     }
 } else if(programInfo.target === "etc") {
     optionElements[2].selected = true; // "지역" 옵션을 선택
     if(programInfo.targetDetail!==null){
-         html = '<input type=text id="targetDetail" name="targetDetail">';
-         const detailDiv = document.getElementById("detail");
+        document.getElementById("detail2").classList.remove("col");
+        html = '<input class="form-control" id="etcDetail" type=text name="targetDetail" placeholder="신청대상을 입력해 주세요.">';
+
+         const detailDiv = document.getElementById("detail2");
          detailDiv.innerHTML = html;
 
-        const detailTarget = document.getElementById("targetDetail");
-         detailTarget.value = programInfo.targetDetail;
-         detailTarget.style.display="block";
-         detailTarget.style.marginLeft = '9.34rem';
-         detailTarget.style.marginTop = '0.5rem';
+        const etcDetail = document.getElementById("etcDetail");
+         etcDetail.value = programInfo.targetDetail;
     }
 }
 
 if(bookingCount > 0){
-    const detailTarget = document.getElementById("targetDetail");
+    const detailTarget = document.getElementById("areaTargetDetail");
     if(detailTarget!==null){
         detailTarget.disabled = true;
     }
@@ -461,50 +475,71 @@ if(bookingCount > 0){
         }
     }
 
-  function showArea() {
-    if(bookingCount > 0){
-        alert("신청자가 존재하므로 변경이 불가능합니다.");
-        var selectElement = document.getElementById("drop");
-        var selectValue = selectElement.options[selectElement.selectedIndex].value;
-        var optionElements = selectElement.getElementsByTagName("option");
-        if (selectValue === "제한없음") {
-            optionElements[1].selected = true; // "제한없음" 옵션을 선택
-        } else if (selectValue === "지역") {
-            optionElements[0].selected = true; // "지역" 옵션을 선택
-        }
-    }
 
+  function showArea() {
     const drop = document.getElementById("drop");
     const detailDiv = document.getElementById("detail");
+    document.getElementById("detail2").innerHTML = "";
     let html;
 
-    if(drop.selectedIndex === 1) {
-      let addr = userAddr.split(' ', 2);
-      let addr1 = addr[0];
-      let addr2 = addr[1];
-
-      html = `<select id="targetDetail" name="targetDetail"><option value='${addr1}'>${addr1}</option><option value='${addr1} ${addr2}'>${addr2}</option></select>`;
-    }
-    else if(drop.selectedIndex === 2) {
-      html = '<input type=text id="targetDetail" name="targetDetail">';
-    }
-    else
-      html = "";
+    if (drop.selectedIndex === 1) {
+        document.getElementById("detail2").classList.add("col");
+        html = "<input type='hidden' id='areaTargetDetail' name='targetDetail'>"
+        html += '    <select id="area1" class="form-select" onchange="getAreaDetail(this)">\n' +
+            '        <option selected disabled>=== 지역 선택 ===</option>\n' +
+            '        <option>서울</option>\n' +
+            '        <option>경기</option>\n' +
+            '        <option>인천</option>\n' +
+            '        <option>부산</option>\n' +
+            '        <option>대구</option>\n' +
+            '        <option>광주</option>\n' +
+            '        <option>대전</option>\n' +
+            '        <option>울산</option>\n' +
+            '        <option>세종</option>\n' +
+            '        <option>강원</option>\n' +
+            '        <option>경남</option>\n' +
+            '        <option>경북</option>\n' +
+            '        <option>전남</option>\n' +
+            '        <option>전북</option>\n' +
+            '        <option>충남</option>\n' +
+            '        <option>충북</option>\n' +
+            '        <option>제주</option>\n' +
+            '    </select>';
+    } else if (drop.selectedIndex === 2) {
+        document.getElementById("detail2").classList.remove("col");
+        html = '<input class="form-control" id="etcDetail" type=text name="targetDetail" placeholder="신청대상을 입력해 주세요.">';
+    } else
+        html = "";
 
     detailDiv.innerHTML = html;
+}
+function showAreaDetail(t) {
+    let list = t;
+    const aDiv = document.getElementById("detail2");
 
-const targetDetail = document.getElementById("targetDetail");
-    if(drop.selectedIndex === 1){
-
-    } else if(drop.selectedIndex === 2){
-        if(targetDetail !== null){
-        targetDetail.style.display="block";
-        targetDetail.style.marginLeft = '9.34rem';
-        targetDetail.style.marginTop = '0.5rem';
+    let html = "<select id='area2' class='form-select'><option selected>선택안함</option>"
+    for (let i = 0; i < list.length; i++) {
+        html += `<option>${list[i]}</option>`
     }
-    }
+    html += "</select>"
 
-  }
+    aDiv.innerHTML = html;
+}
+
+function getAreaDetail(t) {
+    const a = t.value;
+    const list = [];
+    fetch(`/business/program/areaList?area=${a}`)
+        .then((r) => {
+            return r.json()
+        })
+        .then((r) => {
+            for (let i = 0; i < r.length; i++) {
+                list.push(r[i].area2)
+            }
+            showAreaDetail(list);
+        })
+}
 </script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="/js/updateProgram.js?ver=1.4"></script>
