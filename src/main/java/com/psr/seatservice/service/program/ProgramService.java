@@ -187,13 +187,7 @@ public class ProgramService {
 
     public boolean checkProgramTargetDetailAndUserAddress(String targetDetail, String address) {
         String addr = address.split(",")[0];
-        String[] addr2 = addr.split(" ", 3);
-
-        if(targetDetail.indexOf(" ") > 0) {
-            return targetDetail.equals(addr2[0] + " " + addr2[1]);
-        }
-        else
-            return targetDetail.equals(addr2[0]);
+        return addr.contains(targetDetail);
     }
 
     public List<BizProgramViewingDateAndTimeAndPeopleNumResponse> getProgramViewingDateAndTimeAndPeopleNum(Long programNum) {
